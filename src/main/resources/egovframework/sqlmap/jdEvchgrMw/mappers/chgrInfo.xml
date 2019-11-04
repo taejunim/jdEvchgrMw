@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jdEvchgrMw.chgrInfo.service.impl.ChgrInfoMapper">
+
+	<select id="chgrInfoDataList" resultType="egovMap">
+	
+		SELECT chgr_info_seq
+			 , chgr_info_msg
+			 , DATE_FORMAT(reg_dt, '%Y-%m-%d %H:%i:%s') reg_dt
+		
+		FROM   tb_chgr_info
+		
+		WHERE  1=1
+		
+		ORDER BY reg_dt DESC
+	
+	</select>
+	
+	<select id="chgrInfoDataDetail" resultType="egovMap">
+	
+		SELECT chgr_info_seq
+			 , chgr_info_msg
+			 , reg_dt
+		
+		FROM   tb_chgr_info
+		
+		WHERE  1=1
+		
+		AND	  chgr_info_seq = ${chgrInfoSeq}
+	
+	</select>
+
+	<insert id="chgrInfoDataInsert" parameterType="chgrInfoVO">
+	
+		INSERT INTO tb_chgr_info (
+		
+			chgr_info_msg
+			,reg_dt
+		)
+		VALUES(
+			#{chgrInfoMsg}
+			, now()
+		)
+
+	</insert>
+	
+</mapper>

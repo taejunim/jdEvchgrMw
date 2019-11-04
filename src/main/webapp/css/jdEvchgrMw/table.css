@@ -1,0 +1,17 @@
+
+table.table thead tr th {
+	
+	text-align: center;
+}
+
+table.table tbody tr th {
+	
+	text-align: center;
+	vertical-align: middle;
+}
+
+table.table tbody tr td.txt_center {
+	
+	text-align: center;
+	vertical-align: middle;
+}
