@@ -6,7 +6,9 @@ import egovframework.rte.psl.dataaccess.util.EgovMap;
 
 public interface ChgrInfoService {
 
-	public List<EgovMap> chgrInfoDataList() throws Exception;
+	public List<EgovMap> chgrInfoDataList(ChgrInfoVO chgrInfoVO) throws Exception;
+	
+	public int chgrInfoDataListCnt() throws Exception;
 	
 	public void chgrInfoDataInsert(ChgrInfoVO chgrInfoVO) throws Exception;
 	

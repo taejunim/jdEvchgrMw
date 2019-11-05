@@ -1,9 +1,10 @@
 package jdEvchgrMw.chgrInfo.service;
 
+import jdEvchgrMw.common.service.PageVO;
 import lombok.Data;
 
 @Data
-public class ChgrInfoVO {
+public class ChgrInfoVO extends PageVO{
 	
 	private String chgrInfoMsg;
 	private String msgSendType;

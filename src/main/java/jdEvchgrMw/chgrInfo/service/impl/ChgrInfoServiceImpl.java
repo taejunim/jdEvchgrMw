@@ -17,9 +17,14 @@ public class ChgrInfoServiceImpl extends EgovAbstractServiceImpl implements Chgr
 	@Resource(name = "chgrInfoMapper")
 	private ChgrInfoMapper chgrInfoMapper;
 	
-	public List<EgovMap> chgrInfoDataList() throws Exception {
+	public List<EgovMap> chgrInfoDataList(ChgrInfoVO chgrInfoVO) throws Exception {
 		
-		return chgrInfoMapper.chgrInfoDataList();
+		return chgrInfoMapper.chgrInfoDataList(chgrInfoVO);
+	}
+	
+	public int chgrInfoDataListCnt() throws Exception {
+		
+		return chgrInfoMapper.chgrInfoDataListCnt();
 	}
 	
 	public void chgrInfoDataInsert(ChgrInfoVO chgrInfoVO) throws Exception {

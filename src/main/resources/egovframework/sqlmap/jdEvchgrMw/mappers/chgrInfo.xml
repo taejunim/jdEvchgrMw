@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jdEvchgrMw.chgrInfo.service.impl.ChgrInfoMapper">
 
-	<select id="chgrInfoDataList" resultType="egovMap">
+	<select id="chgrInfoDataList"  parameterType="ChgrInfoVO" resultType="egovMap">
 	
 		SELECT MSG_DATA_SEQ
 			 , MSG_SEND_TYPE
@@ -15,9 +15,9 @@
 		WHERE  1=1
 		
 		ORDER BY REG_DT DESC
-	
+		  LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	
 	</select>
-	<select id="chgrInfoDataListCnt" resultType="egovMap">
+	<select id="chgrInfoDataListCnt" resultType="int">
 	
 		SELECT COUNT(MSG_DATA_SEQ)
 		

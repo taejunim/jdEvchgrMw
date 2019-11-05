@@ -9,8 +9,8 @@ import jdEvchgrMw.chgrInfo.service.ChgrInfoVO;
 @Mapper("chgrInfoMapper")
 public interface ChgrInfoMapper {
 
-	public List<EgovMap> chgrInfoDataList() throws Exception;
-	
+	public List<EgovMap> chgrInfoDataList(ChgrInfoVO chgrInfoVO) throws Exception;
+	public int chgrInfoDataListCnt() throws Exception;
 	public void chgrInfoDataInsert(ChgrInfoVO chgrInfoVO) throws Exception;
 	
 }
