@@ -4,29 +4,33 @@
 
 	<select id="chgrInfoDataList" resultType="egovMap">
 	
-		SELECT chgr_info_seq
-			 , chgr_info_msg
-			 , DATE_FORMAT(reg_dt, '%Y-%m-%d %H:%i:%s') reg_dt
+		SELECT MSG_DATA_SEQ
+			 , MSG_SEND_TYPE
+			 , MSG_ACTION_TYPE
+			 , MSG_DATA
+			 , DATE_FORMAT(reg_dt, '%Y-%m-%d %H:%i:%s') REG_DT
 		
-		FROM   tb_chgr_info
+		FROM   tb_msg_data
 		
 		WHERE  1=1
 		
-		ORDER BY reg_dt DESC
+		ORDER BY REG_DT DESC
 	
 	</select>
 	
 	<select id="chgrInfoDataDetail" resultType="egovMap">
 	
-		SELECT chgr_info_seq
-			 , chgr_info_msg
-			 , reg_dt
+		SELECT MSG_DATA_SEQ
+			 , MSG_SEND_TYPE
+			 , MSG_ACTION_TYPE
+			 , MSG_DATA
+			 , DATE_FORMAT(reg_dt, '%Y-%m-%d %H:%i:%s') REG_DT
 		
-		FROM   tb_chgr_info
+		FROM   tb_msg_data
 		
 		WHERE  1=1
 		
-		AND	  chgr_info_seq = ${chgrInfoSeq}
+		AND	  MSG_DATA_SEQ = ${msgDataSeq}
 	
 	</select>
 
@@ -36,7 +40,7 @@
 			MSG_SEND_TYPE
 			,MSG_ACTION_TYPE
 			,MSG_DATA
-			,reg_dt
+			,REG_DT
 		)
 		VALUES(
 			#{msgSendType}

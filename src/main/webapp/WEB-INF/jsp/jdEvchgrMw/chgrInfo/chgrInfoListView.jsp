@@ -24,9 +24,8 @@ function get_data() {
 		
 		$.each(data, function(i, item) {
 			
-			console.log("item: "+item.chgrInfoMsg);
-			
-			dataHtml += "<tr><th scope='row'>"+item.chgrInfoSeq+"</th><td>"+item.chgrInfoMsg+"</td><td class='txt_center'>"+item.regDt+"</td></tr>";
+			dataHtml += "<tr><th scope='row'>"+item.msgDataSeq+"</th><td>"+item.msgSendType+"</td><td class='txt_center'>"+item.msgActionType+"</td>";
+			dataHtml += "<td>"+item.msgData+"</td><td class='txt_center'>"+item.regDt+"</td></tr>";
 			
 		});
 		
@@ -44,13 +43,17 @@ function get_data() {
 <table class="table">
 	<colgroup>
 		<col width="5%">
-		<col width="">
 		<col width="20%">
+		<col width="10%">
+		<col width="">
+		<col width="10%">
 	</colgroup>
   <thead class="thead-dark">
     <tr>
       <th scope="col">SEQ.</th>
-      <th scope="col">MESSAGE</th>
+      <th scope="col">전문 구분</th>
+      <th scope="col">명령 구분</th>
+      <th scope="col">MSG_DATA</th>
       <th scope="col">등록 일자</th>
     </tr>
   </thead>
