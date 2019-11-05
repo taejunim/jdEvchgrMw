@@ -1,15 +1,12 @@
 package jdEvchgrMw.chgrInfo.service;
 
+import lombok.Data;
+
+@Data
 public class ChgrInfoVO {
 	
 	private String chgrInfoMsg;
-
-	public String getChgrInfoMsg() {
-		return chgrInfoMsg;
-	}
-
-	public void setChgrInfoMsg(String chgrInfoMsg) {
-		this.chgrInfoMsg = chgrInfoMsg;
-	}
-
+	private String msgSendType;
+	private String msgActionType;
+	private String msgData;
 }

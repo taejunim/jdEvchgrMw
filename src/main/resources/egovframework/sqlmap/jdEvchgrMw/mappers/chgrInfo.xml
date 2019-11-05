@@ -32,13 +32,16 @@
 
 	<insert id="chgrInfoDataInsert" parameterType="chgrInfoVO">
 	
-		INSERT INTO tb_chgr_info (
-		
-			chgr_info_msg
+		INSERT INTO tb_msg_data (
+			MSG_SEND_TYPE
+			,MSG_ACTION_TYPE
+			,MSG_DATA
 			,reg_dt
 		)
 		VALUES(
-			#{chgrInfoMsg}
+			#{msgSendType}
+			,#{msgActionType}
+			,#{msgData}
 			, now()
 		)
 

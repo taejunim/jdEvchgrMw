@@ -30,7 +30,7 @@ public class CollectServiceBean {
 		
 		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
 		
-		return (ChgrInfoService)context.getBean("ChgrInfoService");
+		return (ChgrInfoService)context.getBean("chgrInfoService");
 	}
 	
 }

@@ -68,7 +68,7 @@ public class jdEvChgrMwMain {
     
     /**
      * WEBSOCKET SEND MESSAGE
-     * @param message - SEND MESSAGE
+     * @param commonVO - SEND MESSAGE
      */
     public void sendMessage(CommonVO commonVO) {
        
