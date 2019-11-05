@@ -24,8 +24,8 @@ function get_data() {
 		
 		$.each(data, function(i, item) {
 			
-			dataHtml += "<tr><th scope='row'>"+item.msgDataSeq+"</th><td>"+item.msgSendType+"</td><td class='txt_center'>"+item.msgActionType+"</td>";
-			dataHtml += "<td>"+item.msgData+"</td><td class='txt_center'>"+item.regDt+"</td></tr>";
+			dataHtml += "<tr><th scope='row'>"+item.msgDataSeq+"</th><td class='txt_center'>"+item.msgSendType+"</td><td class='txt_center'>"+item.msgActionType+"</td>";
+			dataHtml += "<td class='txt_center'>"+item.msgData+"</td><td class='txt_center'>"+item.regDt+"</td></tr>";
 			
 		});
 		
@@ -40,10 +40,11 @@ function get_data() {
 <div class="page-header">
   <h1>CHGR INFO<small> MESSAGE LIST</small></h1>
 </div>
+	<%@include file="/WEB-INF/jsp/jdEvchgrMw/menu/menu.jsp"%>	
 <table class="table">
 	<colgroup>
 		<col width="5%">
-		<col width="20%">
+		<col width="7%">
 		<col width="10%">
 		<col width="">
 		<col width="10%">
@@ -60,5 +61,9 @@ function get_data() {
   <tbody id="data_list">
   </tbody>
 </table>
+
+<div>
+
+</div>
 </body>
 </html>
