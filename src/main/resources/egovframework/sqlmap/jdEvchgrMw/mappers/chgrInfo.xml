@@ -17,7 +17,16 @@
 		ORDER BY REG_DT DESC
 	
 	</select>
+	<select id="chgrInfoDataListCnt" resultType="egovMap">
 	
+		SELECT COUNT(MSG_DATA_SEQ)
+		
+		FROM   tb_msg_data
+		
+		WHERE  1=1
+
+	
+	</select>
 	<select id="chgrInfoDataDetail" resultType="egovMap">
 	
 		SELECT MSG_DATA_SEQ
