@@ -66,23 +66,6 @@ public class jdEvChgrMwMain {
         t.printStackTrace();
     }
     
-    /**
-     * WEBSOCKET SEND MESSAGE
-     * @param commonVO - SEND MESSAGE
-     */
-    public void sendMessage(CommonVO commonVO) {
-       
-    	System.out.println("[ MSG <- M/W : "+ commonVO.getSndMsg() +" ]");
-    	
-    	try {
-			
-    		commonVO.getUserSession().getAsyncRemote().sendText(commonVO.getSndMsg());
-		
-    	} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-    		System.out.println("[ 클라이언트가 종료되어 MSG를 전송하지 못하였습니다. ]");
-    	}
-    }
+
 
 }
