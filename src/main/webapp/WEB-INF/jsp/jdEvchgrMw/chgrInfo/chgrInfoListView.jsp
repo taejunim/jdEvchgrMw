@@ -74,6 +74,9 @@ function get_data() {
   			<tbody id="data_list">
  			 </tbody>
 		</table>
+	<div id="pagination" class="pagingBox">
+		<ui:pagination paginationInfo = "${paginationInfo}" type="image" jsFunction="fn_page"/>
+	</div>
 	</form:form>
 </body>
 </html>
