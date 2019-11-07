@@ -84,6 +84,11 @@ function fn_init() {
 			 		<td>${resultList.regDt}</td>
 			 	</tr>
 			</c:forEach>
+			<c:if test=  "${empty resultList}" >
+				<tr>
+					<td colspan = "5" rowspan = "10" class="align_c"> --데이터가 존재하지 않습니다--  </td>
+				</tr>
+			</c:if>			
  			 </tbody>
 		</table>
 	<div id="pagination" class="pagingBox align_c">
