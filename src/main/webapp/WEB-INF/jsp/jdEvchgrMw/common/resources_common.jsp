@@ -10,6 +10,8 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/jdEvchgrMw/main.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/jdEvchgrMw/table.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/jdEvchgrMw/menu.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/jdEvchgrMw/button/pagination.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/jdEvchgrMw/jquery-ui.css">
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -24,6 +26,7 @@
 <!-- js -->
 <script src="<%=request.getContextPath()%>/js/json.js"></script>
 <script src="<%=request.getContextPath()%>/js/jquery.modal.js"></script>
+<script src="<%=request.getContextPath()%>/js/jquery.datepicker.js"></script>
 
 <script type="text/javascript">
 	

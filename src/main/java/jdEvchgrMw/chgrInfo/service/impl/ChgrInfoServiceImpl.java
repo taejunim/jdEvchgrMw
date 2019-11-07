@@ -22,9 +22,9 @@ public class ChgrInfoServiceImpl extends EgovAbstractServiceImpl implements Chgr
 		return chgrInfoMapper.chgrInfoDataList(chgrInfoVO);
 	}
 	
-	public int chgrInfoDataListCnt() throws Exception {
+	public int chgrInfoDataListCnt(ChgrInfoVO chgrInfoVO) throws Exception {
 		
-		return chgrInfoMapper.chgrInfoDataListCnt();
+		return chgrInfoMapper.chgrInfoDataListCnt(chgrInfoVO);
 	}
 	
 	public void chgrInfoDataInsert(ChgrInfoVO chgrInfoVO) throws Exception {

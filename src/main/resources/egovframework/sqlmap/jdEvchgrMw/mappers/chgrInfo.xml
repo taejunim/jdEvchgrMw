@@ -13,9 +13,21 @@
 		FROM   tb_msg_data
 		
 		WHERE  1=1
+		AND MSG_ACTION_TYPE = #{msgActionType}
 		
+		<if test="srtDate != null and !srtDate.equals('')" >
+           <![CDATA[ AND REG_DT >= #{srtDate} ]]>
+	   </if>      
+	   <if test="endDate != null and !endDate.equals('')" >
+           <![CDATA[ AND REG_DT <= #{endDate} ]]>
+	   </if>  
+		<if test="msgSendType != null and !msgSendType.equals('')" >
+           <![CDATA[ AND MSG_SEND_TYPE = #{msgSendType} ]]>
+	   </if>      
+	
 		ORDER BY REG_DT DESC
-		  LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	
+		LIMIT #{recordCountPerPage} OFFSET #{firstIndex}	   
+		 
 	</select>
 	<select id="chgrInfoDataListCnt" resultType="int">
 	
@@ -24,7 +36,18 @@
 		FROM   tb_msg_data
 		
 		WHERE  1=1
-
+		AND MSG_ACTION_TYPE = #{msgActionType}
+		
+		<if test="srtDate != null and !srtDate.equals('')" >
+           <![CDATA[ AND REG_DT >= #{srtDate} ]]>
+	   </if>      
+	   <if test="endDate != null and !endDate.equals('')" >
+           <![CDATA[ AND REG_DT <= #{endDate} ]]>
+	   </if>  
+		<if test="msgSendType != null and !msgSendType.equals('')" >
+           <![CDATA[ AND MSG_SEND_TYPE = #{msgSendType} ]]>
+	   </if>    
+	   
 	
 	</select>
 	<select id="chgrInfoDataDetail" resultType="egovMap">
@@ -39,7 +62,8 @@
 		
 		WHERE  1=1
 		
-		AND	  MSG_DATA_SEQ = ${msgDataSeq}
+		AND	  MSG_DATA_SEQ = #{msgDataSeq}
+		AND MSG_ACTION_TYPE = #{msgActionType}
 	
 	</select>
 

@@ -13,13 +13,18 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import egovframework.rte.psl.dataaccess.util.EgovMap;
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoVO;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ChgrInfoController {
@@ -31,8 +36,35 @@ public class ChgrInfoController {
 	 * CHGR INFO LIST VIEW PAGE
 	 */
 	@RequestMapping(value = "/chgrInfoListView.do")
-	public String chgrInfoListView(ChgrInfoVO chgrInfoVO) throws Exception {
+	public String chgrInfoListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
 
+		chgrInfoVO.getMsgActionType();
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);										//출고 목록 조회 TOTAL CNT CALL	
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    // 차량목록조회
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
 		return "jdEvchgrMw/chgrInfo/chgrInfoListView";
 	}
 
