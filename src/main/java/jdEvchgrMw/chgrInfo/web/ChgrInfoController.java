@@ -38,7 +38,7 @@ public class ChgrInfoController {
 	@RequestMapping(value = "/chgrInfoListView.do")
 	public String chgrInfoListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
 
-		chgrInfoVO.getMsgActionType();
+		chgrInfoVO.setMsgActionType("chgrInfo");
 		/***********************페이징 SETTING 시작***********************/
 		PaginationInfo paginationInfo = new PaginationInfo();
 		  
