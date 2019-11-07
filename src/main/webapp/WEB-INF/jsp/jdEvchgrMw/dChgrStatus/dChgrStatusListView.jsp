@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@include file="/WEB-INF/jsp/jdEvchgrMw/common/resources_common.jsp"%>
-<title>충전기 설치정보</title>
+<title>덤프_충전기상태</title>
 <script>
 $(document).ready(function(){
 	fn_init();

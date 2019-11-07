@@ -1,12 +1,10 @@
 package jdEvchgrMw.chgrInfo.web;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
-import jdEvchgrMw.common.CollectServiceBean;
-import jdEvchgrMw.vo.CommonVO;
-import jdEvchgrMw.vo.FwVerInfoVO;
-import jdEvchgrMw.vo.PlugDetlInfoVO;
-import jdEvchgrMw.vo.chgrInfoVO;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -22,9 +20,9 @@ import egovframework.rte.psl.dataaccess.util.EgovMap;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoVO;
-
-import java.util.ArrayList;
-import java.util.List;
+import jdEvchgrMw.common.CollectServiceBean;
+import jdEvchgrMw.vo.FwVerInfoVO;
+import jdEvchgrMw.vo.PlugDetlInfoVO;
 
 @Controller
 public class ChgrInfoController {
@@ -37,29 +35,16 @@ public class ChgrInfoController {
 	 */
 	@RequestMapping(value = "/chgrInfoListView.do")
 	public String chgrInfoListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
-
 		
 		chgrInfoVO.setMsgActionType("chgrInfo");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);										//출고 목록 조회 TOTAL CNT CALL	
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 	
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
 	    model.addAttribute("resultList", resList);
@@ -72,25 +57,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("alarmHistory");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);						
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -104,25 +77,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("askVer");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);							
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -136,25 +97,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("changeMode");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);									
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -168,25 +117,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("chargePavment");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -200,25 +137,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("chargingEnd");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -232,25 +157,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("chargingInfo");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -264,25 +177,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("chargingStart");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -296,25 +197,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("chgrStatus");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -328,25 +217,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("dAlarmHistory");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -360,25 +237,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("dChargePavment");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -392,25 +257,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("dChargingEnd");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -424,25 +277,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("dChargingInfo");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -456,25 +297,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("dChargingStart");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -488,25 +317,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("dChgrStatus");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -520,25 +337,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("displayBrightness");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -552,25 +357,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("dReportUpdate");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -584,25 +377,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("notifyVerUpgrade");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -616,25 +397,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("prices");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -648,25 +417,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("reportUpate");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -680,25 +437,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("reset");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -712,25 +457,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("sendSms");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -744,25 +477,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("sound");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -776,25 +497,13 @@ public class ChgrInfoController {
 
 		
 		chgrInfoVO.setMsgActionType("user");
-		/***********************페이징 SETTING 시작***********************/
-		PaginationInfo paginationInfo = new PaginationInfo();
-		  
-		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
-		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
-		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
-	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+  /***********************페이징 SETTING***********************/
+		
+	 	chgrInfoVO = pagenateMake(chgrInfoVO);
 
-	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
-	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
-	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
-	    
-	    if(chgrInfoVO.getPageIndex() != 1)
-	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
-	   
-	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
-	    paginationInfo.setTotalRecordCount(totCnt);
-	    model.addAttribute("paginationInfo", paginationInfo);
-	    /***********************페이징 SETTING 끝***********************/
+	 	model.addAttribute("paginationInfo", chgrInfoVO.getPaginationInfo());
+	 	
+ /***********************페이징 SETTING 끝***********************/	 
 
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
@@ -2508,4 +2217,27 @@ public class ChgrInfoController {
 
 	}
 
+	
+	public ChgrInfoVO pagenateMake(ChgrInfoVO chgrInfoVO) throws Exception {
+		
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+		
+		chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);										//출고 목록 조회 TOTAL CNT CALL	
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    chgrInfoVO.setPaginationInfo(paginationInfo);
+	    
+	    System.out.println("totCnt: "+totCnt);
+	    
+	    
+	    return chgrInfoVO;
+	}
 }

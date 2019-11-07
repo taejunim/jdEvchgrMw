@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@include file="/WEB-INF/jsp/jdEvchgrMw/common/resources_common.jsp"%>
-<title>충전기 설치정보</title>
+<title>충전기 화면밝기정보</title>
 <script>
 $(document).ready(function(){
 	fn_init();
+	$("input:checkbox[id='group-2']").prop("checked", true);
 	$( "#btn_search" ).click(function() {
 		fn_selectList();
 	});
@@ -34,7 +35,7 @@ function fn_init() {
 	if(msgSendType != ""){
 		$("#msgSendType").val(msgSendType);
 	}
-	
+	 
 	if(srtDate != ""){
 		$("#srtDate").val(srtDate);
 	}
@@ -47,7 +48,7 @@ function fn_init() {
 <body>
 
 <div class="page-header">
-  <h1>DISPLAYBRIGHTNESS<small> MESSAGE LIST</small></h1>
+  <h1>DISPLAY BRIGHTNESS<small> MESSAGE LIST</small></h1>
 </div>
 <div class = "body">
 	<%@include file="/WEB-INF/jsp/jdEvchgrMw/menu/menu.jsp"%>	

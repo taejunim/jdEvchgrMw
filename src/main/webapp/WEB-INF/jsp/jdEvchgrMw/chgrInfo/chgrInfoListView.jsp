@@ -4,6 +4,8 @@
 <script>
 $(document).ready(function(){
 	fn_init();
+	$("input:checkbox[id='group-1']").prop("checked", true);
+
 	$( "#btn_search" ).click(function() {
 		fn_selectList();
 	});

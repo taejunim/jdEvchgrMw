@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@include file="/WEB-INF/jsp/jdEvchgrMw/common/resources_common.jsp"%>
-<title>충전기 설치정보</title>
+<title>사용자 인증요청</title>
 <script>
 $(document).ready(function(){
 	fn_init();
+	$("input:checkbox[id='group-1']").prop("checked", true);
 	$( "#btn_search" ).click(function() {
 		fn_selectList();
 	});
