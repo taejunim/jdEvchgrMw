@@ -38,6 +38,7 @@ public class ChgrInfoController {
 	@RequestMapping(value = "/chgrInfoListView.do")
 	public String chgrInfoListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
 
+		
 		chgrInfoVO.setMsgActionType("chgrInfo");
 		/***********************페이징 SETTING 시작***********************/
 		PaginationInfo paginationInfo = new PaginationInfo();
@@ -59,7 +60,6 @@ public class ChgrInfoController {
 	    model.addAttribute("paginationInfo", paginationInfo);
 	    /***********************페이징 SETTING 끝***********************/
 
-	    // 차량목록조회
 	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
 	    
 	    model.addAttribute("resultList", resList);
@@ -67,7 +67,742 @@ public class ChgrInfoController {
 		
 		return "jdEvchgrMw/chgrInfo/chgrInfoListView";
 	}
+	@RequestMapping(value = "/alarmHistoryListView.do")
+	public String alarmHistoryListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
 
+		
+		chgrInfoVO.setMsgActionType("alarmHistory");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);						
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/alarmHistory/alarmHistoryListView";
+	}
+	@RequestMapping(value = "/askVerListView.do")
+	public String askVerListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("askVer");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);							
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/askVer/askVerListView";
+	}
+	@RequestMapping(value = "/changeModeListView.do")
+	public String changeModeListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("changeMode");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);									
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/changeMode/changeModeListView";
+	}
+	@RequestMapping(value = "/chargePavmentListView.do")
+	public String chargePavmentListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("chargePavment");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/chargePavment/chargePavmentListView";
+	}
+	@RequestMapping(value = "/chargingEndListView.do")
+	public String chargingEndListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("chargingEnd");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/chargingEnd/chargingEndListView";
+	}
+	@RequestMapping(value = "/chargingInfoListView.do")
+	public String chargingInfoListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("chargingInfo");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/chargingInfo/chargingInfoListView";
+	}
+	@RequestMapping(value = "/chargingStartListView.do")
+	public String chargingStartListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("chargingStart");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/chargingStart/chargingStartListView";
+	}
+	@RequestMapping(value = "/chgrStatusListView.do")
+	public String chgrStatusListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("chgrStatus");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/chgrStatus/chgrStatusListView";
+	}
+	@RequestMapping(value = "/dAlarmHistoryListView.do")
+	public String dAlarmHistoryListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("dAlarmHistory");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/dAlarmHistory/dAlarmHistoryListView";
+	}
+	@RequestMapping(value = "/dChargePavmentListView.do")
+	public String dChargePavmentListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("dChargePavment");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/dChargePavment/dChargePavmentListView";
+	}
+	@RequestMapping(value = "/dChargingEndListView.do")
+	public String dChargingEndListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("dChargingEnd");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/dChargingEnd/dChargingEndListView";
+	}
+	@RequestMapping(value = "/dChargingInfoListView.do")
+	public String dChargingInfoListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("dChargingInfo");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/dChargingInfo/dChargingInfoListView";
+	}
+	@RequestMapping(value = "/dChargingStartListView.do")
+	public String dChargingStartListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("dChargingStart");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/dChargingStart/dChargingStartListView";
+	}
+	@RequestMapping(value = "/dChgrStatusListView.do")
+	public String dChgrStatusListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("dChgrStatus");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/dChgrStatus/dChgrStatusListView";
+	}
+	@RequestMapping(value = "/displayBrightnessListView.do")
+	public String displayBrightnessListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("displayBrightness");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/displayBrightness/displayBrightnessListView";
+	}
+	@RequestMapping(value = "/dReportUpdateListView.do")
+	public String dReportUpdateListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("dReportUpdate");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/dReportUpdate/dReportUpdateListView";
+	}
+	@RequestMapping(value = "/notifyVerUpgradeListView.do")
+	public String notifyVerUpgradeListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("notifyVerUpgrade");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/notifyVerUpgrade/notifyVerUpgradeListView";
+	}
+	@RequestMapping(value = "/pricesListView.do")
+	public String pricesListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("prices");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/prices/pricesListView";
+	}
+	@RequestMapping(value = "/reportUpateListView.do")
+	public String reportUpdateListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("reportUpate");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/reportUpdate/reportUpdateListView";
+	}
+	@RequestMapping(value = "/resetListView.do")
+	public String resetListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("reset");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/reset/resetListView";
+	}
+	@RequestMapping(value = "/sendSmsListView.do")
+	public String sendSmsListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("sendSms");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/sendSms/sendSmsListView";
+	}
+	@RequestMapping(value = "/soundListView.do")
+	public String soundListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("sound");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/sound/soundListView";
+	}
+	@RequestMapping(value = "/userListView.do")
+	public String userListView(@ModelAttribute("chgrInfoVO") ChgrInfoVO chgrInfoVO, ModelMap model) throws Exception {
+
+		
+		chgrInfoVO.setMsgActionType("user");
+		/***********************페이징 SETTING 시작***********************/
+		PaginationInfo paginationInfo = new PaginationInfo();
+		  
+		paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+		paginationInfo.setRecordCountPerPage(chgrInfoVO.getPageUnit());
+		paginationInfo.setPageSize(chgrInfoVO.getPageSize());
+	    paginationInfo.setCurrentPageNo(chgrInfoVO.getPageIndex());
+
+	    chgrInfoVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
+	    chgrInfoVO.setLastIndex(paginationInfo.getLastRecordIndex());
+	    chgrInfoVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+	    
+	    if(chgrInfoVO.getPageIndex() != 1)
+	    	chgrInfoVO.setPageRowIndex(chgrInfoVO.getPageIndex()*10-10);
+	   
+	    int totCnt = chgrInfoService.chgrInfoDataListCnt(chgrInfoVO);
+	    paginationInfo.setTotalRecordCount(totCnt);
+	    model.addAttribute("paginationInfo", paginationInfo);
+	    /***********************페이징 SETTING 끝***********************/
+
+	    List<EgovMap> resList = chgrInfoService.chgrInfoDataList(chgrInfoVO);
+	    
+	    model.addAttribute("resultList", resList);
+		
+		
+		return "jdEvchgrMw/user/userListView";
+	}
 	@RequestMapping(value="/chgrInfoListData.do")
 	@ResponseBody
 	public Object chgrInfoListData(ChgrInfoVO chgrInfoVO, Model model) throws Exception{

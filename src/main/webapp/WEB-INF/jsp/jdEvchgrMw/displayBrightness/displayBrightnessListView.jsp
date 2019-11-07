@@ -47,7 +47,7 @@ function fn_init() {
 <body>
 
 <div class="page-header">
-  <h1>D ALARM HISTORY<small> MESSAGE LIST</small></h1>
+  <h1>DISPLAYBRIGHTNESS<small> MESSAGE LIST</small></h1>
 </div>
 <div class = "body">
 	<%@include file="/WEB-INF/jsp/jdEvchgrMw/menu/menu.jsp"%>	

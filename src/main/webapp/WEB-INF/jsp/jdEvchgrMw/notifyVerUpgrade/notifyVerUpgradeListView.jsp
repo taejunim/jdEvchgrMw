@@ -8,7 +8,7 @@ $(document).ready(function(){
 		fn_selectList();
 	});
 	$( "#btn_refresh" ).click(function() {
-		location.href = "<c:url value='/reportUpdateListView.do'/>";
+		location.href = "<c:url value='/notifyVerUpgradeListView.do'/>";
 	});
 	
 
@@ -16,13 +16,13 @@ $(document).ready(function(){
 //페이지 이동 스크립트
 function fn_page(pageNo){
 	frm.pageIndex.value = pageNo;
-	document.frm.action = '<c:url value="/reportUpdateListView.do"/>';
+	document.frm.action = '<c:url value="/notifyVerUpgradeListView.do"/>';
 	document.frm.submit();
 }
 // 목록 조회
 function fn_selectList() {	
 	frm.pageIndex.value = 1;     
-	document.frm.action = "<c:url value='/reportUpdateListView.do'/>";
+	document.frm.action = "<c:url value='/notifyVerUpgradeListView.do'/>";
 	document.frm.submit();
 }
 function fn_init() {
@@ -47,12 +47,12 @@ function fn_init() {
 <body>
 
 <div class="page-header">
-  <h1>REPORT UPDATE<small> MESSAGE LIST</small></h1>
+  <h1>NOTIFY VER UPGRADE<small> MESSAGE LIST</small></h1>
 </div>
 <div class = "body">
 	<%@include file="/WEB-INF/jsp/jdEvchgrMw/menu/menu.jsp"%>	
 	<form:form id="frm" name="frm" method="post" autocomplete="off">
-	<input type="hidden" id="msgActionType" name="msgActionType" value="reportUpdate">
+	<input type="hidden" id="msgActionType" name="msgActionType" value="notifyVerUpgrade">
 	<input type="hidden" id="pageIndex" name="pageIndex" value="${chgrInfoVO.pageIndex}">
 	<div class = "pl5">
 		<table class="table">
