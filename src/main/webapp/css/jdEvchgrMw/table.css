@@ -17,6 +17,8 @@ table.table tbody tr td.txt_center {
 }
 
 table.table {
-	width : auto !important;
+	width : calc(100% - 355px);
 	word-break:break-all;
+	float : left;
+	margin-left : 5px;
 }

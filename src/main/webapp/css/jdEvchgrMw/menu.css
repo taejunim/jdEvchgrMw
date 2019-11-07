@@ -21,6 +21,7 @@ header {
   margin-left: auto;
   float : left;
   display : block;
+  width : 350px;
   max-width: 22.5rem;
  /* box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);*/
   height : 130vh; /* 높이 수정하자*/
@@ -49,6 +50,7 @@ header {
 
 .nav label {
   cursor: pointer;
+  border-bottom : 1px #fff solid;
 }
 
 /**

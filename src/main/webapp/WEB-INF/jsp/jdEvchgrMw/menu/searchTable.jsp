@@ -7,7 +7,7 @@
 		<table class="table">
 			<colgroup>
 				<col width="">
-				<col width="75%">
+				<col width="60%">
 				<col width="20%">
 			</colgroup>
 			<thead class="thead-dark"><tr>
@@ -16,7 +16,7 @@
 				<th scope="col"></th>
 			</tr></thead>
 			<tbody><tr>
-				<td><select id="msgSendType" name = "msgSendType">
+				<td class="align_c"><select id="msgSendType" name = "msgSendType">
 						<option value = "" selected>전체</option>
 						<option value = "req">req</option>
 						<option value = "res">res</option>
