@@ -56,28 +56,7 @@ function fn_init() {
 	<input type="hidden" id="msgActionType" name="msgActionType" value="chargingEnd">
 	<input type="hidden" id="pageIndex" name="pageIndex" value="${chgrInfoVO.pageIndex}">
 	<div class = "pl5">
-		<table class="table">
-			<colgroup>
-				<col width="10%">
-				<col width="80%">
-				<col width="10%">
-			</colgroup>
-			<thead class="thead-dark"><tr>
-				<th scope="col">전문 구분</th>
-				<th scope="col">등록 일자</th>
-				<th scope="col"></th>
-			</tr></thead>
-			<tbody><tr>
-				<td><select id="msgSendType" name = "msgSendType">
-						<option value = "" selected>전체</option>
-						<option value = "req">req</option>
-						<option value = "res">res</option>
-				</select></td>
-				<td><input type="text" class="datepicker srtDate" name="srtDate" id="srtDate" >
-					&nbsp;&nbsp;~&nbsp;&nbsp; <input type="text" class="datepicker endDate" name="endDate" id="endDate"></td>
-				<td><input type ="button" id = "btn_refresh" value ="새로고침"/>&nbsp;&nbsp;<input type ="button" id = "btn_search" value ="검색"/></td>
-			</tr></tbody>
-		</table>	
+		<%@include file="/WEB-INF/jsp/jdEvchgrMw/menu/searchTable.jsp"%>	
 		<table class="table">
 			<colgroup>
 			<col width="5%">

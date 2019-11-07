@@ -16,13 +16,14 @@ a {
  * Styling navigation
  */
 header {
+  background-color : #151515;
   margin-right: auto;
   margin-left: auto;
   float : left;
   display : block;
   max-width: 22.5rem;
  /* box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);*/
-  height : 100vh; // 높이 수정하자
+  height : 130vh; /* 높이 수정하자*/
 }
 
 
@@ -56,13 +57,13 @@ header {
 .group-list a,
 .group-list label {
   padding-left: 2rem;
-  background: #252525;
+  background: #151515;
   /*box-shadow: inset 0 -1px #373737;*/
 }
 .group-list a:focus, .group-list a:hover,
 .group-list label:focus,
 .group-list label:hover {
-  background: #131313;
+  background: #151515;
 }
 
 /**
@@ -97,7 +98,7 @@ header {
 
 .nav__list input[type=checkbox]:checked + label + ul {
   /* reset the height when checkbox is checked */
-  max-height: 1000px;
+  max-height: 1500px;
 }
 
 /**

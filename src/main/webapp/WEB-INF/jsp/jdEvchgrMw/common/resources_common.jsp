@@ -12,6 +12,8 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/jdEvchgrMw/menu.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/jdEvchgrMw/button/pagination.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/jdEvchgrMw/jquery-ui.css">
+<!-- Fontawesom -->
+<link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" >
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
