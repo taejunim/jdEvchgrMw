@@ -16,10 +16,10 @@
 		AND MSG_ACTION_TYPE = #{msgActionType}
 		
 		<if test="srtDate != null and !srtDate.equals('')" >
-           <![CDATA[ AND REG_DT >= #{srtDate} ]]>
+           <![CDATA[ AND REG_DT >=  DATE_FORMAT(#{srtDate}, '%Y-%m-%d 00:00:00') ]]>
 	   </if>      
 	   <if test="endDate != null and !endDate.equals('')" >
-           <![CDATA[ AND REG_DT <= #{endDate} ]]>
+           <![CDATA[ AND REG_DT <=  DATE_FORMAT(#{endDate}, '%Y-%m-%d 23:59:59') ]]>
 	   </if>  
 		<if test="msgSendType != null and !msgSendType.equals('')" >
            <![CDATA[ AND MSG_SEND_TYPE = #{msgSendType} ]]>
@@ -39,10 +39,10 @@
 		AND MSG_ACTION_TYPE = #{msgActionType}
 		
 		<if test="srtDate != null and !srtDate.equals('')" >
-           <![CDATA[ AND REG_DT >= #{srtDate} ]]>
+           <![CDATA[ AND REG_DT >=  DATE_FORMAT(#{srtDate}, '%Y-%m-%d 00:00:00') ]]>
 	   </if>      
 	   <if test="endDate != null and !endDate.equals('')" >
-           <![CDATA[ AND REG_DT <= #{endDate} ]]>
+           <![CDATA[ AND REG_DT <=  DATE_FORMAT(#{endDate}, '%Y-%m-%d 23:59:59') ]]>
 	   </if>  
 		<if test="msgSendType != null and !msgSendType.equals('')" >
            <![CDATA[ AND MSG_SEND_TYPE = #{msgSendType} ]]>
