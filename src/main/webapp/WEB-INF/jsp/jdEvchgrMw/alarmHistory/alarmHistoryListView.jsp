@@ -57,7 +57,7 @@ function fn_init() {
 	<input type="hidden" id="pageIndex" name="pageIndex" value="${chgrInfoVO.pageIndex}">
 	<div class = "pl5">
 		<%@include file="/WEB-INF/jsp/jdEvchgrMw/menu/searchTable.jsp"%>	
-		<table class="table">
+		<table class="table align_c">
 			<colgroup>
 			<col width="5%">
 			<col width="7%">
@@ -78,7 +78,7 @@ function fn_init() {
   			<c:forEach var="resultList" items="${resultList}" varStatus="status">
 			<c:set var="index" value="${paginationInfo.totalRecordCount - ((paginationInfo.currentPageNo-1) * paginationInfo.recordCountPerPage + status.index) }"/>
 			 	<tr>
-			 		<td>${paginationInfo.totalRecordCount - 10 * (chgrInfoVO.pageIndex-1) - status.index}</td>
+			 		<td class="align_c">${paginationInfo.totalRecordCount - 10 * (chgrInfoVO.pageIndex-1) - status.index}</td>
 			 		<td>${resultList.msgSendType}</td>
 			 		<td>${resultList.msgActionType}</td>
 			 		<td>${resultList.msgData}</td>

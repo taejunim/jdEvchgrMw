@@ -57,7 +57,7 @@ function fn_init() {
 	<input type="hidden" id="pageIndex" name="pageIndex" value="${chgrInfoVO.pageIndex}">
 	<div class = "pl5">
 		<%@include file="/WEB-INF/jsp/jdEvchgrMw/menu/searchTable.jsp"%>	
-		<table class="table">
+		<table class="table align_c">
 			<colgroup>
 			<col width="5%">
 			<col width="7%">
