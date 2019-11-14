@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
-import jdEvchgrMw.chgrInfo.service.ChgrInfoVO;
+import jdEvchgrMw.vo.ChgrInfoVO;
 import jdEvchgrMw.common.CollectServiceBean;
 import jdEvchgrMw.vo.FwVerInfoVO;
 import jdEvchgrMw.vo.PlugDetlInfoVO;

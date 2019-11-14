@@ -10,7 +10,7 @@ import org.json.simple.parser.ParseException;
 
 import com.google.gson.JsonParser;
 
-import jdEvchgrMw.chgrInfo.service.ChgrInfoVO;
+import jdEvchgrMw.vo.ChgrInfoVO;
 import jdEvchgrMw.common.CollectServiceBean;
 import jdEvchgrMw.vo.CommonVO;
 
@@ -59,6 +59,8 @@ public class JsonDataParsing {
             jObject = (JSONObject) jParser.parse(commonVO.getRcvMsg());
 
             /*COMMON PARSING*/
+
+            System.out.println("[ 충전소 : " + commonVO.getStationId() + " - 충전기 : "+ commonVO.getChgrId() +" ]");
 
             String uuid = jObject.get("uuid").toString();
             String send_type = jObject.get("send_type").toString();
@@ -214,8 +216,8 @@ public class JsonDataParsing {
 
             JSONObject sendData = new JSONObject();
 
-            sendData.put("station_id", "JD000001");
-            sendData.put("chgr_id", "01");
+            sendData.put("station_id", commonVO.getStationId());
+            sendData.put("chgr_id", commonVO.getChgrId());
             sendData.put("response_date", "201905929172029");
             sendData.put("req_create_date", "20190529172029");
             sendData.put("response_receive", commonVO.getResponseReceive());

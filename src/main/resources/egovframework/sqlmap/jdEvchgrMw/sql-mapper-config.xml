@@ -4,6 +4,6 @@
 <configuration>
     <typeAliases>
 		<typeAlias alias="egovMap" 		type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
-		<typeAlias alias="chgrInfoVO"	type="jdEvchgrMw.chgrInfo.service.ChgrInfoVO"/>
+		<typeAlias alias="chgrInfoVO"	type="jdEvchgrMw.vo.ChgrInfoVO"/>
     </typeAliases>
 </configuration>

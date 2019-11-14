@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
-import jdEvchgrMw.chgrInfo.service.ChgrInfoVO;
+import jdEvchgrMw.vo.ChgrInfoVO;
 
 @Service("chgrInfoService")
 public class ChgrInfoServiceImpl extends EgovAbstractServiceImpl implements ChgrInfoService {
