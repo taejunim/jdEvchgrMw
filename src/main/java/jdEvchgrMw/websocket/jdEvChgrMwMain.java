@@ -17,9 +17,9 @@ public class jdEvChgrMwMain {
      * WEBSOCKET CONNECTED CALL EVENT
      */
     @OnOpen
-    public void handleOpen(@PathParam("chgrId") String chgrId, Session session){
-    	
-        System.out.println("[ 충전기  "+ chgrId +"(가)이 접속 하였습니다. ]");
+    public void handleOpen(@PathParam("stationId") String stationId, @PathParam("chgrId") String chgrId, Session session){
+
+        System.out.println("[ 충전소 : " + stationId + " - 충전기  "+ chgrId +"(가)이 접속 하였습니다. ]");
     }
     
     /**

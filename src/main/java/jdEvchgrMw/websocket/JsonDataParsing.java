@@ -60,31 +60,25 @@ public class JsonDataParsing {
 
             /*COMMON PARSING*/
 
+            String uuid = jObject.get("uuid").toString();
             String send_type = jObject.get("send_type").toString();
             String action_type = jObject.get("action_type").toString();
             String data = jObject.get("data").toString();
 
+            commonVO.setUuid(uuid);
+            commonVO.setSendType(send_type);
+            commonVO.setActionType(action_type);
+            commonVO.setData(data);
+
             //데이터 공백 체크
-            if (send_type.equals("") || send_type == null) {
+            if (uuid.equals("") || uuid == null || send_type.equals("") || send_type == null || action_type.equals("") || action_type == null || data.equals("") || data == null) {
 
-                protocolErrorMsgSend(commonVO, "전송전문(send_type)");
-
-            } else if (action_type.equals("") || action_type == null) {
-
-                protocolErrorMsgSend(commonVO, "명령구분(action_type)");
-
-            } else if (data.equals("") || data == null) {
-
-                protocolErrorMsgSend(commonVO, "전송 데이터(data)");
+                protocolErrorMsgSend(commonVO);
 
             }
 
             //데이터 정상 -> 파싱 시작
             else {
-
-                commonVO.setSendType(send_type);
-                commonVO.setActionType(action_type);
-                commonVO.setData(data);
 
                 if (commonVO.getActionType().equals("chgrInfo")) {
                     chgrInfoParsingData(commonVO);                        //충전기 설치정보(충전기 -> 충전기정보시스템) CALL
@@ -160,7 +154,8 @@ public class JsonDataParsing {
 
                 } else {
                     System.out.println("[ 정의 되지 않은 PACKET 입니다. ]");
-                    undefinedActionErrorMsgSend(commonVO);
+
+                    protocolErrorMsgSend(commonVO);
                     return;
                 }
             }
@@ -168,7 +163,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             e.printStackTrace();
 
-            protocolErrorMsgSend(commonVO, "");
+            protocolErrorMsgSend(commonVO);
             return;
 
         } catch (Exception e) {
@@ -186,17 +181,18 @@ public class JsonDataParsing {
             chgrInfoVO.setMsgActionType(commonVO.getActionType());
             chgrInfoVO.setMsgData(commonVO.getData());
 
-            csb.beanChgrInfoService().chgrInfoDataInsert(chgrInfoVO);
+            //csb.beanChgrInfoService().chgrInfoDataInsert(chgrInfoVO);
 
         } catch (Exception e) {
             e.printStackTrace();
 
-            commonVO.getUserSession().getAsyncRemote().sendText("DB Insert 오류입니다. 담당자에게 문의주세요.");
             unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
             return;
         }
 
         //응답 보내기
+        commonVO.setResponseReceive("1");
+        commonVO.setResponseReason("");
         sendMessage(commonVO);
 
     }
@@ -208,232 +204,145 @@ public class JsonDataParsing {
      */
     public void sendMessage(CommonVO commonVO) {
 
-        System.out.println("[ MSG <- M/W : " + commonVO.getSndMsg() + " ]");
-
         JSONObject sendJsonObject = new JSONObject();
-
-        sendJsonObject.put("send_type", "res");
-
-        JSONObject sendData = new JSONObject();
-
-        sendData.put("station_id", "JD000001");
-        sendData.put("chgr_id", "01");
-        sendData.put("response_date", "201905929172029");
-        sendData.put("req_create_date", "20190529172029");
-        sendData.put("response_receive", "1");
-        sendData.put("response_reason", "");
 
         try {
 
-            if (commonVO.getActionType().equals("chgrInfo")) {
+            sendJsonObject.put("uuid", commonVO.getUuid());
+            sendJsonObject.put("send_type", "res");
+            sendJsonObject.put("action_type", commonVO.getActionType());
 
-                sendJsonObject.put("action_type", "chgrInfo");
+            JSONObject sendData = new JSONObject();
 
-                sendData.put("price_apply_yn", "1");
+            sendData.put("station_id", "JD000001");
+            sendData.put("chgr_id", "01");
+            sendData.put("response_date", "201905929172029");
+            sendData.put("req_create_date", "20190529172029");
+            sendData.put("response_receive", commonVO.getResponseReceive());
+            sendData.put("response_reason", commonVO.getResponseReason());
 
-                JSONArray unit_prices_array = new JSONArray();
+            //응답 성공 -> data Json으로 만들어서 보내줌 실패시 data 없이 보냄
+            if (commonVO.getResponseReceive().equals("1")) {
 
-                JSONObject unit_prices_data = new JSONObject();
+                if (commonVO.getActionType().equals("chgrInfo")) {
 
-                for (int i = 0; i < 24; i++) {
+                    sendData.put("price_apply_yn", "1");
 
-                    String key;
-                    String value = String.valueOf(i);
+                    JSONArray unit_prices_array = new JSONArray();
 
-                    if (i < 10) {
-                        key = "h0" + i;
-                    } else {
-                        key = "h" + i;
+                    JSONObject unit_prices_data = new JSONObject();
+
+                    for (int i = 0; i < 24; i++) {
+
+                        String key;
+                        String value = String.valueOf(i);
+
+                        if (i < 10) {
+                            key = "h0" + i;
+                        } else {
+                            key = "h" + i;
+                        }
+
+                        unit_prices_data.put(key, value);
                     }
 
-                    unit_prices_data.put(key, value);
-                }
+                    unit_prices_array.add(unit_prices_data);
 
-                unit_prices_array.add(unit_prices_data);
-
-                sendData.put("unit_prices", unit_prices_array);
+                    sendData.put("unit_prices", unit_prices_array);
 
 
-                JSONArray display_brightness_array = new JSONArray();
+                    JSONArray display_brightness_array = new JSONArray();
 
-                JSONObject display_brightness_data = new JSONObject();
+                    JSONObject display_brightness_data = new JSONObject();
 
-                for (int i = 0; i < 24; i++) {
+                    for (int i = 0; i < 24; i++) {
 
-                    String key;
+                        String key;
 
-                    if (i < 10) {
-                        key = "h0" + i;
-                    } else {
-                        key = "h" + i;
+                        if (i < 10) {
+                            key = "h0" + i;
+                        } else {
+                            key = "h" + i;
+                        }
+
+                        display_brightness_data.put(key, "100");
                     }
 
-                    display_brightness_data.put(key, "100");
-                }
+                    display_brightness_array.add(display_brightness_data);
 
-                display_brightness_array.add(display_brightness_data);
-
-                sendData.put("display_brightness", display_brightness_array);
+                    sendData.put("display_brightness", display_brightness_array);
 
 
-                JSONArray sound_array = new JSONArray();
+                    JSONArray sound_array = new JSONArray();
 
-                JSONObject sound_data = new JSONObject();
+                    JSONObject sound_data = new JSONObject();
 
-                for (int i = 0; i < 24; i++) {
+                    for (int i = 0; i < 24; i++) {
 
-                    String key;
-                    String value = String.valueOf(i);
+                        String key;
+                        String value = String.valueOf(i);
 
-                    if (i < 10) {
-                        key = "h0" + i;
-                    } else {
-                        key = "h" + i;
+                        if (i < 10) {
+                            key = "h0" + i;
+                        } else {
+                            key = "h" + i;
+                        }
+
+                        sound_data.put(key, value);
                     }
 
-                    sound_data.put(key, value);
+                    sound_array.add(sound_data);
+
+                    sendData.put("sound", sound_array);
+
+                } else if (commonVO.getActionType().equals("chgrStatus")    || commonVO.getActionType().equals("chargingStart") || commonVO.getActionType().equals("chargingInfo")
+                        || commonVO.getActionType().equals("chargingEnd")   || commonVO.getActionType().equals("chargePayment") || commonVO.getActionType().equals("sendSms")
+                        || commonVO.getActionType().equals("alarmHistory")  || commonVO.getActionType().equals("reportUpate")   || commonVO.getActionType().equals("dChargingStart")
+                        || commonVO.getActionType().equals("dChargingEnd")  || commonVO.getActionType().equals("dChargePayment")|| commonVO.getActionType().equals("dAlaramHistory")
+                        || commonVO.getActionType().equals("dReportUpdate") || commonVO.getActionType().equals("chgrStatus")    || commonVO.getActionType().equals("chgrStatus")) {
+
+
+                } else if (commonVO.getActionType().equals("user")) {        //사용자 인증요청(충전기 -> 충전기정보시스템) CALL
+
+                    sendData.put("card_num", "2100147845698523");
+                    sendData.put("valid", "1");
+                    sendData.put("pay_yn", "N");
+                    sendData.put("charger_pay_yn", "Y");
+                    sendData.put("member_company", "ME");
+                    sendData.put("current_unit_cost", "173.8");
+
+                } else if (commonVO.getActionType().equals("reset")) {
+                    resetParsingData(commonVO);                        //충전기 RESET 요청(충전기정보시스템 -> 충전기) CALL
+
+                } else if (commonVO.getActionType().equals("prices")) {
+                    pricesParsingData(commonVO);                        //단가정보(충전기정보시스템 -> 충전기) CALL
+
+                } else if (commonVO.getActionType().equals("changeMode")) {
+                    changeModeParsingData(commonVO);                        //충전기모드변경(충전기정보시스템 -> 충전기) CALL
+
+                } else if (commonVO.getActionType().equals("displayBrightness")) {
+                    displayBrightnessParsingData(commonVO);                        //충전기 화면밝기정보(충전기정보시스템 -> 충전기) CALL
+
+                } else if (commonVO.getActionType().equals("sound")) {
+                    soundParsingData(commonVO);                        //충전기 소리정보(충전기정보시스템 -> 충전기) CALL
+
+                } else if (commonVO.getActionType().equals("askVer")) {
+                    askVerParsingData(commonVO);                        //펌웨어 버전 정보 확인(충전기정보시스템 -> 충전기) CALL
+
+                } else if (commonVO.getActionType().equals("notifyVerUpgrade")) {
+                    notifyVerUpgradeParsingData(commonVO);                        //펌웨어 버전 정보 업그레이드 알림(충전기정보시스템 -> 충전기) CALL
+
+                } else {
+                    System.out.println("[ 정의 되지 않은 PACKET 입니다. ]");
+                    //undefinedActionErrorMsgSend(commonVO);
+                    protocolErrorMsgSend(commonVO);
+                    return;
                 }
-
-                sound_array.add(sound_data);
-
-                sendData.put("sound", sound_array);
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-
-            } else if (commonVO.getActionType().equals("chgrStatus")) {    //충전기 상태정보(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "chgrStatus");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("user")) {        //사용자 인증요청(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "user");
-
-                sendData.put("card_num", "2100147845698523");
-                sendData.put("valid", "1");
-                sendData.put("pay_yn", "N");
-                sendData.put("charger_pay_yn", "Y");
-                sendData.put("member_company", "ME");
-                sendData.put("current_unit_cost", "173.8");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("chargingStart")) {    //충전 시작정보(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "chargingStart");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("chargingInfo")) {        //충전 진행정보(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "chargingInfo");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("chargingEnd")) {        //충전 완료정보(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "chargingEnd");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("chargePayment")) {    //충전 결제정보(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "chargePayment");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("sendSms")) {            //문자 전송(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "sendSms");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("alarmHistory")) {        //경보 이력(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "alarmHistory");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("reportUpate")) {        //펌웨어 업데이트 결과 알림(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "reportUpate");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("dChargingStart")) {    //덤프_충전 시작정보(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "dChargingStart");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("dChargingEnd")) {        //덤프_충전 완료정보(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "dChargingEnd");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("dChargePayment")) {    //덤프_충전 결제정보(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "dChargePayment");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("dAlaramHistory")) {    //덤프_경보이력(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "dAlaramHistory");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("dReportUpdate")) {    //덤프_펌웨어 업데이트 결과 알림(충전기 -> 충전기정보시스템) CALL
-                sendJsonObject.put("action_type", "dReportUpdate");
-
-                sendJsonObject.put("data", sendData);
-
-                System.out.println("보낼 JSON : " + sendJsonObject);
-
-            } else if (commonVO.getActionType().equals("reset")) {
-                resetParsingData(commonVO);                        //충전기 RESET 요청(충전기정보시스템 -> 충전기) CALL
-
-            } else if (commonVO.getActionType().equals("prices")) {
-                pricesParsingData(commonVO);                        //단가정보(충전기정보시스템 -> 충전기) CALL
-
-            } else if (commonVO.getActionType().equals("changeMode")) {
-                changeModeParsingData(commonVO);                        //충전기모드변경(충전기정보시스템 -> 충전기) CALL
-
-            } else if (commonVO.getActionType().equals("displayBrightness")) {
-                displayBrightnessParsingData(commonVO);                        //충전기 화면밝기정보(충전기정보시스템 -> 충전기) CALL
-
-            } else if (commonVO.getActionType().equals("sound")) {
-                soundParsingData(commonVO);                        //충전기 소리정보(충전기정보시스템 -> 충전기) CALL
-
-            } else if (commonVO.getActionType().equals("askVer")) {
-                askVerParsingData(commonVO);                        //펌웨어 버전 정보 확인(충전기정보시스템 -> 충전기) CALL
-
-            } else if (commonVO.getActionType().equals("notifyVerUpgrade")) {
-                notifyVerUpgradeParsingData(commonVO);                        //펌웨어 버전 정보 업그레이드 알림(충전기정보시스템 -> 충전기) CALL
-
-            } else {
-                System.out.println("[ 정의 되지 않은 PACKET 입니다. ]");
-                undefinedActionErrorMsgSend(commonVO);
-                return;
             }
+
+            sendJsonObject.put("data", sendData);
+
+            System.out.println("보낼 JSON : " + sendJsonObject);
 
             //응답 데이터 DB에 저장
             ChgrInfoVO chgrInfoVO = new ChgrInfoVO();
@@ -441,15 +350,9 @@ public class JsonDataParsing {
             chgrInfoVO.setMsgActionType(sendJsonObject.get("action_type").toString());
             chgrInfoVO.setMsgData(sendJsonObject.get("data").toString());
 
-            csb.beanChgrInfoService().chgrInfoDataInsert(chgrInfoVO);
+            //csb.beanChgrInfoService().chgrInfoDataInsert(chgrInfoVO);
 
             commonVO.getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-
-            parsingErrorMsgSend(commonVO);
-            return;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -534,9 +437,9 @@ public class JsonDataParsing {
 
 
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -588,7 +491,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -615,7 +518,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -667,7 +570,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -723,7 +626,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -785,7 +688,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -823,7 +726,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -859,7 +762,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -889,7 +792,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -932,7 +835,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -995,7 +898,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -1063,7 +966,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -1105,7 +1008,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -1139,7 +1042,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -1186,7 +1089,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parsingErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         }
     }
 
@@ -1218,33 +1121,51 @@ public class JsonDataParsing {
 
     }
 
-    public void protocolErrorMsgSend(CommonVO commonVO, String msg) {
+    public void protocolErrorMsgSend(CommonVO commonVO) {
 
-        if (!msg.equals("")) {
-            commonVO.getUserSession().getAsyncRemote().sendText(msg + " 데이터가 없습니다. 다시 확인후 요청해주세요.");
-        } else {
-            commonVO.getUserSession().getAsyncRemote().sendText("전문 오류 입니다. 받은 send_type : " + commonVO.getSendType() + ", 받은 action_type : " + commonVO.getActionType() + ", 받은 data : " + commonVO.getData());
-        }
+        System.out.println("필수항목 누락으로 인한 전문 오류 입니다. 받은 uuid : " + commonVO.getUuid() + ", 받은 send_type : "
+                + commonVO.getSendType() + ", 받은 action_type : " + commonVO.getActionType() + ", 받은 data : " + commonVO.getData());
 
-        System.out.println("전문 오류 입니다. 받은 send_type : " + commonVO.getSendType() + ", 받은 action_type : " + commonVO.getActionType() + ", 받은 data : " + commonVO.getData());
+        commonVO.setResponseReceive("0");
+        commonVO.setResponseReason("11");
+        sendMessage(commonVO);
+
         return;
     }
 
-    public void parsingErrorMsgSend(CommonVO commonVO) {
+    //파리미터 오류
+    public void parameterErrorMsgSend(CommonVO commonVO) {
+        System.out.println("JSON Parsing 중 오류 입니다. 받은 Data : " + commonVO.getData());
+
+        commonVO.setResponseReceive("0");   //실패
+        commonVO.setResponseReason("12");   //파리미터 오류
+        sendMessage(commonVO);
+
+        return;
+    }
+
+    //데이터형식 오류
+    public void dataTypeErrorMsgSend(CommonVO commonVO) {
         commonVO.getUserSession().getAsyncRemote().sendText("JSON Parsing 중 오류 입니다. 받은 Data : " + commonVO.getData());
+
+        commonVO.setResponseReceive("0");   //실패
+        commonVO.setResponseReason("14");   //데이터형식 오류
+        sendMessage(commonVO);
+
         System.out.println("JSON Parsing 중 오류 입니다. 받은 Data : " + commonVO.getData());
         return;
     }
 
-    public void undefinedActionErrorMsgSend(CommonVO commonVO) {
-        commonVO.getUserSession().getAsyncRemote().sendText("정의되지 않은 명령입니다. 받은 action_type : " + commonVO.getActionType());
-        System.out.println("정의되지 않은 명령입니다. 받은 action_type : " + commonVO.getData());
-        return;
-    }
-
     public void unknownErrorMsgSend(CommonVO commonVO, String msg) {
-        commonVO.getUserSession().getAsyncRemote().sendText(msg);
-        System.out.println(msg);
+
+        System.out.println("내부 오류 입니다. 받은 uuid : " + commonVO.getUuid() + ", 받은 send_type : "
+                + commonVO.getSendType() + ", 받은 action_type : " + commonVO.getActionType() + ", 받은 data : " + commonVO.getData());
+        System.out.println("내부 오류 : " + msg);
+
+        commonVO.setResponseReceive("0");
+        commonVO.setResponseReason("15");
+        sendMessage(commonVO);
+
         return;
     }
 }
