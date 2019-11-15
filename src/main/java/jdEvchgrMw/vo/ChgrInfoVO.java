@@ -61,5 +61,4 @@ public class ChgrInfoVO extends PageVO {
 	private String delYn;				//자료삭제 여부
 	private String regUid;				//등록 UID
 	private String modUid;				//수정 UID
-
 }
