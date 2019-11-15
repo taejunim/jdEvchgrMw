@@ -9,4 +9,6 @@ import jdEvchgrMw.vo.ChgrInfoVO;
 @Mapper("chgrInfoMapper")
 public interface ChgrInfoMapper {
 
+    /*충전기 설지 정보 UPDATE*/
+    public void chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception;
 }

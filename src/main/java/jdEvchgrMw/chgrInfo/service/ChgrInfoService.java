@@ -7,4 +7,6 @@ import jdEvchgrMw.vo.ChgrInfoVO;
 
 public interface ChgrInfoService {
 
+    /*충전기 설지 정보 UPDATE*/
+    public void chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception;
 }
