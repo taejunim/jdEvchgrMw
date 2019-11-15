@@ -29,7 +29,8 @@ public class ChgrInfoVO extends PageVO {
 	private PaginationInfo paginationInfo;
 
 	private String ttt;
-	
+	private String ttt2;
+
 	private String providerId;			//충전사업자 ID
 	private String stId;				//충전소 ID
 	private String chgrId;				//충전기 ID
