@@ -14,7 +14,9 @@ import jdEvchgrMw.vo.ChgrInfoVO;
 import jdEvchgrMw.common.CollectServiceBean;
 import jdEvchgrMw.vo.CommonVO;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * @ Class Name  : JsonDataParsing.java
@@ -60,7 +62,11 @@ public class JsonDataParsing {
 
             /*COMMON PARSING*/
 
-            System.out.println("[ 충전소 : " + commonVO.getStationId() + " - 충전기 : "+ commonVO.getChgrId() +" ]");
+            SimpleDateFormat sdf = new SimpleDateFormat ( "yyyy년 MM월 dd일 HH시 mm분 ss초");
+            Date dt = new Date();
+            String time = sdf.format(dt);
+
+            System.out.println(time + " - [ 충전소 : " + commonVO.getStationId() + " - 충전기 : "+ commonVO.getChgrId() +" ]");
 
             String uuid = jObject.get("uuid").toString();
             String send_type = jObject.get("send_type").toString();
@@ -437,6 +443,57 @@ public class JsonDataParsing {
             System.out.println("plugDetlInfoVOList : " + plugDetlInfoVOList);
             System.out.println("<------------------------------------------------>");
 
+            // req Data DB Insert
+            try {
+                ChgrInfoVO chgrInfoVO = new ChgrInfoVO();
+                /*chgrInfoVO.setMsgSendType(commonVO.getSendType());
+                chgrInfoVO.setMsgActionType(commonVO.getActionType());
+                chgrInfoVO.setMsgData(commonVO.getData());*/
+
+                //추후 PROVIDER_ID 하드코딩한거 수정해야 함
+                chgrInfoVO.setProviderId("JD");
+                chgrInfoVO.setProviderId(commonVO.getStationId().substring(0,2));
+                chgrInfoVO.setStId(commonVO.getStationId());
+                chgrInfoVO.setChgrId(commonVO.getChgrId());
+                chgrInfoVO.setChgrNm("");
+                chgrInfoVO.setChgrDispId("");
+                chgrInfoVO.setMwKindCd("");
+                chgrInfoVO.setChgrSvcComId("");
+                chgrInfoVO.setSpeedTpCd("");
+                chgrInfoVO.setGpsXpos(gps_xpos);
+                chgrInfoVO.setGpsYpos(gps_ypos);
+                chgrInfoVO.setLocInfo("");
+                chgrInfoVO.setMfCd("");
+                chgrInfoVO.setM2mMfCd(m2m_mf);
+                chgrInfoVO.setRfMfCd(rf_mf);
+                chgrInfoVO.setM2mTel(m2m_tel);
+                chgrInfoVO.setVanIp(van_ip);
+                chgrInfoVO.setVanPort(van_port);
+                chgrInfoVO.setInstallYy("");
+                chgrInfoVO.setUseTime("");
+                chgrInfoVO.setPayingYn("");
+                chgrInfoVO.setMemshOnlyYn("");
+                chgrInfoVO.setParkingFeeYn("");
+                chgrInfoVO.setParkingFeeDetl("");
+                chgrInfoVO.setRsvFuncYn("");
+                chgrInfoVO.setCableYn("");
+                chgrInfoVO.setShowYn("");
+                chgrInfoVO.setRemark("");
+                chgrInfoVO.setChQty("");
+                chgrInfoVO.setOfflineFreeWh("");
+                chgrInfoVO.setMwSession("");
+                chgrInfoVO.setDelYn("");
+                chgrInfoVO.setModUid("");
+
+                csb.beanChgrInfoService().chgrInfoUpdate(chgrInfoVO);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+                unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+                return;
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();
