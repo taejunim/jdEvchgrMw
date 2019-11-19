@@ -11,6 +11,21 @@ import egovframework.rte.psl.dataaccess.util.EgovMap;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
 import jdEvchgrMw.vo.ChgrInfoVO;
 
+/**
+ * @ class Name  : ChgrInfoServiceImpl.java
+ * @ Description : 충전기 설치 정보 IMPLEMENTS
+ * @ autor : 고재훈
+ * @ since : 2019-11-19 10:01
+ * @
+ * @ Modification Information
+ * @    수정일      		  수정자               수정 내용
+ * @ -------------     ----------     -------------------------------
+ * @ 2019-11-19                                최초 생성
+ * @ version : 1.0.0
+ * @ see
+ * Copyright (C) by MetisInfo All right reserved.
+ **/
+
 @Service("chgrInfoService")
 public class ChgrInfoServiceImpl extends EgovAbstractServiceImpl implements ChgrInfoService {
 
@@ -18,8 +33,9 @@ public class ChgrInfoServiceImpl extends EgovAbstractServiceImpl implements Chgr
 	private ChgrInfoMapper chgrInfoMapper;
 
 	/*충전기 설지 정보 UPDATE*/
-	public void chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception {
+	public int chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception {
 
-		chgrInfoMapper.chgrInfoUpdate(chgrInfoVO);
+		return chgrInfoMapper.chgrInfoUpdate(chgrInfoVO);
 	}
+
 }
