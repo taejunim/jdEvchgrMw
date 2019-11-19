@@ -407,8 +407,8 @@ public class JsonDataParsing {
             String rf_mf = (String) data.get("rf_mf");
             String m2m_tel = (String) data.get("m2m_tel");
             String van_ip = (String) data.get("van_ip");
-            int van_port = Integer.valueOf((String) data.get("van_port"));
-            String offline_free_charge_W = (String) data.get("offline_free_charge_W");
+            int van_port = Integer.parseInt((String) data.get("van_port"));
+            int offline_free_charge_W = Integer.parseInt((String) data.get("offline_free_charge_W"));
 
             ArrayList<FwVerInfoVO> fwVerInfoVOList = new ArrayList<>();
             ArrayList<PlugDetlInfoVO> plugDetlInfoVOList = new ArrayList<>();
@@ -441,7 +441,7 @@ public class JsonDataParsing {
             }
 
             System.out.println("<----------- 충전기 설치정보 Parsing Data ----------->");
-            /*System.out.println("send_date : " + send_date);
+            System.out.println("send_date : " + send_date);
             System.out.println("create_date : " + create_date);
             System.out.println("gps_xpos : " + gps_xpos);
             System.out.println("gps_ypos : " + gps_ypos);
@@ -454,7 +454,7 @@ public class JsonDataParsing {
             System.out.println("van_port : " + van_port);
             System.out.println("offline_free_charge_W : " + offline_free_charge_W);
             System.out.println("fwVerInfoVOList : " + fwVerInfoVOList);
-            System.out.println("plugDetlInfoVOList : " + plugDetlInfoVOList);*/
+            System.out.println("plugDetlInfoVOList : " + plugDetlInfoVOList);
             System.out.println("<------------------------------------------------>");
 
             // req Data DB Insert
@@ -475,6 +475,7 @@ public class JsonDataParsing {
                 chgrInfoVO.setM2mTel(m2m_tel);
                 chgrInfoVO.setVanIp(van_ip);
                 chgrInfoVO.setVanPort(van_port);
+                chgrInfoVO.setOfflineFreeWh(offline_free_charge_W);
                 chgrInfoVO.setMwSession(commonVO.getStationId() + commonVO.getChgrId());
                 chgrInfoVO.setModUid("MW");
 

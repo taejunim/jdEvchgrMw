@@ -14,7 +14,7 @@ import javax.annotation.Resource;
  * @ since : 2019-11-19 10:01
  * @
  * @ Modification Information
- * @    수정일      		  수정자               수정 내용
+ * @ 수정일      		  수정자               수정 내용
  * @ -------------     ----------     -------------------------------
  * @ 2019-11-19                                최초 생성
  * @ version : 1.0.0
@@ -25,14 +25,12 @@ import javax.annotation.Resource;
 @Service("chgrInfoService")
 public class ChgrInfoServiceImpl extends EgovAbstractServiceImpl implements ChgrInfoService {
 
-	@Resource(name = "chgrInfoMapper")
-	private ChgrInfoMapper chgrInfoMapper;
+    @Resource(name = "chgrInfoMapper")
+    private ChgrInfoMapper chgrInfoMapper;
 
-	/*충전기 설지 정보 UPDATE*/
-	public int chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception {
-
-		System.err.println("업데이트 결과 : "+chgrInfoMapper.chgrInfoUpdate(chgrInfoVO));
-		 return chgrInfoMapper.chgrInfoUpdate(chgrInfoVO);
-	}
+    /*충전기 설지 정보 UPDATE*/
+    public int chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception {
+        return chgrInfoMapper.chgrInfoUpdate(chgrInfoVO);
+    }
 
 }
