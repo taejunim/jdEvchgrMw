@@ -6,34 +6,16 @@
 
         UPDATE chgr
 
-           SET CHGR_NM          = #{chgrNm}
-             , CHGR_DISP_ID     = #{chgrDispId}
-             , MW_KIND_CD       = #{mwKindCd}
-             , CHGR_SVC_COM_ID  = #{chgrSvcComId}
-             , SPEED_TP_CD      = #{speedTpCd}
+           SET SPEED_TP_CD      = #{speedTpCd}
              , GPS_XPOS         = #{gpsXpos}
              , GPS_YPOS         = #{gpsYpos}
-             , LOC_INFO         = #{locInfo}
              , MF_CD            = #{mfCd}
              , M2M_MF_CD        = #{m2mMfCd}
              , RF_MF_CD         = #{rfMfCd}
              , M2M_TEL          = #{m2mTel}
              , VAN_IP           = #{vanIp}
              , VAN_PORT         = #{vanPort}
-             , INSTALL_YY       = #{installYy}
-             , USE_TIME         = #{useTime}
-             , PAYING_YN        = #{payingYn}
-             , MEMSH_ONLY_YN    = #{memshOnlyYn}
-             , PARKING_FEE_YN   = #{parkingFeeYn}
-             , PARKING_FEE_DETL = #{parkingFeeDetl}
-             , RSV_FUNC_YN      = #{rsvFuncYn}
-             , CABLE_YN         = #{cableYn}
-             , SHOW_YN          = #{showYn}
-             , REMARK           = #{remark}
-             , CH_QTY           = #{chQty}
-             , OFFLINE_FREE_WH  = #{offlineFreeWh}
              , MW_SESSION       = #{mwSession}
-             , DEL_YN           = #{delYn}
              , MOD_UID          = #{modUid}
              , MOD_DT           = now()
 
