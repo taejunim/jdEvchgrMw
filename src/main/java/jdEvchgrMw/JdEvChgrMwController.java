@@ -44,13 +44,13 @@ public class JdEvChgrMwController {
 			chgrInfoVO.setRfMfCd("");
 			chgrInfoVO.setM2mTel("");
 			chgrInfoVO.setVanIp("");
-			chgrInfoVO.setVanPort("");
+			chgrInfoVO.setVanPort(8080);
 			chgrInfoVO.setMwSession("11000101");
 			chgrInfoVO.setModUid("MW");
 
 			CollectServiceBean csb = new CollectServiceBean();
-			int updateCnt = csb.beanChgrInfoService().chgrInfoUpdate(chgrInfoVO);
-			System.out.println("<----------------------- Update Count : [" + updateCnt + "] ------------------------->");
+			csb.beanChgrInfoService().chgrInfoUpdate(chgrInfoVO);
+			System.out.println("<----------------------- Update OK ------------------------->");
 
 		} catch (Exception e) {
 			e.printStackTrace();

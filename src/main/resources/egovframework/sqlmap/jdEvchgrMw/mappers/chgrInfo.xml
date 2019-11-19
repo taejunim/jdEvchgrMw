@@ -14,7 +14,7 @@
              , RF_MF_CD         = #{rfMfCd}
              , M2M_TEL          = #{m2mTel}
              , VAN_IP           = #{vanIp}
-             , VAN_PORT         = #{vanPort}
+             , VAN_PORT         = ${vanPort}
              , MW_SESSION       = #{mwSession}
              , MOD_UID          = #{modUid}
              , MOD_DT           = now()

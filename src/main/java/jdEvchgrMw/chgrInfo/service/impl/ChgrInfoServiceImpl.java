@@ -31,9 +31,8 @@ public class ChgrInfoServiceImpl extends EgovAbstractServiceImpl implements Chgr
 	/*충전기 설지 정보 UPDATE*/
 	public int chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception {
 
-		//int test = chgrInfoMapper.chgrInfoUpdate(chgrInfoVO);
-		System.out.println("Update Count : " + chgrInfoMapper.chgrInfoUpdate(chgrInfoVO));
-		return chgrInfoMapper.chgrInfoUpdate(chgrInfoVO);
+		System.err.println("업데이트 결과 : "+chgrInfoMapper.chgrInfoUpdate(chgrInfoVO));
+		 return chgrInfoMapper.chgrInfoUpdate(chgrInfoVO);
 	}
 
 }

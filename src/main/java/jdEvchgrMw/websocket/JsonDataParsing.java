@@ -407,7 +407,7 @@ public class JsonDataParsing {
             String rf_mf = (String) data.get("rf_mf");
             String m2m_tel = (String) data.get("m2m_tel");
             String van_ip = (String) data.get("van_ip");
-            String van_port = (String) data.get("van_port");
+            int van_port = Integer.valueOf((String) data.get("van_port"));
             String offline_free_charge_W = (String) data.get("offline_free_charge_W");
 
             ArrayList<FwVerInfoVO> fwVerInfoVOList = new ArrayList<>();
@@ -478,8 +478,8 @@ public class JsonDataParsing {
                 chgrInfoVO.setMwSession(commonVO.getStationId() + commonVO.getChgrId());
                 chgrInfoVO.setModUid("MW");
 
-                int updateCnt = csb.beanChgrInfoService().chgrInfoUpdate(chgrInfoVO);
-                System.out.println("<----------------------- Update Count : [" + updateCnt + "] ------------------------->");
+                csb.beanChgrInfoService().chgrInfoUpdate(chgrInfoVO);
+                System.out.println("<----------------------- Update OK ------------------------->");
 
             } catch (Exception e) {
                 e.printStackTrace();

@@ -44,7 +44,7 @@ public class ChgrInfoVO extends PageVO {
 	private String rfMfCd;				//RF카드단말기 제조사 코드
 	private String m2mTel;				//M2M 전화번호
 	private String vanIp;				//VAN사 IP
-	private String vanPort;				//VAN사 PORT
+	private int vanPort;				//VAN사 PORT
 	private String installYy;			//설치 년도
 	private String useTime;				//사용 시간
 	private String payingYn;			//유료 여부
@@ -56,7 +56,7 @@ public class ChgrInfoVO extends PageVO {
 	private String showYn;				//표시 여부
 	private String remark;				//비고
 	private String chQty;				//채널 수량
-	private String offlineFreeWh;		//OFFLINE 무료 WH
+	private int offlineFreeWh;			//OFFLINE 무료 WH
 	private String mwSession;			//미들웨어 세션
 	private String delYn;				//자료삭제 여부
 	private String regUid;				//등록 UID

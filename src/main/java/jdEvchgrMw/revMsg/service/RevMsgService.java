@@ -23,9 +23,9 @@ public interface RevMsgService {
     public String getRecvLogId() throws Exception;
 
     /*수신 전문 인력 등록*/
-    public int recvMsgInsert(RevMsgVO revMsgVO) throws Exception;
+    public void recvMsgInsert(RevMsgVO revMsgVO) throws Exception;
 
     /*수신 전문 인력 수정*/
-    public int recvMsgUpdate(RevMsgVO revMsgVO) throws Exception;
+    public void recvMsgUpdate(RevMsgVO revMsgVO) throws Exception;
 
 }
