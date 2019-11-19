@@ -1,15 +1,11 @@
 package jdEvchgrMw.chgrInfo.service.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import egovframework.rte.psl.dataaccess.util.EgovMap;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
 import jdEvchgrMw.vo.ChgrInfoVO;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @ class Name  : ChgrInfoServiceImpl.java
@@ -35,6 +31,8 @@ public class ChgrInfoServiceImpl extends EgovAbstractServiceImpl implements Chgr
 	/*충전기 설지 정보 UPDATE*/
 	public int chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception {
 
+		//int test = chgrInfoMapper.chgrInfoUpdate(chgrInfoVO);
+		System.out.println("Update Count : " + chgrInfoMapper.chgrInfoUpdate(chgrInfoVO));
 		return chgrInfoMapper.chgrInfoUpdate(chgrInfoVO);
 	}
 

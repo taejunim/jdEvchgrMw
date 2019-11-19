@@ -441,7 +441,7 @@ public class JsonDataParsing {
             }
 
             System.out.println("<----------- 충전기 설치정보 Parsing Data ----------->");
-            System.out.println("send_date : " + send_date);
+            /*System.out.println("send_date : " + send_date);
             System.out.println("create_date : " + create_date);
             System.out.println("gps_xpos : " + gps_xpos);
             System.out.println("gps_ypos : " + gps_ypos);
@@ -454,7 +454,7 @@ public class JsonDataParsing {
             System.out.println("van_port : " + van_port);
             System.out.println("offline_free_charge_W : " + offline_free_charge_W);
             System.out.println("fwVerInfoVOList : " + fwVerInfoVOList);
-            System.out.println("plugDetlInfoVOList : " + plugDetlInfoVOList);
+            System.out.println("plugDetlInfoVOList : " + plugDetlInfoVOList);*/
             System.out.println("<------------------------------------------------>");
 
             // req Data DB Insert
@@ -478,7 +478,8 @@ public class JsonDataParsing {
                 chgrInfoVO.setMwSession(commonVO.getStationId() + commonVO.getChgrId());
                 chgrInfoVO.setModUid("MW");
 
-                csb.beanChgrInfoService().chgrInfoUpdate(chgrInfoVO);
+                int updateCnt = csb.beanChgrInfoService().chgrInfoUpdate(chgrInfoVO);
+                System.out.println("<----------------------- Update Count : [" + updateCnt + "] ------------------------->");
 
             } catch (Exception e) {
                 e.printStackTrace();
