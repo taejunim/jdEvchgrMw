@@ -20,4 +20,15 @@ import lombok.Data;
 @Data
 public class AlarmHistoryVO {
 
+    private String alarmId;             //알람 ID
+    private String providerId;          //충전사업자 ID
+    private String stId;                //충전소 ID
+    private String chgrId;              //충전기 ID
+    private String mwKindCd;            //미들웨어 종류 코드
+    private String rTimeYn;             //실시간 여부
+    private String occurDt;             //발생 일시
+    private String alarmStateCd;        //알람 상태 코드
+    private String alarmCd;             //알람 코드
+    private String chgrTxDt;            //충전기 전송 일시
+
 }

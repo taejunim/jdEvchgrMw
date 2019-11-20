@@ -20,12 +20,12 @@ import jdEvchgrMw.vo.RevMsgVO;
 public interface RevMsgService {
 
     /*수신 전문 이력의 수신 로그 ID GET*/
-    public String getRecvLogId() throws Exception;
+    String getRecvLogId() throws Exception;
 
     /*수신 전문 인력 등록*/
-    public void recvMsgInsert(RevMsgVO revMsgVO) throws Exception;
+    int recvMsgInsert(RevMsgVO revMsgVO) throws Exception;
 
     /*수신 전문 인력 수정*/
-    public void recvMsgUpdate(RevMsgVO revMsgVO) throws Exception;
+    int recvMsgUpdate(RevMsgVO revMsgVO) throws Exception;
 
 }

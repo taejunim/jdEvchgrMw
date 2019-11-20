@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jdEvchgrMw.alarmHistory.service.impl.AlarmHistoryMapper">
+
+    <insert id="alarmHistoryInsert" parameterType="alarmHistoryVO">
+
+        INSERT INTO alarm_list(
+                                ALARM_ID
+                              , PROVIDER_ID
+                              , ST_ID
+                              , CHGR_ID
+                              , MW_KIND_CD
+                              , R_TIME_YN
+                              , OCCUR_DT
+                              , ALARM_STATE_CD
+                              , ALARM_CD
+                              , CHGR_TX_DT
+                              , REG_DT
+                      )values (
+                                (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(al.ALARM_ID,5)), 0)+1, 8, '0')) AS ALARM_ID
+                                    FROM alarm_list al
+                                    WHERE LEFT(al.ALARM_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
+                                )
+                              , #{providerId}
+                              , #{stId}
+                              , #{chgrId}
+                              , #{mw_kindCd}
+                              , #{rTimeYn}
+                              , #{occurDt}
+                              , #{alarmStateCd}
+                              , #{alarmCd}
+                              , #{chgrTxDt}
+                              , now()
+                      )
+    </insert>
+
+</mapper>

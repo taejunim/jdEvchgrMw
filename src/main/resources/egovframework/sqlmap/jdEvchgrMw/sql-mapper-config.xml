@@ -3,8 +3,9 @@
 
 <configuration>
     <typeAliases>
-		<typeAlias alias="egovMap" 		type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
-		<typeAlias alias="chgrInfoVO"	type="jdEvchgrMw.vo.ChgrInfoVO"/>
-        <typeAlias alias="revMsgVO"     type="jdEvchgrMw.vo.RevMsgVO"/>
+		<typeAlias alias="egovMap" 		    type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+		<typeAlias alias="chgrInfoVO"	    type="jdEvchgrMw.vo.ChgrInfoVO"/>
+        <typeAlias alias="revMsgVO"         type="jdEvchgrMw.vo.RevMsgVO"/>
+        <typeAlias alias="alarmHistoryVO"   type="jdEvchgrMw.vo.AlarmHistoryVO"/>
     </typeAliases>
 </configuration>

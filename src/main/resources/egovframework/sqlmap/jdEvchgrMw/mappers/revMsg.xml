@@ -15,30 +15,26 @@
     <insert id="recvMsgInsert" parameterType="revMsgVO">
 
         INSERT INTO recv_msg_list (
-
-            RECV_LOG_ID
-            PROVIDER_ID
-            ST_ID
-            CHGR_ID
-            MW_KIND_CD
-            CMD_TP
-            R_TIME_YN
-            DATA_CREATE_DT
-            CHGR_TX_DT
-
-        ) VALUES (
-
-            #recvLogId#
-            #providerId#
-            #stId#
-            #chgrId#
-            #mwKindCd#
-            #cmdTp#
-            #rTimeYn#
-            #dataCreateDt#
-            #chgrTxDt#
-
-        )
+                                    RECV_LOG_ID
+                                    , PROVIDER_ID
+                                    , ST_ID
+                                    , CHGR_ID
+                                    , MW_KIND_CD
+                                    , CMD_TP
+                                    , R_TIME_YN
+                                    , DATA_CREATE_DT
+                                    , CHGR_TX_DT
+                        ) VALUES (
+                                    #{recvLogId}
+                                    , #{providerId}
+                                    , #{stId}
+                                    , #{chgrId}
+                                    , #{mwKindCd}
+                                    , #{cmdTp}
+                                    , #{rTimeYn}
+                                    , #{dataCreateDt}
+                                    , #{chgrTxDt}
+                       )
 
     </insert>
 
@@ -46,15 +42,15 @@
 
         UPDATE recv_msg_list
 
-           SET RECV_MSG     = #recvMsg#
-             , RES_DT       = #resDt#
-             , RES_CD       = #resCd#
-             , RES_RSN_CD   = #resRsnCd#
-             , RES_MSG      = #resMsg#
+           SET RECV_MSG     = #{recvMsg}
+             , RES_DT       = #{resDt}
+             , RES_CD       = #{resCd}
+             , RES_RSN_CD   = #{resRsnCd}
+             , RES_MSG      = #{resMsg}
 
          WHERE 1=1
 
-           AND  RECV_LOG_ID = #recvLogId#
+           AND  RECV_LOG_ID = #{recvLogId#
 
     </update>
 

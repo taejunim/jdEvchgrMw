@@ -36,15 +36,15 @@ public class RevMsgServiceImpl extends EgovAbstractServiceImpl implements RevMsg
     }
 
     /*수신 전문 인력 등록*/
-    public void recvMsgInsert(RevMsgVO revMsgVO) throws Exception {
+    public int recvMsgInsert(RevMsgVO revMsgVO) throws Exception {
 
-        revMsgMapper.recvMsgInsert(revMsgVO);
+        return revMsgMapper.recvMsgInsert(revMsgVO);
     }
 
     /*수신 전문 인력 수정*/
-    public void recvMsgUpdate(RevMsgVO revMsgVO) throws Exception {
+    public int recvMsgUpdate(RevMsgVO revMsgVO) throws Exception {
 
-        revMsgMapper.recvMsgUpdate(revMsgVO);
+        return revMsgMapper.recvMsgUpdate(revMsgVO);
     }
 
 }
