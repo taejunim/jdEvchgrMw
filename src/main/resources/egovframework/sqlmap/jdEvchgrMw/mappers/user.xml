@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jdEvchgrMw.user.service.impl.UserMapper">
+
+    <select id="userAuthSelect" parameterType="userVO" resultType="egovMap">
+
+        SELECT MEMSH_CARD_NO
+             , CUST_ID
+             , PAY_KIND_CD
+             , SPOT_PAY_YN
+             , STOP_YN
+             , STOP_RSN
+             , VALID_YN
+             , REG_UID
+             , REG_DT
+             , MOD_UID
+             , MOD_DT
+
+          FROM memsh_card_info
+
+         WHERE 1=1
+
+           AND MEMSH_CARD_NO = #{memAuthInputNo}
+
+    </select>
+
+    <select id="userPriceSelect" parameterType="" resultType="java.lang.String">
+
+        SELECT PRICE
+
+          FROM cust_price_info
+
+         WHERE 1=1
+
+           AND CUST_ID = (SELECT mci.CUST_ID CUST_ID FROM mem_card_info mci WHERE MEMSH_CARD_NO = #{memAuthInputNo})
+           AND
+
+    </select>
+
+</mapper>
+

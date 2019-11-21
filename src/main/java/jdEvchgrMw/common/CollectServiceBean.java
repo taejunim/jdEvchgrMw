@@ -4,6 +4,7 @@ import jdEvchgrMw.alarmHistory.service.AlarmHistoryService;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
 import jdEvchgrMw.chgrState.service.ChgrStateService;
 import jdEvchgrMw.revMsg.service.RevMsgService;
+import jdEvchgrMw.user.service.UserService;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 /**
@@ -13,9 +14,9 @@ import org.springframework.web.context.WebApplicationContext;
  * @ Description : SERVICE BEAN CLASS
  * @ Modification Information
  * @
- * @    수정일      		  수정자                 				수정 내용
+ * @    수정일      	수정자               수정 내용
  * @ ----------   ----------   -------------------------------
- * @ 2018.07.16             신호정    				         최초 생성
+ * @ 2019.11.04     고재훈    			최초 생성
  *
  * @ since 
  * @ version 
@@ -69,6 +70,18 @@ public class CollectServiceBean {
 		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
 
 		return (ChgrStateService)context.getBean("chgrStateService");
+	}
+
+	/**
+	 * UserService Bean 생성
+	 * @return
+	 * @throws Exception
+	 */
+	public UserService userService()throws Exception{
+
+		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+
+		return (UserService)context.getBean("userService");
 	}
 
 }

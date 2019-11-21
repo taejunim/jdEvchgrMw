@@ -8,5 +8,6 @@
         <typeAlias alias="revMsgVO"         type="jdEvchgrMw.vo.RevMsgVO"/>
         <typeAlias alias="alarmHistoryVO"   type="jdEvchgrMw.vo.AlarmHistoryVO"/>
         <typeAlias alias="chgrStatusVO"     type="jdEvchgrMw.vo.ChgrStatusVO"/>
+        <typeAlias alias="userVO"           type="jdEvchgrMw.vo.UserVO"/>
     </typeAliases>
 </configuration>
