@@ -6,20 +6,20 @@
 
         UPDATE chgr_curr_state
 
-            SET STATE_DT
-               , OP_MODE_CD
-               , CH1_RECHG_STATE_CD
-               , CH1_DOOR_STATE_CD
-               , CH1_PLUG_STATE_CD
-               , CH2_RECHG_STATE_CD
-               , CH2_DOOR_STATE_CD
-               , CH2_PLUG_STATE_CD
-               , CH3_RECHG_STATE_CD
-               , CH3_DOOR_STATE_CD
-               , CH3_PLUG_STATE_CD
-               , POWERBOX_STATE
-               , INTEGRATED_KWH
-               , MOD_DT
+            SET STATE_DT                = #{stateDt}
+               , OP_MODE_CD             = #{opModeCd}
+               , CH1_RECHG_STATE_CD     = #{ch1RechgStateCd}
+               , CH1_DOOR_STATE_CD      = #{ch1DoorStateCd}
+               , CH1_PLUG_STATE_CD      = #{ch1PlugStateCd}
+               , CH2_RECHG_STATE_CD     = #{ch2RechgStateCd}
+               , CH2_DOOR_STATE_CD      = #{ch2DoorStateCd}
+               , CH2_PLUG_STATE_CD      = #{ch2PlugStateCd}
+               , CH3_RECHG_STATE_CD     = #{ch3RechgStateCd}
+               , CH3_DOOR_STATE_CD      = #{ch3DoorStateCd}
+               , CH3_PLUG_STATE_CD      = #{ch3PlugStateCd}
+               , POWERBOX_STATE         = #{powerboxState}
+               , INTEGRATED_KWH         = #{integratedKwh}
+               , MOD_DT                 = now()
 
            WHERE 1=1
 
