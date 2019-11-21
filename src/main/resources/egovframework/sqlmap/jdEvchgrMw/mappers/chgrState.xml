@@ -29,7 +29,7 @@
 
     </update>
 
-    <insert id="chgrSateListInsert" parameterType="chgrStatusVO">
+    <insert id="chgrStateInsert" parameterType="chgrStatusVO">
 
         INSERT INTO chgr_state_list (
                                         PROVIDER_ID

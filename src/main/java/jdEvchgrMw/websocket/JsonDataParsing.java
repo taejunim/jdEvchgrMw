@@ -1,18 +1,11 @@
 package jdEvchgrMw.websocket;
 
-import jdEvchgrMw.vo.ChargerPlugVO;
-import jdEvchgrMw.vo.FwVerInfoVO;
-import jdEvchgrMw.vo.PlugDetlInfoVO;
+import jdEvchgrMw.common.CollectServiceBean;
+import jdEvchgrMw.vo.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
-import com.google.gson.JsonParser;
-
-import jdEvchgrMw.vo.ChgrInfoVO;
-import jdEvchgrMw.common.CollectServiceBean;
-import jdEvchgrMw.vo.CommonVO;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,15 +28,7 @@ import java.util.Date;
 
 public class JsonDataParsing {
 
-    //private CsmsService csmsService;
-
-    //CsmsMainController csmsMainController = new CsmsMainController();
-
     CollectServiceBean csb = new CollectServiceBean();
-    //CommonFunction     function    		  = new CommonFunction();
-    //CsmsRequest    	   req         		  = new CsmsRequest();
-    //CsmsResponse   	   res    			  = new CsmsResponse();
-    JsonParser jParser = new JsonParser();
 
     /**
      * JSON DATA PARSING MAIN
@@ -466,9 +451,10 @@ public class JsonDataParsing {
                 chgrInfoVO.setProviderId("JD");
                 chgrInfoVO.setStId(commonVO.getStationId());
                 chgrInfoVO.setChgrId(commonVO.getChgrId());
+                chgrInfoVO.setMwKindCd("WS");
                 chgrInfoVO.setSpeedTpCd(charger_type);
-                chgrInfoVO.setGpsXpos(gps_xpos);
-                chgrInfoVO.setGpsYpos(gps_ypos);
+                chgrInfoVO.setGpsXpos(gps_xpos.equals("") ? "0.0" : gps_xpos);
+                chgrInfoVO.setGpsYpos(gps_ypos.equals("") ? "0.0" : gps_ypos);
                 chgrInfoVO.setMfCd(charger_mf);
                 chgrInfoVO.setM2mMfCd(m2m_mf);
                 chgrInfoVO.setRfMfCd(rf_mf);
@@ -479,8 +465,7 @@ public class JsonDataParsing {
                 chgrInfoVO.setMwSession(commonVO.getStationId() + commonVO.getChgrId());
                 chgrInfoVO.setModUid("MW");
 
-                csb.beanChgrInfoService().chgrInfoUpdate(chgrInfoVO);
-                System.out.println("<----------------------- Update OK ------------------------->");
+                System.out.println("<----------------------- Update OK -------------------------> : " + csb.beanChgrInfoService().chgrInfoUpdate(chgrInfoVO));
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -540,6 +525,55 @@ public class JsonDataParsing {
             System.out.println("powerbox : " + powerbox);
             System.out.println("chargerPlugList : " + chargerPlugList);
             System.out.println("<------------------------------------------------>");
+
+            // req Data DB Insert
+            try {
+
+                ChgrStatusVO chgrStatusVO = new ChgrStatusVO();
+                chgrStatusVO.setProviderId("JD");
+                chgrStatusVO.setStId(commonVO.getStationId());
+                chgrStatusVO.setChgrId(commonVO.getChgrId());
+                chgrStatusVO.setOpModeCd(mode);
+                chgrStatusVO.setIntegratedKwh(integrated_power);
+                chgrStatusVO.setPowerboxState(powerbox);
+                chgrStatusVO.setStateDt(create_date);
+                chgrStatusVO.setMwKindCd("WS");
+                chgrStatusVO.setRTimeYn("Y");
+                chgrStatusVO.setChgrTxDt(create_date);
+
+                for (int i=0; i < chargerPlugList.size(); i++) {
+
+                    if (chargerPlugList.get(i).getPlug_id().equals("1")) {
+
+                        chgrStatusVO.setCh1RechgStateCd(chargerPlugList.get(i).getCharging_state());
+                        chgrStatusVO.setCh1DoorStateCd(chargerPlugList.get(i).getPlug_door());
+                        chgrStatusVO.setCh1PlugStateCd(chargerPlugList.get(i).getPlug_state());
+
+                    } else if (chargerPlugList.get(i).getPlug_id().equals("2")) {
+
+                        chgrStatusVO.setCh2RechgStateCd(chargerPlugList.get(i).getCharging_state());
+                        chgrStatusVO.setCh2DoorStateCd(chargerPlugList.get(i).getPlug_door());
+                        chgrStatusVO.setCh2PlugStateCd(chargerPlugList.get(i).getPlug_state());
+
+                    } else if (chargerPlugList.get(i).getPlug_id().equals("3")) {
+
+                        chgrStatusVO.setCh3RechgStateCd(chargerPlugList.get(i).getCharging_state());
+                        chgrStatusVO.setCh3DoorStateCd(chargerPlugList.get(i).getPlug_door());
+                        chgrStatusVO.setCh3PlugStateCd(chargerPlugList.get(i).getPlug_state());
+
+                    }
+                }
+
+                System.out.println("<----------------------- Insert OK -------------------------> : " + csb.chgrStateService().chgrStateInsert(chgrStatusVO));
+                System.out.println("<----------------------- Update OK -------------------------> : " + csb.chgrStateService().chgrCurrStateUpdate(chgrStatusVO));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+                unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+                return;
+            }
 
 
         } catch (ParseException e) {
@@ -842,6 +876,32 @@ public class JsonDataParsing {
             System.out.println("alarm_date : " + alarm_date);
             System.out.println("alarm_code : " + alarm_code);
             System.out.println("<------------------------------------------------>");
+
+            // req Data DB Insert
+            try {
+                AlarmHistoryVO alarmHistoryVO = new AlarmHistoryVO();
+
+                //추후 PROVIDER_ID 하드코딩한거 수정해야 함
+                //chgrInfoVO.setProviderId(commonVO.getStationId().substring(0,2));
+                alarmHistoryVO.setAlarmStateCd(alarm_type);
+                alarmHistoryVO.setOccurDt(alarm_date);
+                alarmHistoryVO.setAlarmCd(alarm_code);
+                alarmHistoryVO.setProviderId("JD");
+                alarmHistoryVO.setStId(commonVO.getStationId());
+                alarmHistoryVO.setChgrId(commonVO.getChgrId());
+                alarmHistoryVO.setChgrTxDt(create_date);
+                alarmHistoryVO.setMwKindCd("WS");
+                alarmHistoryVO.setRTimeYn("Y");
+
+                System.out.println("<----------------------- Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+                unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+                return;
+            }
 
         } catch (ParseException e) {
             // TODO Auto-generated catch block

@@ -1,16 +1,11 @@
 package jdEvchgrMw.websocket;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.PathParam;
-import javax.websocket.server.ServerEndpoint;
-
 import jdEvchgrMw.vo.CommonVO;
 import jdEvchgrMw.vo.SessionVO;
 
+import javax.websocket.*;
+import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -54,7 +49,14 @@ public class jdEvChgrMwMain {
         CommonVO commonVO = new CommonVO();
 
     	commonVO.setStationId(stationId);
-    	commonVO.setChgrId(chgrId);
+
+    	//충전기ID는 두자리
+        if (chgrId.length() > 2) {
+            commonVO.setChgrId(chgrId.substring(0,2));
+        } else {
+            commonVO.setChgrId(chgrId);
+        }
+
     	commonVO.setUserSession(session);
     	commonVO.setRcvMsg(message);
 

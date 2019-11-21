@@ -36,7 +36,8 @@ public class ChgrStatusVO{
     private String ch3PlugStateCd;          //채널3 PLUG 상태 코드
     private String powerboxState;           //파워박스 상태
     private String integratedKwh;           //적산 KWH
-    private String chgrTxDt;                //실시간 여부
+    private String chgrTxDt;                //충전기 전소 일시
     private String mwKindCd;                //미들웨어 종류 코드
+    private String rTimeYn;                 //실시간 여부
 
 }
