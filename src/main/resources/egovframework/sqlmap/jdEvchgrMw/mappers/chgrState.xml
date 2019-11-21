@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jdEvchgrMw.chgrState.service.impl.ChgrStateMapper">
+
+    <update id="chgrCurrStateUpdate" parameterType="chgrStatusVO">
+
+        UPDATE chgr_curr_state
+
+            SET STATE_DT
+               , OP_MODE_CD
+               , CH1_RECHG_STATE_CD
+               , CH1_DOOR_STATE_CD
+               , CH1_PLUG_STATE_CD
+               , CH2_RECHG_STATE_CD
+               , CH2_DOOR_STATE_CD
+               , CH2_PLUG_STATE_CD
+               , CH3_RECHG_STATE_CD
+               , CH3_DOOR_STATE_CD
+               , CH3_PLUG_STATE_CD
+               , POWERBOX_STATE
+               , INTEGRATED_KWH
+               , MOD_DT
+
+           WHERE 1=1
+
+             AND PROVIDER_ID = #{providerId}
+             AND ST_ID       = #{stId}
+             AND CHGR_ID     = #{chgrId}
+
+    </update>
+
+    <insert id="chgrSateListInsert" parameterType="chgrStatusVO">
+
+        INSERT INTO chgr_state_list (
+                                        PROVIDER_ID
+                                    ,   ST_ID
+                                    ,   CHGR_ID
+                                    ,   STATE_DT
+                                    ,   MW_KIND_CD
+                                    ,   R_TIME_YN
+                                    ,   OP_MODE_CD
+                                    ,   CH1_RECHG_STATE_CD
+                                    ,   CH1_DOOR_STATE_CD
+                                    ,   CH1_PLUG_STATE_CD
+                                    ,   CH2_RECHG_STATE_CD
+                                    ,   CH2_DOOR_STATE_CD
+                                    ,   CH2_PLUG_STATE_CD
+                                    ,   CH3_RECHG_STATE_CD
+                                    ,   CH3_DOOR_STATE_CD
+                                    ,   CH3_PLUG_STATE_CD
+                                    ,   POWERBOX_STATE
+                                    ,   INTEGRATED_KWH
+                                    ,   CHGR_TX_DT
+                                    ,   REG_DT
+
+                           ) VALUES (
+                                        #{providerId}
+                                    ,   #{stId}
+                                    ,   #{chgrId}
+                                    ,   #{stateDt}
+                                    ,   #{mwKindCd}
+                                    ,   #{rTimeYn}
+                                    ,   #{opModeCd}
+                                    ,   #{ch1RechgStateCd}
+                                    ,   #{ch1DoorStateCd}
+                                    ,   #{ch1PlugStateCd}
+                                    ,   #{ch2RechgStateCd}
+                                    ,   #{ch2DoorStateCd}
+                                    ,   #{ch2PlugStateCd}
+                                    ,   #{ch3RechgStateCd}
+                                    ,   #{ch3DoorStateCd}
+                                    ,   #{ch3PlugStateCd}
+                                    ,   #{powerboxState}
+                                    ,   #{integratedKwh}
+                                    ,   #{chgrTxDt}
+                                    ,   now()
+                                    )
+
+    </insert>
+
+</mapper>

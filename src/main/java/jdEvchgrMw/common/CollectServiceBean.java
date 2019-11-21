@@ -1,11 +1,11 @@
 package jdEvchgrMw.common;
 
 import jdEvchgrMw.alarmHistory.service.AlarmHistoryService;
+import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
+import jdEvchgrMw.chgrState.service.ChgrStateService;
 import jdEvchgrMw.revMsg.service.RevMsgService;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
-
-import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
 /**
  * 
 /**
@@ -58,5 +58,17 @@ public class CollectServiceBean {
 
 		return (RevMsgService)context.getBean("revMsgService");
 	}
-	
+
+	/**
+	 * ChgrStateService Bean 생성
+	 * @return
+	 * @throws Exception
+	 */
+	public ChgrStateService chgrStateService()throws Exception{
+
+		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+
+		return (ChgrStateService)context.getBean("chgrStateService");
+	}
+
 }
