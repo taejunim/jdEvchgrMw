@@ -33,7 +33,6 @@
          WHERE 1=1
 
            AND CUST_ID = (SELECT mci.CUST_ID CUST_ID FROM mem_card_info mci WHERE MEMSH_CARD_NO = #{memAuthInputNo})
-           AND
 
     </select>
 
