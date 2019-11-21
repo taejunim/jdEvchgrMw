@@ -1,5 +1,7 @@
 package jdEvchgrMw.common;
 
+import jdEvchgrMw.alarmHistory.service.AlarmHistoryService;
+import jdEvchgrMw.revMsg.service.RevMsgService;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -31,6 +33,30 @@ public class CollectServiceBean {
 		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
 		
 		return (ChgrInfoService)context.getBean("chgrInfoService");
+	}
+
+	/**
+	 * AlarmHistoryService Bean 생성
+	 * @return
+	 * @throws Exception
+	 */
+	public AlarmHistoryService alarmHistoryService()throws Exception{
+
+		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+
+		return (AlarmHistoryService)context.getBean("alarmHistoryService");
+	}
+
+	/**
+	 * RevMsgService Bean 생성
+	 * @return
+	 * @throws Exception
+	 */
+	public RevMsgService revMsgService()throws Exception{
+
+		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+
+		return (RevMsgService)context.getBean("revMsgService");
 	}
 	
 }

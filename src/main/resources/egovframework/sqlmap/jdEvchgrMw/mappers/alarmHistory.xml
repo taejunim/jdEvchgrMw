@@ -24,7 +24,7 @@
                               , #{providerId}
                               , #{stId}
                               , #{chgrId}
-                              , #{mw_kindCd}
+                              , #{mwKindCd}
                               , #{rTimeYn}
                               , #{occurDt}
                               , #{alarmStateCd}
