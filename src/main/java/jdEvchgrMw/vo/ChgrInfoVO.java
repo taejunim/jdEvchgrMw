@@ -48,7 +48,7 @@ public class ChgrInfoVO extends PageVO {
 	private String installYy;			//설치 년도
 	private String useTime;				//사용 시간
 	private String payingYn;			//유료 여부
-	private String memshOnlyYn;			//멤버쉽 ONLY 여부
+	private String memshOnlyYn;			//멤버쉽 OplugTypeCdNLY 여부
 	private String parkingFeeYn;		//주차비 여부
 	private String parkingFeeDetl;		//주차비 상세정보
 	private String rsvFuncYn;			//예약 기능 여부
@@ -61,4 +61,8 @@ public class ChgrInfoVO extends PageVO {
 	private String delYn;				//자료삭제 여부
 	private String regUid;				//등록 UID
 	private String modUid;				//수정 UID
+
+	private String plugTypeCd;			//플러그 타입 코드
+	private int chId;					//채널 ID
+
 }

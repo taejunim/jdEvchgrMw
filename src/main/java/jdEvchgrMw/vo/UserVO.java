@@ -23,6 +23,7 @@ public class UserVO {
     private String providerId;              //충전사업자 ID
     private String stId;                    //충전소 ID
     private String chgrId;                  //충전기 ID
+    private int chId;                       //채널 ID
     private String mwKindCd;                //미들웨어 종류 코드
     private String memAuthReqDt;            //회원 인증 요청 일시
     private String memAuthInputNo;          //회원 인증 입력 번호

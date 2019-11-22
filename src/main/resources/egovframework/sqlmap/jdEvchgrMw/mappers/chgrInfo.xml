@@ -27,5 +27,20 @@
            AND CHGR_ID          = #{chgrId}
 
     </update>
+    
+    <insert id="chgrChInfoInsUpdate" parameterType="chgrInfoVO">
+
+        INSERT INTO chgr_ch_info
+
+                SET PROVIDER_ID     = #{providerId}
+                  , ST_ID           = #{stId}
+                  , CHGR_ID         = #{chgrId}
+                  , CH_ID           = #{chId}
+                  , PLUG_TYPE_CD    = #{plugTypeCd}
+
+                 ON DUPLICATE KEY UPDATE
+                  , PLUG_TYPE_CD    = #{plugTypeCd}
+
+    </insert>
 
 </mapper>

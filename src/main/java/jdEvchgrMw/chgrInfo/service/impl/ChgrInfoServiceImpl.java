@@ -28,9 +28,16 @@ public class ChgrInfoServiceImpl extends EgovAbstractServiceImpl implements Chgr
     @Resource(name = "chgrInfoMapper")
     private ChgrInfoMapper chgrInfoMapper;
 
-    /*충전기 설지 정보 UPDATE*/
+    /*충전기 설지 정보 수정*/
     public int chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception {
+
         return chgrInfoMapper.chgrInfoUpdate(chgrInfoVO);
+    }
+
+    /*충전기 채널 정보 등록 및 수정*/
+    public int chgrChInfoInsUpdate(ChgrInfoVO chgrInfoVO) throws Exception {
+
+        return chgrInfoMapper.chgrChInfoInsUpdate(chgrInfoVO);
     }
 
 }
