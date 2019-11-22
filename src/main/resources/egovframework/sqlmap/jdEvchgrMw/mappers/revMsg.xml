@@ -34,7 +34,7 @@
                                     , #{rTimeYn}
                                     , #{dataCreateDt}
                                     , #{chgrTxDt}
-                       )
+                                  )
 
     </insert>
 

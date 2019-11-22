@@ -49,15 +49,32 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
             if (userVO.getStopYn().equals("Y") || userVO.getValidYn().equals("N"))  //카드 정지 또는  유효여부 체크
                 userVO.setAuthResult("2");
 
-            else {                                                                  //인증 성공 시 단가 조회(단가 조회는 구현중)
+            else {                                                                  //성공
+
+                String price    =   "0";
+
+                if(!userMapper.userPriceSelect(userVO).equals("") && !userMapper.userPriceSelect(userVO).equals(null))
+                    price = userMapper.userPriceSelect(userVO);                   //단가 정보 조회 CALL
 
                 userVO.setAuthResult("3");
-                userVO.setCurrentUnitCost("178");
+                userVO.setCurrentUnitCost(price);
             }
-        }else
+        }else                                                                      //카드번호 오류
             userVO.setAuthResult("4");
 
         return userVO;
+    }
+
+    /*단가 정보 조회*/
+    public String userPriceSelect(UserVO userVO) throws Exception {
+
+        return userMapper.userPriceSelect(userVO);
+    }
+
+    /*회원 인증 이력 등록*/
+    public int userAuthListInert(UserVO userVO) throws Exception {
+
+        return userMapper.userAuthListInert(userVO);
     }
 
 }

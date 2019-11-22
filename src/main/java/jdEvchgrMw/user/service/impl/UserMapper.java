@@ -25,4 +25,10 @@ public interface UserMapper {
     /*회원 인증 조회*/
     EgovMap userAuthSelect(UserVO userVO) throws Exception;
 
+    /*단가 정보 조회*/
+    String userPriceSelect(UserVO userVO) throws Exception;
+
+    /*회원 인증 이력 등록*/
+    int userAuthListInert(UserVO userVO) throws Exception;
+
 }

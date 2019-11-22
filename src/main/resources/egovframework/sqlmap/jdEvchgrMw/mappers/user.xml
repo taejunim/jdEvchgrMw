@@ -24,7 +24,7 @@
 
     </select>
 
-    <select id="userPriceSelect" parameterType="" resultType="java.lang.String">
+    <select id="userPriceSelect" parameterType="userVO" resultType="java.lang.String">
 
         SELECT PRICE
 
@@ -34,7 +34,54 @@
 
            AND CUST_ID = (SELECT mci.CUST_ID CUST_ID FROM mem_card_info mci WHERE MEMSH_CARD_NO = #{memAuthInputNo})
 
+           <![CDATA[
+           AND COST_SDD < NOW() AND COST_EDD >= NOW()
+           ]]>
+
     </select>
+
+    <insert id="userAuthListInert" parameterType="userVO">
+
+        INSERT INTO mem_auth_list (
+                                    (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(mal.MEM_AUTH_ID,5)), 0)+1, 8, '0')) AS MEM_AUTH_ID
+                                        FROM mem_auth_list mal
+                                        WHERE LEFT(mal.MEM_AUTH_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
+                                    )
+                                  , PROVIDER_ID
+                                  , ST_ID
+                                  , CHGR_ID
+                                  , CH_ID
+                                  , MW_KIND_CD
+                                  , MEM_AUTH_REQ_DT
+                                  , MEM_AUTH_INPUT_NO
+                                  , RES_DT
+                                  , AUTH_RSLT_CD
+                                  , SPOT_PAY_YN
+                                  , CHGR_PAYING_YN
+                                  , MEM_PROVIDER_ID
+                                  , PRICE
+                                  , CHGR_TX_DT
+                                  , REG_DT
+                        ) VALUES (
+                                    MEM_AUTH_ID
+                                  , #{providerId}
+                                  , #{stId}
+                                  , #{chgrId}
+                                  , #{chId}
+                                  , #{mwKindCd}
+                                  , #{memAuthReqDt}
+                                  , #{memAuthInputNo}
+                                  , #{resDt}
+                                  , #{authRsltCd}
+                                  , #{spotPayYn}
+                                  , #{chgrPayingYn}
+                                  , #{memProviderId}
+                                  , #{price}
+                                  , #{chgrTxDt}
+                                  , now()
+                                  )
+
+    </insert>
 
 </mapper>
 
