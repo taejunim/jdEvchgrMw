@@ -11,7 +11,7 @@ import jdEvchgrMw.vo.ChgrInfoVO;
  * @ Modification Information
  * @    수정일      		  수정자               수정 내용
  * @ -------------     ----------     -------------------------------
- * @ 2019-11-19                                최초 생성
+ * @ 2019-11-19                               최초 생성
  * @ version : 1.0.0
  * @ see
  * Copyright (C) by MetisInfo All right reserved.

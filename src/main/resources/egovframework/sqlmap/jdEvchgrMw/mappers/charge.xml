@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jdEvchgrMw.charge.service.impl.ChargeMapper">
+
+    <insert id="rechgSttInsert" parameterType="chargeVO">
+
+        INSERT INTO rechg_stt_list (
+                                      RECHG_STT_LIST_ID
+                                    , PROVIDER_ID
+                                    , ST_ID
+                                    , CHGR_ID
+                                    , MW_KIND_CD
+                                    , R_TIME_YN
+                                    , CH_ID
+                                    , PLUG_TYPE_CD
+                                    , MEM_AUTH_INPUT_NO
+                                    , RECHG_SDT
+                                    , RECHG_DEMAND_AMT
+                                    , RECHG_EST_TIME
+                                    , CHGR_PAYING_YN
+                                    , PAY_TYPE_CD
+                                    , MEM_AUTH_ID
+                                    , CREDIT_P_PAY_TRX_NO
+                                    , CREDIT_P_PAY_TRX_DT
+                                    , INTEGRATED_WH
+                                    , CURR_VOLT
+                                    , CURR_C
+                                    , DATA_CREATE_DT
+                                    , CHGR_TX_DT
+                                    , REG_DT
+                          ) VALUES (
+                                      (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(rsl.RECHG_STT_LIST_ID,5)), 0)+1, 8, '0')) AS RECHG_STT_LIST_ID
+                                         FROM rechg_stt_list rsl
+                                        WHERE LEFT(rsl.RECHG_STT_LIST_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
+                                      )
+                                    , #{providerId}
+                                    , #{stId}
+                                    , #{chgrId}
+                                    , #{mwKindCd}
+                                    , #{rTimeYn}
+                                    , #{chId}
+                                    , #{plugTypeCd}
+                                    , #{memAuthInputNo}
+                                    , #{rechgSdt}
+                                    , #{rechgDemandAmt}
+                                    , #{rechgEstTime}
+                                    , #{chgrPayingYn}
+                                    , #{payTypeCd}
+                                    , (
+                                        SELECT mal.MEM_AUTH_ID MEM_AUTH_ID
+                                          FROM mem_auth_list mal
+                                         WHERE 1=1
+                                           AND mal.PROVIDER_ID = #{providerId}
+                                           AND mal.ST_ID       = #{stId}
+                                           AND mal.CHGR_ID     = #{chgrId}
+                                           AND mal.CH_ID       = #{chId}
+                                      ORDER BY mal.REG_DT
+                                          DESC LIMIT 1
+                                      )
+                                    , #{creditPPayTrxNo}
+                                    , #{creditPPayTrxDt}
+                                    , #{integratedWh}
+                                    , #{currVolt}
+                                    , #{currC}
+                                    , #{dataCreateDt}
+                                    , #{chgrTxDt}
+                                    , now()
+                                   )
+
+    </insert>
+
+    <insert id="rechgingInsert" parameterType="chargeVO">
+
+        INSERT INTO rechging_list (
+                                    RECHGING_LIST_ID
+                                    , PROVIDER_ID
+                                    , ST_ID
+                                    , CHGR_ID
+                                    , MW_KIND_CD
+                                    , R_TIME_YN
+                                    , CH_ID
+                                    , PLUG_TYPE_CD
+                                    , MEM_AUTH_INPUT_NO
+                                    , RECHG_STT_LIST_ID
+                                    , RECHG_SDT
+                                    , RECHG_DEMAND_AMT
+                                    , RECHGING_AMT
+                                    , RECHGING_WH
+                                    , RECHG_REMAIN_TIME
+                                    , CHGR_PAYING_YN
+                                    , PAY_TYPE_CD
+                                    , MEM_AUTH_ID
+                                    , CREDIT_P_PAY_TRX_NO
+                                    , CREDIT_P_PAY_TRX_DT
+                                    , INTEGRATED_WH
+                                    , CURR_VOLT
+                                    , CURR_C
+                                    , DATA_CREATE_DT
+                                    , CHGR_TX_DT
+                                    , REG_DT
+                        ) VALUES (
+                                      (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(rl.RECHGING_LIST_ID,5)), 0)+1, 8, '0')) AS RECHGING_LIST_ID
+                                         FROM rechging_list rl
+                                        WHERE LEFT(rl.RECHGING_LIST_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
+                                      )
+                                    , #{providerId}
+                                    , #{stId}
+                                    , #{chgrId}
+                                    , #{mwKindCd}
+                                    , #{rTimeYn}
+                                    , #{chId}
+                                    , #{plugTypeCd}
+                                    , #{memAuthInputNo}
+                                    , (
+                                        SELECT rsl.RECHG_STT_LIST_ID RECHG_STT_LIST_ID
+                                          FROM rechg_stt_list rsl
+                                         WHERE 1=1
+                                           AND rsl.PROVIDER_ID = #{providerId}
+                                           AND rsl.ST_ID       = #{stId}
+                                           AND rsl.CHGR_ID     = #{chgrId}
+                                           AND rsl.CH_ID       = #{chId}
+                                           AND rsl.R_TIME_YN   = 'Y'
+                                      ORDER BY rsl.REG_DT
+                                          DESC LIMIT 1
+                                      )
+                                    , #{rechgSdt}
+                                    , #{rechgDemandAmt}
+                                    , #{rechgingAmt}
+                                    , #{rechgingWh}
+                                    , #{rechgRemainTime}
+                                    , #{chgrPayingYn}
+                                    , #{payTypeCd}
+                                    , (
+                                        SELECT mal.MEM_AUTH_ID MEM_AUTH_ID
+                                          FROM mem_auth_list mal
+                                         WHERE 1=1
+                                           AND mal.PROVIDER_ID = #{providerId}
+                                           AND mal.ST_ID       = #{stId}
+                                           AND mal.CHGR_ID     = #{chgrId}
+                                           AND mal.CH_ID       = #{chId}
+                                      ORDER BY mal.REG_DT
+                                          DESC LIMIT 1
+                                      )
+                                    , #{creditPPayTrxNo}
+                                    , #{creditPPayTrxDt}
+                                    , #{integratedWh}
+                                    , #{currVolt}
+                                    , #{currC}
+                                    , #{dataCreateDt}
+                                    , #{chgrTxDt}
+                                    , now()
+                        )
+
+    </insert>
+
+    <insert id="rechgFnshInsert" parameterType="chargeVO">
+
+        INSERT INTO rechg_fnsh_list (
+                                        RECHG_FNSH_LIST_ID
+                                        , PROVIDER_ID
+                                        , ST_ID
+                                        , CHGR_ID
+                                        , MW_KIND_CD
+                                        , R_TIME_YN
+                                        , CH_ID
+                                        , PLUG_TYPE_CD
+                                        , MEM_AUTH_INPUT_NO
+                                        , RECHG_STT_LIST_ID
+                                        , RECHG_SDT
+                                        , RECHG_EDT
+                                        , RECHG_FNSH_TP_CD
+                                        , RECHG_DEMAND_AMT
+                                        , RECHG_AMT
+                                        , RECHG_WH
+                                        , RECHG_TIME
+                                        , CHGR_PAYING_YN
+                                        , PAY_TYPE_CD
+                                        , MEM_AUTH_ID
+                                        , CREDIT_P_PAY_TRX_NO
+                                        , CREDIT_P_PAY_TRX_DT
+                                        , CANCEL_AMT
+                                        , CANCEL_DETL
+                                        , INTEGRATED_WH
+                                        , CURR_VOLT
+                                        , CURR_C
+                                        , DATA_CREATE_DT
+                                        , CHGR_TX_DT
+                                        , REG_DT
+                            ) VALUES (
+                                          (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(rfl.RECHG_FNSH_LIST_ID,5)), 0)+1, 8, '0')) AS RECHG_FNSH_LIST_ID
+                                             FROM rechg_fnsh_list rfl
+                                            WHERE LEFT(rfl.RECHG_FNSH_LIST_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
+                                          )
+                                        , #{providerId}
+                                        , #{stId}
+                                        , #{chgrId}
+                                        , #{mwKindCd}
+                                        , #{rTimeYn}
+                                        , #{chId}
+                                        , #{plugTypeCd}
+                                        , #{memAuthInputNo}
+                                        , (
+                                            SELECT rsl.RECHG_STT_LIST_ID RECHG_STT_LIST_ID
+                                              FROM rechg_stt_list rsl
+                                             WHERE 1=1
+                                               AND rsl.PROVIDER_ID = #{providerId}
+                                               AND rsl.ST_ID       = #{stId}
+                                               AND rsl.CHGR_ID     = #{chgrId}
+                                               AND rsl.CH_ID       = #{chId}
+                                               AND rsl.R_TIME_YN   = 'Y'
+                                          ORDER BY rsl.REG_DT
+                                              DESC LIMIT 1
+                                          )
+                                        , #{rechgSdt}
+                                        , #{rechgEdt}
+                                        , #{rechgFnshTpCd}
+                                        , #{rechgDemandAmt}
+                                        , #{rechgAmt}
+                                        , #{rechgWh}
+                                        , #{rechgTime}
+                                        , #{chgrPayingYn}
+                                        , #{payTypeCd}
+                                        , (
+                                            SELECT mal.MEM_AUTH_ID MEM_AUTH_ID
+                                              FROM mem_auth_list mal
+                                             WHERE 1=1
+                                               AND mal.PROVIDER_ID = #{providerId}
+                                               AND mal.ST_ID       = #{stId}
+                                               AND mal.CHGR_ID     = #{chgrId}
+                                               AND mal.CH_ID       = #{chId}
+                                          ORDER BY mal.REG_DT
+                                              DESC LIMIT 1
+                                          )
+                                        , #{creditPPayTrxNo}
+                                        , #{creditPPayTrxDt}
+                                        , #{cancelAmt}
+                                        , #{cancelDetl}
+                                        , #{integratedWh}
+                                        , #{currVolt}
+                                        , #{currC}
+                                        , #{dataCreateDt}
+                                        , #{chgrTxDt}
+                                        , now()
+                                    )
+
+    </insert>
+
+</mapper>

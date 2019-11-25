@@ -17,9 +17,10 @@
                               , CHGR_TX_DT
                               , REG_DT
                       )values (
-                                (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(al.ALARM_ID,5)), 0)+1, 8, '0')) AS ALARM_ID
-                                    FROM alarm_list al
-                                    WHERE LEFT(al.ALARM_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
+                                (
+                                 SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(al.ALARM_ID,5)), 0)+1, 8, '0')) AS ALARM_ID
+                                   FROM alarm_list al
+                                  WHERE LEFT(al.ALARM_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
                                 )
                               , #{providerId}
                               , #{stId}
