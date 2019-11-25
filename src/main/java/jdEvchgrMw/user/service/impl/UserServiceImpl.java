@@ -45,19 +45,15 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
             userVO.setRegUid(egovMap.get("regUid").toString());             //등록 UID
             userVO.setModDt(egovMap.get("modDt").toString());               //수정 일시
             userVO.setModUid(egovMap.get("modUid").toString());             //수정 UID
+            userVO.setProviderId(egovMap.get("providerId").toString());     //충전사업자 ID
 
             if (userVO.getStopYn().equals("Y") || userVO.getValidYn().equals("N"))  //카드 정지 또는  유효여부 체크
                 userVO.setAuthResult("2");
 
             else {                                                                  //성공
 
-                String price    =   "0";
-
-                if(!userMapper.userPriceSelect(userVO).equals("") && !userMapper.userPriceSelect(userVO).equals(null))
-                    price = userMapper.userPriceSelect(userVO);                   //단가 정보 조회 CALL
-
                 userVO.setAuthResult("3");
-                userVO.setCurrentUnitCost(price);
+                userVO.setCurrentUnitCost(userMapper.userPriceSelect(userVO));      //단가 정보 조회 SET
             }
         }else                                                                      //카드번호 오류
             userVO.setAuthResult("4");

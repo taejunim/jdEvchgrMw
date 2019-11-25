@@ -4,23 +4,20 @@
 
     <select id="userAuthSelect" parameterType="userVO" resultType="egovMap">
 
-        SELECT MEMSH_CARD_NO
-             , CUST_ID
-             , PAY_KIND_CD
-             , SPOT_PAY_YN
-             , STOP_YN
-             , STOP_RSN
-             , VALID_YN
-             , REG_UID
-             , REG_DT
-             , MOD_UID
-             , MOD_DT
+        SELECT mci.MEMSH_CARD_NO    MEMSH_CARD_NO
+             , mci.CUST_ID          CUST_ID
+             , mci.PAY_KIND_CD      PAY_KIND_CD
+             , mci.SPOT_PAY_YN      SPOT_PAY_YN
+             , mci.STOP_YN          STOP_YN
+             , mci.STOP_RSN         STOP_RSN
+             , mci.VALID_YN         VALID_YN
+             , mci.REG_UID          REG_UID
+             , mci.REG_DT           REG_DT
+             , mci.MOD_UID          MOD_UID
+             , mci.MOD_DT           MOD_DT
+             , ct.PROVIDER_ID       PROVIDER_ID
 
-          FROM memsh_card_info
-
-         WHERE 1=1
-
-           AND MEMSH_CARD_NO = #{memAuthInputNo}
+          FROM memsh_card_info mci INNER JOIN cust ct ON mci.CUST_ID = ct.CUST_ID AND mci.MEMSH_CARD_NO = #{memAuthInputNo}
 
     </select>
 
@@ -28,11 +25,11 @@
 
         SELECT PRICE
 
-          FROM cust_price_info
+          FROM rechg_price_info
 
          WHERE 1=1
 
-           AND CUST_ID = (SELECT mci.CUST_ID CUST_ID FROM mem_card_info mci WHERE MEMSH_CARD_NO = #{memAuthInputNo})
+           AND PROVIDER_ID = #{providerId}
 
            <![CDATA[
            AND COST_SDD < NOW() AND COST_EDD >= NOW()
