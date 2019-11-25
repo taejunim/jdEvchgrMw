@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 /**
  * @ class Name  : ChgrStateServiceImpl.java
  * @ Description : 충전기 상태 IMPLEMENTS
- * @ autor : 고재훈
+ * @ author : 고재훈
  * @ since : 2019-11-21 13:48
  * @
  * @ Modification Information

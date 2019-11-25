@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * @ Class Name  : ChgrInfoVO.java
  * @ Description : 충전기 설치 정보 VO
- * @ autor : 임태준
+ * @ author : 임태준
  * @ since : 2019-11-14 13:29
  * @
  * @ Modification Information

@@ -6,7 +6,7 @@ import jdEvchgrMw.vo.AlarmHistoryVO;
 /**
  * @ interface Name  : AlarmHistoryMapper.java
  * @ Description : 알람 이력 MAPPER
- * @ autor : 고재훈
+ * @ author : 고재훈
  * @ since : 2019-11-20 10:14
  * @
  * @ Modification Information

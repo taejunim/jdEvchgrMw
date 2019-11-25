@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 /**
  * @ class Name  : ChgrInfoServiceImpl.java
  * @ Description : 충전기 설치 정보 IMPLEMENTS
- * @ autor : 고재훈
+ * @ author : 고재훈
  * @ since : 2019-11-19 10:01
  * @
  * @ Modification Information

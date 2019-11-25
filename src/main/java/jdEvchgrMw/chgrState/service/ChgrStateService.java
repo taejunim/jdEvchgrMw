@@ -5,7 +5,7 @@ import jdEvchgrMw.vo.ChgrStatusVO;
 /**
  * @ interface Name  : ChgrStateService.java
  * @ Description : 상태 SERVICE
- * @ autor : 고재훈
+ * @ author : 고재훈
  * @ since : 2019-11-21 13:49
  * @
  * @ Modification Information

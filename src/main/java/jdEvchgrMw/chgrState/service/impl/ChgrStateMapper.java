@@ -6,7 +6,7 @@ import jdEvchgrMw.vo.ChgrStatusVO;
 /**
  * @ interface Name  : ChgrStateMapper.java
  * @ Description : 충전기 상태 MAPPER
- * @ autor : 고재훈
+ * @ author : 고재훈
  * @ since : 2019-11-21 13:47
  * @
  * @ Modification Information

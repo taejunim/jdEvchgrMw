@@ -36,8 +36,7 @@ public class ControlMw {
     @OnMessage
     public void handleMessage(@PathParam("action_type") String actionType, String message, Session session) {
 
-    	JsonDataParsing jdp         = new JsonDataParsing();
-        //CommonFunction  function 	= new CommonFunction();
+    	JsonDataParsingForControl jdp = new JsonDataParsingForControl();
 
         CommonVO commonVO = new CommonVO();
 
@@ -45,13 +44,12 @@ public class ControlMw {
         //commonVO.setChgrId(chgrId);
         commonVO.setUserSession(session);
         commonVO.setRcvMsg(message);
-
-        //function.clientSetting(commonVO);						//CHGR 및 SESSION SETTING CALL
+        commonVO.setActionType(actionType);
 
         System.out.println("[ MSG Start.. 현재 session 수 : " + sessionList.size() + " ]");
         System.out.println("[ MSG -> M/W : "+ commonVO.getRcvMsg() +" ]");
 
-        jdp.jsonDataParsingMain(commonVO);
+        jdp.jsonDataParsingMainForControl(commonVO);
     }
     
     /**

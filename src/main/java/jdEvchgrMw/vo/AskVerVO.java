@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @ Class Name  : AskVer.java
  * @ Description : 펌웨어 버전 정보 확인 VO
- * @ autor : 임태준
+ * @ author : 임태준
  * @ since : 2019-11-14 13:26
  * @
  * @ Modification Information

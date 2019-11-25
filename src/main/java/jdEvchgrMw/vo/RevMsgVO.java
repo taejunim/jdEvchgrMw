@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @ Class Name  : ResetVO.java
  * @ Description : 수신 전문 이력 VO
- * @ autor : 고재훈
+ * @ author : 고재훈
  * @ since : 2019-11-18 18:56
  * @
  * @ Modification Information

@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 /**
  * @ class Name  : AlarmHistoryServiceImpl.java
  * @ Description : 알람 이력 IMPLEMENTS
- * @ autor : 고재훈
+ * @ author : 고재훈
  * @ since : 2019-11-20 10:15
  * @
  * @ Modification Information

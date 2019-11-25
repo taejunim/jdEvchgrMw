@@ -7,7 +7,7 @@ import jdEvchgrMw.vo.UserVO;
 /**
  * @ interface Name  : UserMapper.java
  * @ Description : 사용자 MAPPER
- * @ autor : 고재훈
+ * @ author : 고재훈
  * @ since : 2019-11-21 15:43
  * @
  * @ Modification Information

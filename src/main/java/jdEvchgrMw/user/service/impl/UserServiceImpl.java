@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 /**
  * @ class Name  : UserServiceImpl.java
  * @ Description : 사용자 IMPLEMENTS
- * @ autor : 고재훈
+ * @ author : 고재훈
  * @ since : 2019-11-21 17:36
  * @
  * @ Modification Information

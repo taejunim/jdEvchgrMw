@@ -6,7 +6,7 @@ import jdEvchgrMw.vo.ChgrInfoVO;
 /**
  * @ interface Name  : ChgrInfoMapper.java
  * @ Description : 충전기 설치 정보 MAPPER
- * @ autor : 고재훈
+ * @ author : 고재훈
  * @ since : 2019-11-19 10:01
  * @
  * @ Modification Information

@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @ Class Name  : ChargePaymentVO.java
  * @ Description : 충전 결제 정보 VO
- * @ autor : 임태준
+ * @ author : 임태준
  * @ since : 2019-11-14 13:26
  * @
  * @ Modification Information

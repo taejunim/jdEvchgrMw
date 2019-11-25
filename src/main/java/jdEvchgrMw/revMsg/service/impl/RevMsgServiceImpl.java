@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 /**
  * @ class Name  : RevMsgServiceImpl.java
  * @ Description : 수신 전문 이력 IMPLEMENTS
- * @ autor : 고재훈
+ * @ author : 고재훈
  * @ since : 2019-11-19 10:01
  * @
  * @ Modification Information

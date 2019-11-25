@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @ Class Name  : ReportUpdateVO.java
  * @ Description : 충전기 펌웨어 업데이트 결과 알림 VO
- * @ autor : 임태준
+ * @ author : 임태준
  * @ since : 2019-11-14 13:26
  * @
  * @ Modification Information

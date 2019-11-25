@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @ Class Name  : ChangeModeVO.java
  * @ Description : 충전기 모드 변경 VO
- * @ autor : 임태준
+ * @ author : 임태준
  * @ since : 2019-11-14 13:26
  * @
  * @ Modification Information
@@ -20,4 +20,5 @@ import lombok.Data;
 @Data
 public class ChangeModeVO {
 
+    private String changeMode; //모드
 }

@@ -7,7 +7,7 @@ import javax.websocket.Session;
 /**
  * @ Class Name  : SessionVO.java
  * @ Description : 세션 VO
- * @ autor : 임태준
+ * @ author : 임태준
  * @ since : 2019-11-18 13:26
  * @
  * @ Modification Information

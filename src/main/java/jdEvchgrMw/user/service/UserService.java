@@ -5,7 +5,7 @@ import jdEvchgrMw.vo.UserVO;
 /**
  * @ interface Name  : UserService.java
  * @ Description : 사용자 SERVICE
- * @ autor : 고재훈
+ * @ author : 고재훈
  * @ since : 2019-11-21 18:23
  * @
  * @ Modification Information

@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @ Class Name  : DChargingEndVO.java
  * @ Description : 덤프_충전 완료 정보 VO
- * @ autor : 임태준
+ * @ author : 임태준
  * @ since : 2019-11-14 13:26
  * @
  * @ Modification Information

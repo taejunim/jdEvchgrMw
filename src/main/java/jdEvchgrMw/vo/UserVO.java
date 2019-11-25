@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @ Class Name  : UserVO.java
  * @ Description : 사용자 인증 VO
- * @ autor : 임태준
+ * @ author : 임태준
  * @ since : 2019-11-14 13:26
  * @
  * @ Modification Information

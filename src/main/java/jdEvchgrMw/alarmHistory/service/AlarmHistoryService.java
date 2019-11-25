@@ -5,7 +5,7 @@ import jdEvchgrMw.vo.AlarmHistoryVO;
 /**
  * @ interface Name  : AlarmHistoryService.java
  * @ Description : 알람 이력 SERVICE
- * @ autor : 고재훈
+ * @ author : 고재훈
  * @ since : 2019-11-20 10:12
  * @
  * @ Modification Information
