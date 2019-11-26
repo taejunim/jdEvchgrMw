@@ -8,6 +8,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 @ServerEndpoint(value="/station/{stationId}/{chgrId}")
@@ -22,16 +23,18 @@ public class jdEvChgrMwMain {
     @OnOpen
     public void handleOpen(@PathParam("stationId") String stationId, @PathParam("chgrId") String chgrId, Session session){
 
-        System.out.println("[ 충전소 : " + stationId + " - 충전기  "+ chgrId +"(가)이 접속 하였습니다. ]");
-        System.out.println("[ session.getId() : " + session.getId() + " ]");
-        System.out.println("[ session : " + session + " ]");
-
         SessionVO sessionVO = new SessionVO();
-        sessionVO.setSessionId(session.getId());
         sessionVO.setStationChgrId(stationId + chgrId);
         sessionVO.setUserSession(session);
 
         sessionList.add(sessionVO);
+
+        //세션 중복 제거 작업 -> 세션은 달라질 수 있는데 충전소ID + 충전기ID 값은 고유하므로 List에서 같은 stationChgrId 면 중복 제거함.
+        List<SessionVO> tempList = new ArrayList<SessionVO>(new HashSet<SessionVO>(sessionList));
+
+        sessionList = tempList;
+
+        System.out.println("[ 충전소 : " + stationId + " - 충전기  "+ chgrId +"(가)이 접속 하였습니다. ]");
         System.out.println("[ 접속한 충전기 : " + stationId + chgrId + ", 현재 sessionList : " + sessionList + " ]");
 
     }
@@ -82,9 +85,7 @@ public class jdEvChgrMwMain {
 
             if (sessionList.get(i).getStationChgrId().equals(stationId + chgrId)) {
 
-                System.out.println("[ sessionList.get(i).getSessionId() : " + sessionList.get(i).getSessionId() + " / session.getId() : " + session.getId() + " ]");
-                System.out.println("[ sessionList.get(i).getStationChgrId() : " + sessionList.get(i).getStationChgrId() + " / stationId + chgrId : " + stationId + chgrId + " ]");
-                System.out.println("[ 삭제된 충전기 : " + sessionList.get(i).getStationChgrId() + " ]");
+                System.out.println("[ 종료된 충전기 : " + sessionList.get(i).getStationChgrId() + " ]");
 
                 sessionList.remove(i);
 

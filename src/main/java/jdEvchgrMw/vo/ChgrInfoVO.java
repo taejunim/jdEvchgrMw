@@ -38,6 +38,7 @@ public class ChgrInfoVO extends PageVO {
 	private String speedTpCd;			//충전속도 구분 코드
 	private String gpsXpos;				//GPS X좌표
 	private String gpsYpos;				//GPS y좌표
+	private String chgrTypeCd;			//충전기 타입 코드
 	private String locInfo;				//설치장소 정보
 	private String mfCd;				//제조사 코드
 	private String m2mMfCd;				//M2M통신단말기 제조사 코드
@@ -64,5 +65,8 @@ public class ChgrInfoVO extends PageVO {
 
 	private String plugTypeCd;			//플러그 타입 코드
 	private int chId;					//채널 ID
+	private String chargerPayYn;		//충전기 과금 여부
+
+	private FwVerInfoVO fwVerInfoVO;
 
 }

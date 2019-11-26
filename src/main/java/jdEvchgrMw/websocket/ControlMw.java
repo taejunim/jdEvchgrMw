@@ -6,6 +6,9 @@ import jdEvchgrMw.vo.SessionVO;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 import static jdEvchgrMw.websocket.jdEvChgrMwMain.sessionList;
 
@@ -20,13 +23,18 @@ public class ControlMw {
 
         System.out.println("[ 관제 접속 : " + session + " ]");
         SessionVO sessionVO = new SessionVO();
-        sessionVO.setSessionId(session.getId());
+
         sessionVO.setStationChgrId("ctrl");
         sessionVO.setUserSession(session);
 
         sessionList.add(sessionVO);
-        System.out.println("[ 관제 제어 명령 : " + actionType + ", 현재 sessionList : " + sessionList + " ]");
 
+        //세션 중복 제거 작업 -> 세션은 달라질 수 있는데 충전소ID + 충전기ID 값은 고유하므로 List에서 같은 stationChgrId 면 중복 제거함.
+        List<SessionVO> tempList = new ArrayList<SessionVO>(new HashSet<SessionVO>(sessionList));
+
+        sessionList = tempList;
+
+        System.out.println("[ 관제 제어 명령 : " + actionType + ", 현재 sessionList : " + sessionList + " ]");
     }
     
     /**
@@ -66,7 +74,6 @@ public class ControlMw {
 
             if (sessionList.get(i).getStationChgrId().equals("ctrl")) {
 
-                System.out.println("[ sessionList.get(i).getSessionId() : " + sessionList.get(i).getSessionId() + " / session.getId() : " + session.getId() + " ]");
                 System.out.println("[ sessionList.get(i).getStationChgrId() : " + sessionList.get(i).getStationChgrId() + " / stationId + chgrId : ctrl ]");
                 System.out.println("[ 삭제된 세션 : " + sessionList.get(i).getStationChgrId() + " ]");
 

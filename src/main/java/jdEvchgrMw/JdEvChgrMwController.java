@@ -1,10 +1,18 @@
 package jdEvchgrMw;
 
+import jdEvchgrMw.vo.SessionVO;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+
 @Controller
 public class JdEvChgrMwController {
+
+	static List<SessionVO> sessionList2= Collections.synchronizedList(new ArrayList<SessionVO>());
 
 	/**
 	 * MAIN PAGE
@@ -16,6 +24,53 @@ public class JdEvChgrMwController {
 	public String main() throws Exception {
 		
 		System.out.println("MAIN");
+
+		sessionList2.clear();
+
+		SessionVO sessionVO = new SessionVO();
+
+		sessionVO.setStationChgrId("01");
+		//sessionVO.setTemp("중앙");
+
+		sessionList2.add(sessionVO);
+
+
+		SessionVO sessionVO2= new SessionVO();
+
+		sessionVO2.setStationChgrId("02");
+		//sessionVO2.setTemp("시그넷");
+
+		sessionList2.add(sessionVO2);
+
+
+		SessionVO sessionVO3= new SessionVO();
+
+		sessionVO3.setStationChgrId("03");
+//		sessionVO3.setTemp("메티스");
+
+		sessionList2.add(sessionVO3);
+
+
+		SessionVO sessionVO4 = new SessionVO();
+
+		sessionVO4.setStationChgrId("02");
+//		sessionVO4.setTemp("진우");
+
+		sessionList2.add(sessionVO4);
+
+		System.out.println("before size:"+ sessionList2.size());
+		System.out.println("before :"+ sessionList2);
+
+		List<SessionVO> sliet = new ArrayList<SessionVO>(new HashSet<SessionVO>(sessionList2));
+		System.out.println("after size:"+ sliet.size());
+		System.out.println("after :"+ sliet);
+
+		sessionList2 = sliet;
+		//sliet.clear();
+		System.out.println("final  sessionList2 :"+ sessionList2);
+
+
+
 
 		// req Data DB Insert
 		/*try {

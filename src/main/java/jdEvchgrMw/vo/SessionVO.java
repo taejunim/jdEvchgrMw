@@ -1,6 +1,7 @@
 package jdEvchgrMw.vo;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.websocket.Session;
 
@@ -20,9 +21,9 @@ import javax.websocket.Session;
  **/
 
 @Data
+@EqualsAndHashCode(exclude = {"userSession"})   //중복 제거 annotation -> 세션은 달라질 수 있는데 충전소ID + 충전기ID 값은 고유하므로 같은 stationChgrId 면 중복 제거함.
 public class SessionVO {
 
-    private String sessionId;       //Session Id => 0,1,2, ... ,n
     private String stationChgrId;   //stationChgrId = 충전소ID + 충전기ID
     private Session userSession;	//USER SESSION
 }

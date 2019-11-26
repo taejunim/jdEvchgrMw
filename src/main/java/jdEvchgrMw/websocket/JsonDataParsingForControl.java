@@ -103,7 +103,6 @@ public class JsonDataParsingForControl {
             }
 
             System.out.println("[ responseDate : " + commonVO.getResponseDate() + " ]");
-            System.out.println("[ reqCreateDate : " + commonVO.getReqCreateDate() + " ]");
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -226,7 +225,6 @@ public class JsonDataParsingForControl {
             commonVO.setCtrlListId(ctrl_list_id);
             commonVO.setStationId(station_id);
             commonVO.setChgrId(chgr_id);
-            commonVO.setReqCreateDate(send_date);
 
             // req Data DB Insert
             /*try {
@@ -292,7 +290,6 @@ public class JsonDataParsingForControl {
             commonVO.setCtrlListId(ctrl_list_id);
             commonVO.setStationId(station_id);
             commonVO.setChgrId(chgr_id);
-            commonVO.setReqCreateDate(send_date);
 
             ChangeModeVO changeModeVO = new ChangeModeVO();
             changeModeVO.setChangeMode(change_mode);
@@ -409,7 +406,6 @@ public class JsonDataParsingForControl {
             commonVO.setCtrlListId(ctrl_list_id);
             commonVO.setStationId(station_id);
             commonVO.setChgrId(chgr_id);
-            commonVO.setReqCreateDate(send_date);
             commonVO.setHourVO(hourVO);
 
 
@@ -525,7 +521,6 @@ public class JsonDataParsingForControl {
             commonVO.setCtrlListId(ctrl_list_id);
             commonVO.setStationId(station_id);
             commonVO.setChgrId(chgr_id);
-            commonVO.setReqCreateDate(send_date);
             commonVO.setHourVO(hourVO);
 
 
@@ -590,7 +585,6 @@ public class JsonDataParsingForControl {
             commonVO.setCtrlListId(ctrl_list_id);
             commonVO.setStationId(station_id);
             commonVO.setChgrId(chgr_id);
-            commonVO.setReqCreateDate(send_date);
 
             FwVerInfoVO fwVerInfoVO = new FwVerInfoVO();
             fwVerInfoVO.setFw_type(fw_type);

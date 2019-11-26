@@ -9,6 +9,7 @@
            SET SPEED_TP_CD      = #{speedTpCd}
              , GPS_XPOS         = #{gpsXpos}
              , GPS_YPOS         = #{gpsYpos}
+             , CHGR_TYPE_CD     = #{chgrTypeCd}
              , MF_CD            = #{mfCd}
              , M2M_MF_CD        = #{m2mMfCd}
              , RF_MF_CD         = #{rfMfCd}
@@ -27,20 +28,20 @@
            AND CHGR_ID          = #{chgrId}
 
     </update>
-    
-    <insert id="chgrChInfoInsUpdate" parameterType="chgrInfoVO">
 
-        INSERT INTO chgr_ch_info
+    <update id="chgrChInfoInsUpdate" parameterType="chgrInfoVO" >
 
-                SET PROVIDER_ID     = #{providerId}
-                  , ST_ID           = #{stId}
-                  , CHGR_ID         = #{chgrId}
-                  , CH_ID           = #{chId}
-                  , PLUG_TYPE_CD    = #{plugTypeCd}
+        UPDATE chgr_ch_info
 
-                 ON DUPLICATE KEY UPDATE
-                  , PLUG_TYPE_CD    = #{plugTypeCd}
+               PLUG_TYPE_CD    = #{plugTypeCd}
 
-    </insert>
+         WHERE 1=1
+
+           AND PROVIDER_ID      = #{providerId}
+           AND ST_ID            = #{stId}
+           AND CHGR_ID          = #{chgrId}
+           AND CH_ID            = #{chId}
+
+    </update>
 
 </mapper>

@@ -59,33 +59,14 @@ public class JsonDataParsing {
             String send_type = jObject.get("send_type").toString();
             String action_type = jObject.get("action_type").toString();
             String data = jObject.get("data").toString();
-            String reqCreateDate = "";
-
-            // 덤프 데이터는 data 가 array로 오므로 분기처리..
-            if (action_type.equals("dChargingStart") || action_type.equals("dChargingEnd") || action_type.equals("dChargePayment") || action_type.equals("dAlarmHistory") || action_type.equals("dReportUpdate")) {
-
-                JSONArray tmpData = (JSONArray) jParser.parse(data);
-
-                for (int i = 0; i < tmpData.size(); i++) {
-                    JSONObject tmpArr = (JSONObject) tmpData.get(i);
-                    reqCreateDate = (String) tmpArr.get("send_date");
-                }
-
-            } else {
-                JSONObject tmpData = (JSONObject) jParser.parse(data);
-
-                reqCreateDate = (String) tmpData.get("send_date");
-            }
 
             commonVO.setUuid(uuid);
             commonVO.setSendType(send_type);
             commonVO.setActionType(action_type);
             commonVO.setData(data);
             commonVO.setResponseDate(responseDateFormat.format(dt));
-            commonVO.setReqCreateDate(reqCreateDate);
 
             System.out.println("[ responseDate : " + commonVO.getResponseDate() + " ]");
-            System.out.println("[ reqCreateDate : " + commonVO.getReqCreateDate() + " ]");
 
             //데이터 공백 체크
             if (uuid.equals("") || uuid == null || send_type.equals("") || send_type == null || action_type.equals("") || action_type == null || data.equals("") || data == null) {
@@ -228,7 +209,7 @@ public class JsonDataParsing {
             sendData.put("station_id", commonVO.getStationId());
             sendData.put("chgr_id", commonVO.getChgrId());
             sendData.put("response_date", commonVO.getResponseDate());
-            sendData.put("req_create_date", commonVO.getReqCreateDate());
+            //sendData.put("req_create_date", commonVO.getReqCreateDate());
             sendData.put("response_receive", commonVO.getResponseReceive());
             sendData.put("response_reason", commonVO.getResponseReason());
 
@@ -237,7 +218,7 @@ public class JsonDataParsing {
 
                 if (commonVO.getActionType().equals("chgrInfo")) {
 
-                    sendData.put("price_apply_yn", "1");
+                    //sendData.put("price_apply_yn", "1");
 
                     JSONArray unit_prices_array = new JSONArray();
 
@@ -387,6 +368,7 @@ public class JsonDataParsing {
             String gps_xpos = (String) data.get("gps_xpos");
             String gps_ypos = (String) data.get("gps_ypos");
             String charger_type = (String) data.get("charger_type");
+            String charger_plug_type = (String) data.get("charger_plug_type");
             String charger_mf = (String) data.get("charger_mf");
             String m2m_mf = (String) data.get("m2m_mf");
             String rf_mf = (String) data.get("rf_mf");
@@ -394,6 +376,7 @@ public class JsonDataParsing {
             String van_ip = (String) data.get("van_ip");
             int van_port = Integer.parseInt((String) data.get("van_port"));
             int offline_free_charge_W = Integer.parseInt((String) data.get("offline_free_charge_W"));
+            String charger_pay_yn = (String) data.get("charger_pay_yn");
 
             ArrayList<FwVerInfoVO> fwVerInfoVOList = new ArrayList<>();
             ArrayList<PlugDetlInfoVO> plugDetlInfoVOList = new ArrayList<>();
@@ -438,6 +421,7 @@ public class JsonDataParsing {
             System.out.println("van_ip : " + van_ip);
             System.out.println("van_port : " + van_port);
             System.out.println("offline_free_charge_W : " + offline_free_charge_W);
+            System.out.println("charger_pay_yn : " + charger_pay_yn);
             System.out.println("fwVerInfoVOList : " + fwVerInfoVOList);
             System.out.println("plugDetlInfoVOList : " + plugDetlInfoVOList);
             System.out.println("<------------------------------------------------>");
@@ -455,6 +439,7 @@ public class JsonDataParsing {
                 chgrInfoVO.setSpeedTpCd(charger_type);
                 chgrInfoVO.setGpsXpos(gps_xpos.equals("") ? "0.0" : gps_xpos);
                 chgrInfoVO.setGpsYpos(gps_ypos.equals("") ? "0.0" : gps_ypos);
+                chgrInfoVO.setChgrTypeCd(charger_plug_type);
                 chgrInfoVO.setMfCd(charger_mf);
                 chgrInfoVO.setM2mMfCd(m2m_mf);
                 chgrInfoVO.setRfMfCd(rf_mf);
@@ -464,8 +449,23 @@ public class JsonDataParsing {
                 chgrInfoVO.setOfflineFreeWh(offline_free_charge_W);
                 chgrInfoVO.setMwSession(commonVO.getStationId() + commonVO.getChgrId());
                 chgrInfoVO.setModUid("MW");
+                chgrInfoVO.setChargerPayYn(charger_pay_yn);
 
-                System.out.println("<----------------------- Update OK -------------------------> : " + csb.beanChgrInfoService().chgrInfoUpdate(chgrInfoVO));
+                System.out.println("<----------------------- 설치 정보 Update OK -------------------------> : " + csb.beanChgrInfoService().chgrInfoUpdate(chgrInfoVO));
+
+                for (int i=0; i<plugDetlInfoVOList.size(); i++) {
+                    chgrInfoVO.setChId(Integer.parseInt(plugDetlInfoVOList.get(i).getPlug_id()));
+                    chgrInfoVO.setPlugTypeCd(plugDetlInfoVOList.get(i).getPlug_type());
+                    System.out.println("<----------------------- 채널 정보 Update OK -------------------------> : " + csb.beanChgrInfoService().chgrChInfoInsUpdate(chgrInfoVO));
+                }
+
+                for (int i=0; i<fwVerInfoVOList.size(); i++) {
+                    FwVerInfoVO fwVerInfoVO = new FwVerInfoVO();
+                    fwVerInfoVO.setFw_type(fwVerInfoVOList.get(i).getFw_type());
+                    fwVerInfoVO.setCurr_ver(fwVerInfoVOList.get(i).getCurr_ver());
+                    chgrInfoVO.setFwVerInfoVO(fwVerInfoVO);
+                    System.out.println("<----------------------- 펌웨 정보 Update OK -------------------------> : " + csb.beanChgrInfoService().chgrChInfoInsUpdate(chgrInfoVO));
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -865,6 +865,7 @@ public class JsonDataParsing {
 
             String send_date = (String) data.get("send_date");
             String create_date = (String) data.get("create_date");
+            String alarm_plug = (String) data.get("alarm_plug");
             String alarm_type = (String) data.get("alarm_type");
             String alarm_date = (String) data.get("alarm_date");
             String alarm_code = (String) data.get("alarm_code");
@@ -872,6 +873,7 @@ public class JsonDataParsing {
             System.out.println("<----------- 경보 이력 Parsing Data ----------->");
             System.out.println("send_date : " + send_date);
             System.out.println("create_date : " + create_date);
+            System.out.println("alarm_plug : " + alarm_plug);
             System.out.println("alarm_type : " + alarm_type);
             System.out.println("alarm_date : " + alarm_date);
             System.out.println("alarm_code : " + alarm_code);
@@ -888,6 +890,7 @@ public class JsonDataParsing {
                 alarmHistoryVO.setAlarmCd(alarm_code);
                 alarmHistoryVO.setProviderId("JD");
                 alarmHistoryVO.setStId(commonVO.getStationId());
+                alarmHistoryVO.setChId(alarm_plug);
                 alarmHistoryVO.setChgrId(commonVO.getChgrId());
                 alarmHistoryVO.setChgrTxDt(create_date);
                 alarmHistoryVO.setMwKindCd("WS");
