@@ -33,7 +33,7 @@
 
         UPDATE chgr_ch_info
 
-               PLUG_TYPE_CD    = #{plugTypeCd}
+           SET PLUG_TYPE_CD    = #{plugTypeCd}
 
          WHERE 1=1
 
