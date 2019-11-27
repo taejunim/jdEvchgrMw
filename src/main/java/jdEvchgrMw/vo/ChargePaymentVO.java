@@ -20,4 +20,22 @@ import lombok.Data;
 @Data
 public class ChargePaymentVO {
 
+    private String providerId;          //충전사업자 ID
+    private String stId;                //충전소 ID
+    private String chgrId;              //충전기 ID
+    private int    chId;                //채널 ID
+    private String rechgSttListId;      //충전 시작 이력 ID
+    private String pPayTrxNo;           //선결제 거래 번호
+    private String pPayTrxDt;           //선결제 거래 일시
+    private int    pPayAmt;             //선결제 금액
+    private String pPayTxDt;            //선결제  전송 일시
+    private String rPayTrxNo;           //실결제 거래 번호
+    private String rPayTrxDt;           //실결제 거래 일시
+    private int    rPayAmt;             //실결제 금액
+    private String rPayTxDt;            //실결제  전송 일시
+    private String cPayTrxNo;           //취소결제 거래 번호
+    private String cPayTrxDt;           //취소결제 거래 일시
+    private int    cPayAmt;             //취소결제 금액
+    private String cPayTxDt;            //취소결제 전송 일시
+
 }

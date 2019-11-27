@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jdEvchgrMw.chargePayment.service.impl.ChargePaymentMapper">
+
+    <select id="rechgSttInfoSelect" parameterType="chargePaymentVO" resultType="egovMap">
+
+        SELECT RECHGING_LIST_ID
+             , RECHG_DEMAND_AMT
+             , CREDIT_P_PAY_TRX_NO
+             , CREDIT_P_PAY_TRX_DT
+
+          FROM RECHG_STT_LIST
+
+         WHERE 1=1
+
+           AND PROVIDER_ID = #{providerId}
+           AND ST_ID       = #{stId}
+           AND CHGR_ID     = #{chgrId}
+           AND CH_ID       = #{chId}
+           AND R_TIME_YN   = 'Y'
+
+      ORDER BY REG_DT
+
+          DESC LIMIT 1
+
+    </select>
+
+
+    <insert id="creditTrxInfoInsert" parameterType="chargePaymentVO">
+
+        INSERT INTO credit_trx_info (
+                                    RECHG_STT_LIST_ID
+                                    , P_PAY_TRX_NO
+                                    , P_PAY_TRX_DT
+                                    , P_PAY_AMT
+                                    , P_PAY_TX_DT
+                                    , R_PAY_TRX_NO
+                                    , R_PAY_TRX_DT
+                                    , R_PAY_AMT
+                                    , R_PAY_TX_DT
+                            ) VALUES (
+                                    #{rechgSttListId}
+                                    , #{pPayTrxNo}
+                                    , #{pPayTrxDt}
+                                    , #{pPayAmt}
+                                    , #{pPayTxDt}
+                                    , #{rPayTrxNo}
+                                    , #{rPayTrxDt}
+                                    , #{rPayAmt}
+                                    , #{rPayTxDt}
+                            )
+
+    </insert>
+
+    <update id="creditTrxInfoUpdate" parameterType="chargePaymentVO">
+
+        UPDATE credit_trx_info
+
+           SET C_PAY_TRX_NO  = #{cPayTrxNo}
+             , C_PAY_TRX_DT  = #{cPayTrxDt}
+             , C_PAY_AMT     = #{cPayAmt}
+             , C_PAY_TX_DT   = #{cPayTxDt}
+
+         WHERE 1=1
+
+           AND RECHG_STT_LIST_ID = #{rechgSttListId}
+
+    </update>
+
+
+</mapper>
