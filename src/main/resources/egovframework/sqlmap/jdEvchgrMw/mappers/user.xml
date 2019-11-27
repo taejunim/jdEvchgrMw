@@ -16,6 +16,7 @@
              , mci.MOD_UID          MOD_UID
              , mci.MOD_DT           MOD_DT
              , ct.PROVIDER_ID       PROVIDER_ID
+             , ct.B_ID B_ID         B_ID
 
           FROM memsh_card_info mci INNER JOIN cust ct ON mci.CUST_ID = ct.CUST_ID AND mci.MEMSH_CARD_NO = #{memAuthInputNo}
 

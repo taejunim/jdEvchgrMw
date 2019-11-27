@@ -36,6 +36,7 @@ public class UserVO {
     private String chgrTxDt;                //충전기 전송 일시
 
     private String custId;                  //고객 ID
+    private String bId;                     //회원사 - 공단, 각 민간 기업코드
     private String payKindCd;               //결제 종류 코드
     private String stopYn;                  //정지 여부
     private String stopRsn;                 //정지 사유

@@ -23,7 +23,7 @@ public class ChargeVO {
     private String providerId;              //충전사업자 ID
     private String stId;                    //충전소 ID
     private String chgrId;                  //충전기 ID
-    private int    mwKindCd;                //미들웨어 종류 코드
+    private String    mwKindCd;                //미들웨어 종류 코드
     private String rTimeYn;                 //실시간 여부
     private int    chId;                    //채널 ID
     private String plugTypeCd;              //플러그 타입 코드

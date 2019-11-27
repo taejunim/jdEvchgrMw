@@ -1,6 +1,7 @@
 package jdEvchgrMw.common;
 
 import jdEvchgrMw.alarmHistory.service.AlarmHistoryService;
+import jdEvchgrMw.charge.service.ChargeService;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
 import jdEvchgrMw.chgrState.service.ChgrStateService;
 import jdEvchgrMw.revMsg.service.RevMsgService;
@@ -70,6 +71,18 @@ public class CollectServiceBean {
 		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
 
 		return (ChgrStateService)context.getBean("chgrStateService");
+	}
+
+	/**
+	 * ChargeService Bean 생성
+	 * @return
+	 * @throws Exception
+	 */
+	public ChargeService chargeService()throws Exception{
+
+		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+
+		return (ChargeService)context.getBean("chargeService");
 	}
 
 	/**

@@ -19,6 +19,8 @@
              , OFFLINE_FREE_WH  = #{offlineFreeWh}
              , MW_SESSION       = #{mwSession}
              , MOD_UID          = #{modUid}
+             , PAYING_YN        = #{payingYn}
+             , CH_QTY           = #{chQty}
              , MOD_DT           = now()
 
          WHERE 1=1

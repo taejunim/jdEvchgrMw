@@ -27,4 +27,5 @@ public class CommonVO {
 	private ChangeModeVO changeModeVO;	//충전기 모드 변경 VO
 	private HourVO hourVO; 				//시간 VO
 	private FwVerInfoVO fwVerInfoVO;	//충전기 버전 VO
+	private UserVO userVO;				//사용자 인증 VO
 }

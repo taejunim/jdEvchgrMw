@@ -17,7 +17,6 @@
                                     , RECHG_SDT
                                     , RECHG_DEMAND_AMT
                                     , RECHG_EST_TIME
-                                    , CHGR_PAYING_YN
                                     , PAY_TYPE_CD
                                     , MEM_AUTH_ID
                                     , CREDIT_P_PAY_TRX_NO
@@ -44,7 +43,6 @@
                                     , #{rechgSdt}
                                     , #{rechgDemandAmt}
                                     , #{rechgEstTime}
-                                    , #{chgrPayingYn}
                                     , #{payTypeCd}
                                     , (
                                         SELECT mal.MEM_AUTH_ID MEM_AUTH_ID
