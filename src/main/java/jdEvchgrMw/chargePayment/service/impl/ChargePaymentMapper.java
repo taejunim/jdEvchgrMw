@@ -30,5 +30,5 @@ public interface ChargePaymentMapper {
 
     /*충전 결제 정보 수정(취소결제 일때))*/
     int creditTrxInfoUpdate(ChargePaymentVO chargePaymentVO) throws Exception;
-    
+
 }

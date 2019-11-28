@@ -25,4 +25,7 @@ public interface ChgrInfoService {
     /*충전기 채널 정보 등록 및 수정*/
     int chgrChInfoInsUpdate(ChgrInfoVO chgrInfoVO) throws Exception;
 
+    /*충전기 펌웨어 버전 정보 등록 및 수정*/
+    int chgrFwVerInfoInsUpdate(ChgrInfoVO chgrInfoVO) throws Exception;
+
 }

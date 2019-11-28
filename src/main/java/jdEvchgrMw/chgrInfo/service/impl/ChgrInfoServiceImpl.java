@@ -40,4 +40,10 @@ public class ChgrInfoServiceImpl extends EgovAbstractServiceImpl implements Chgr
         return chgrInfoMapper.chgrChInfoInsUpdate(chgrInfoVO);
     }
 
+    /*충전기 펌웨어 버전 정보 등록 및 수정*/
+    public int chgrFwVerInfoInsUpdate(ChgrInfoVO chgrInfoVO) throws Exception {
+
+        return chgrInfoMapper.chgrFwVerInfoInsUpdate(chgrInfoVO);
+    }
+
 }

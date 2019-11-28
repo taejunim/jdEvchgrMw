@@ -389,8 +389,8 @@ public class JsonDataParsing {
                 String fw_type = (String) tmp.get("fw_type");
 
                 FwVerInfoVO fwVerInfoVO = new FwVerInfoVO();
-                fwVerInfoVO.setCurr_ver(curr_ver);
-                fwVerInfoVO.setFw_type(fw_type);
+                fwVerInfoVO.setCurrVer(curr_ver);
+                fwVerInfoVO.setFwType(fw_type);
                 fwVerInfoVOList.add(fwVerInfoVO);
             }
 
@@ -460,8 +460,8 @@ public class JsonDataParsing {
 
             for (int i=0; i<fwVerInfoVOList.size(); i++) {
                 FwVerInfoVO fwVerInfoVO = new FwVerInfoVO();
-                fwVerInfoVO.setFw_type(fwVerInfoVOList.get(i).getFw_type());
-                fwVerInfoVO.setCurr_ver(fwVerInfoVOList.get(i).getCurr_ver());
+                fwVerInfoVO.setFwType(fwVerInfoVOList.get(i).getFwType());
+                fwVerInfoVO.setCurrVer(fwVerInfoVOList.get(i).getCurrVer());
                 chgrInfoVO.setFwVerInfoVO(fwVerInfoVO);
                 System.out.println("<----------------------- 펌웨 정보 Update OK -------------------------> : " + csb.beanChgrInfoService().chgrChInfoInsUpdate(chgrInfoVO));
             }
@@ -974,8 +974,8 @@ public class JsonDataParsing {
                 String fw_type = (String) tmp.get("fw_type");
 
                 FwVerInfoVO fwVerInfoVO = new FwVerInfoVO();
-                fwVerInfoVO.setCurr_ver(curr_ver);
-                fwVerInfoVO.setFw_type(fw_type);
+                fwVerInfoVO.setCurrVer(curr_ver);
+                fwVerInfoVO.setFwType(fw_type);
                 fwVerInfoVOList.add(fwVerInfoVO);
             }
 
@@ -1219,8 +1219,8 @@ public class JsonDataParsing {
                     String fw_type = (String) jTmp.get("fw_type");
 
                     FwVerInfoVO fwVerInfoVO = new FwVerInfoVO();
-                    fwVerInfoVO.setCurr_ver(curr_ver);
-                    fwVerInfoVO.setFw_type(fw_type);
+                    fwVerInfoVO.setCurrVer(curr_ver);
+                    fwVerInfoVO.setFwType(fw_type);
                     fwVerInfoVOList.add(fwVerInfoVO);
                 }
 

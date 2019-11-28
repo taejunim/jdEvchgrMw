@@ -1,7 +1,6 @@
 package jdEvchgrMw.vo;
 
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
-import jdEvchgrMw.common.service.PageVO;
 import lombok.Data;
 
 /**
@@ -20,7 +19,7 @@ import lombok.Data;
  **/
 
 @Data
-public class ChgrInfoVO extends PageVO {
+public class ChgrInfoVO extends FwVerInfoVO {
 
 	private String chgrInfoMsg;
 	private String msgSendType;

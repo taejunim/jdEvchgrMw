@@ -587,7 +587,7 @@ public class JsonDataParsingForControl {
             commonVO.setChgrId(chgr_id);
 
             FwVerInfoVO fwVerInfoVO = new FwVerInfoVO();
-            fwVerInfoVO.setFw_type(fw_type);
+            fwVerInfoVO.setFwType(fw_type);
             commonVO.setFwVerInfoVO(fwVerInfoVO);
 
             // req Data DB Insert

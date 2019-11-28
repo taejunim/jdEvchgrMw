@@ -31,19 +31,34 @@
 
     </update>
 
-    <update id="chgrChInfoInsUpdate" parameterType="chgrInfoVO" >
+    <insert id="chgrChInfoInsUpdate" parameterType="chgrInfoVO" >
 
-        UPDATE chgr_ch_info
+        INSERT INTO chgr_ch_info
 
-           SET PLUG_TYPE_CD    = #{plugTypeCd}
+                SET PROVIDER_ID     = #{providerId}
+                  , ST_ID           = #{stId}
+                  , CHGR_ID         = #{chgrId}
+                  , CH_ID           = #{chId}
+                  , PLUG_TYPE_CD    = #{plugTypeCd}
 
-         WHERE 1=1
+                 ON DUPLICATE KEY UPDATE
+                  , PLUG_TYPE_CD    = #{plugTypeCd}
 
-           AND PROVIDER_ID      = #{providerId}
-           AND ST_ID            = #{stId}
-           AND CHGR_ID          = #{chgrId}
-           AND CH_ID            = #{chId}
 
-    </update>
+    </insert>
+
+    <insert id="chgrFwVerInfoInsUpdate" parameterType="chgrInfoVO" >
+
+        INSERT INTO chgr_fw_ver_info
+
+                SET PROVIDER_ID     = #{providerId}
+                  , ST_ID           = #{stId}
+                  , CHGR_ID         = #{chgrId}
+                  , FW_TP           = #{fwType}
+
+                 ON DUPLICATE KEY UPDATE
+                  , VER    = #{currVer}
+
+    </insert>
 
 </mapper>
