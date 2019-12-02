@@ -39,13 +39,14 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
             userVO.setCustId(egovMap.get("custId").toString());             //고객 ID
             userVO.setPayKindCd(egovMap.get("payKindCd").toString());       //결제 종류 코드
             userVO.setStopYn(egovMap.get("stopYn").toString());             //정지 여부
-            userVO.setStopRsn(egovMap.get("stopRsn").toString());           //정지 사유
+            userVO.setStopRsn(egovMap.get("stopRsn") == null ? "" : egovMap.get("stopRsn").toString());           //정지 사유
             userVO.setValidYn(egovMap.get("validYn").toString());           //유효 여부
             userVO.setRegDt(egovMap.get("regDt").toString());               //등록 일시
             userVO.setRegUid(egovMap.get("regUid").toString());             //등록 UID
-            userVO.setModDt(egovMap.get("modDt").toString());               //수정 일시
-            userVO.setModUid(egovMap.get("modUid").toString());             //수정 UID
+            userVO.setModDt(egovMap.get("modDt") == null ? "" : egovMap.get("modDt").toString());               //수정 일시
+            userVO.setModUid(egovMap.get("modUid") == null ? "" : egovMap.get("modUid").toString());             //수정 UID
             userVO.setProviderId(egovMap.get("providerId").toString());     //충전사업자 ID
+            userVO.setProviderId(egovMap.get("bId").toString());     //충전사업자 ID
 
             if (userVO.getStopYn().equals("Y") || userVO.getValidYn().equals("N"))  //카드 정지 또는  유효여부 체크
                 userVO.setAuthResult("2");

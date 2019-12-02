@@ -51,7 +51,13 @@ public class jdEvChgrMwMain {
 
         CommonVO commonVO = new CommonVO();
 
-    	commonVO.setStationId(stationId);
+        if (stationId.length() > 6) {
+            commonVO.setProviderId(stationId.substring(0,2));
+            commonVO.setStationId(stationId.substring(2));
+        } else {
+            commonVO.setProviderId("JD");
+            commonVO.setStationId(stationId);
+        }
 
     	//충전기ID는 두자리
         if (chgrId.length() > 2) {

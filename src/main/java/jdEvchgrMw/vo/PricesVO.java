@@ -20,4 +20,7 @@ import lombok.Data;
 @Data
 public class PricesVO {
 
+    private String ctrlListId;		//제어이력 ID
+    private String stationId;		//충전소 ID
+    private String chgrId;			//충전기 ID
 }

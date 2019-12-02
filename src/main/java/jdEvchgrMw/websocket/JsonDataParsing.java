@@ -66,6 +66,9 @@ public class JsonDataParsing {
             commonVO.setData(data);
             commonVO.setResponseDate(responseDateFormat.format(dt));
 
+            commonVO.setResponseReceive("1");
+            commonVO.setResponseReason("");
+
             System.out.println("[ responseDate : " + commonVO.getResponseDate() + " ]");
 
             //데이터 공백 체크
@@ -182,9 +185,8 @@ public class JsonDataParsing {
             return;
         }
 
-        //응답 보내기
-        commonVO.setResponseReceive("1");
-        commonVO.setResponseReason("");
+        //응답 보내기 - 응답시에는 다시 사업자ID + 충전소ID로 보내야함
+        commonVO.setStationId(commonVO.getProviderId() + commonVO.getStationId());
         sendMessage(commonVO);
 
     }
@@ -430,7 +432,7 @@ public class JsonDataParsing {
 
             //추후 PROVIDER_ID 하드코딩한거 수정해야 함
             //chgrInfoVO.setProviderId(commonVO.getStationId().substring(0,2));
-            chgrInfoVO.setProviderId("JD");
+            chgrInfoVO.setProviderId(commonVO.getProviderId());
             chgrInfoVO.setStId(commonVO.getStationId());
             chgrInfoVO.setChgrId(commonVO.getChgrId());
             chgrInfoVO.setMwKindCd("WS");
@@ -527,7 +529,7 @@ public class JsonDataParsing {
 
 
             ChgrStatusVO chgrStatusVO = new ChgrStatusVO();
-            chgrStatusVO.setProviderId("JD");
+            chgrStatusVO.setProviderId(commonVO.getProviderId());
             chgrStatusVO.setStId(commonVO.getStationId());
             chgrStatusVO.setChgrId(commonVO.getChgrId());
             chgrStatusVO.setOpModeCd(mode);
@@ -602,6 +604,17 @@ public class JsonDataParsing {
             UserVO resultUserVO = csb.userService().userAuthSelect(userVO);
 
             System.out.println("<----------------------- 사용자 인증 OK -------------------------> : " + resultUserVO);
+
+            resultUserVO.setProviderId(commonVO.getProviderId());
+            resultUserVO.setStId(commonVO.getStationId());
+            resultUserVO.setChgrId(commonVO.getChgrId());
+            resultUserVO.setMwKindCd("WS");
+            resultUserVO.setMemAuthReqDt(create_date);
+            resultUserVO.setResDt(commonVO.getResponseDate());
+            resultUserVO.setAuthRsltCd(resultUserVO.getAuthResult());
+            resultUserVO.setMemProviderId(resultUserVO.getProviderId());
+            resultUserVO.setPrice(userVO.getCurrentUnitCost());
+            resultUserVO.setChgrTxDt(create_date);
             System.out.println("<----------------------- 회원 인증 이력 등록 OK -------------------------> : " + csb.userService().userAuthListInert(resultUserVO));
 
             commonVO.setUserVO(resultUserVO);
@@ -609,12 +622,12 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            commonVO = parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
             e.printStackTrace();
 
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
-            unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
 
         return commonVO;
@@ -663,7 +676,7 @@ public class JsonDataParsing {
             System.out.println("<------------------------------------------------>");
 
             ChargeVO chargeVO = new ChargeVO();
-            chargeVO.setProviderId("JD");
+            chargeVO.setProviderId(commonVO.getProviderId());
             chargeVO.setStId(commonVO.getStationId());
             chargeVO.setChgrId(commonVO.getChgrId());
             chargeVO.setMwKindCd("WS");
@@ -925,7 +938,7 @@ public class JsonDataParsing {
                 alarmHistoryVO.setAlarmStateCd(alarm_type);
                 alarmHistoryVO.setOccurDt(alarm_date);
                 alarmHistoryVO.setAlarmCd(alarm_code);
-                alarmHistoryVO.setProviderId("JD");
+                alarmHistoryVO.setProviderId(commonVO.getProviderId());
                 alarmHistoryVO.setStId(commonVO.getStationId());
                 alarmHistoryVO.setChId(alarm_plug);
                 alarmHistoryVO.setChgrId(commonVO.getChgrId());
@@ -1280,14 +1293,13 @@ public class JsonDataParsing {
     }
 
     //파리미터 오류
-    public void parameterErrorMsgSend(CommonVO commonVO) {
+    public CommonVO parameterErrorMsgSend(CommonVO commonVO) {
         System.out.println("JSON Parsing 중 오류 입니다. 받은 Data : " + commonVO.getData());
 
         commonVO.setResponseReceive("0");   //실패
         commonVO.setResponseReason("12");   //파리미터 오류
-        sendMessage(commonVO);
 
-        return;
+        return commonVO;
     }
 
     //데이터형식 오류
@@ -1302,7 +1314,7 @@ public class JsonDataParsing {
         return;
     }
 
-    public void unknownErrorMsgSend(CommonVO commonVO, String msg) {
+    public CommonVO unknownErrorMsgSend(CommonVO commonVO, String msg) {
 
         System.out.println("내부 오류 입니다. 받은 uuid : " + commonVO.getUuid() + ", 받은 send_type : "
                 + commonVO.getSendType() + ", 받은 action_type : " + commonVO.getActionType() + ", 받은 data : " + commonVO.getData());
@@ -1310,8 +1322,7 @@ public class JsonDataParsing {
 
         commonVO.setResponseReceive("0");
         commonVO.setResponseReason("15");
-        sendMessage(commonVO);
 
-        return;
+        return commonVO;
     }
 }

@@ -6,7 +6,9 @@ import jdEvchgrMw.vo.SessionVO;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -14,6 +16,8 @@ import static jdEvchgrMw.websocket.jdEvChgrMwMain.sessionList;
 
 @ServerEndpoint(value="/chgr/{action_type}")
 public class ControlMw {
+
+    SimpleDateFormat responseDateFormat = new SimpleDateFormat ( "yyyyMMddHHmmss");
 
     /**
      * WEBSOCKET CONNECTED CALL EVENT
@@ -54,10 +58,17 @@ public class ControlMw {
         commonVO.setRcvMsg(message);
         commonVO.setActionType(actionType);
 
+        Date dt = new Date();
+        commonVO.setResponseDate(responseDateFormat.format(dt));
+
         System.out.println("[ MSG Start.. 현재 session 수 : " + sessionList.size() + " ]");
         System.out.println("[ MSG -> M/W : "+ commonVO.getRcvMsg() +" ]");
 
-        jdp.jsonDataParsingMainForControl(commonVO);
+        if (actionType.equals("") || actionType == null || message.equals("") || message == null) {
+            jdp.protocolErrorMsgSend(commonVO);
+        } else {
+            jdp.jsonDataParsingMainForControl(commonVO);
+        }
     }
     
     /**

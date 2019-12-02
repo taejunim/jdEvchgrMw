@@ -16,7 +16,7 @@
              , mci.MOD_UID          MOD_UID
              , mci.MOD_DT           MOD_DT
              , ct.PROVIDER_ID       PROVIDER_ID
-             , ct.B_ID B_ID         B_ID
+             , ct.B_ID              B_ID
 
           FROM memsh_card_info mci INNER JOIN cust ct ON mci.CUST_ID = ct.CUST_ID AND mci.MEMSH_CARD_NO = #{memAuthInputNo}
 
@@ -41,10 +41,7 @@
     <insert id="userAuthListInert" parameterType="userVO">
 
         INSERT INTO mem_auth_list (
-                                    (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(mal.MEM_AUTH_ID,5)), 0)+1, 8, '0')) AS MEM_AUTH_ID
-                                        FROM mem_auth_list mal
-                                        WHERE LEFT(mal.MEM_AUTH_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
-                                    )
+                                    MEM_AUTH_ID
                                   , PROVIDER_ID
                                   , ST_ID
                                   , CHGR_ID
@@ -61,7 +58,10 @@
                                   , CHGR_TX_DT
                                   , REG_DT
                         ) VALUES (
-                                    MEM_AUTH_ID
+                                    (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(mal.MEM_AUTH_ID,5)), 0)+1, 8, '0')) AS MEM_AUTH_ID
+                                        FROM mem_auth_list mal
+                                        WHERE LEFT(mal.MEM_AUTH_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
+                                    )
                                   , #{providerId}
                                   , #{stId}
                                   , #{chgrId}
