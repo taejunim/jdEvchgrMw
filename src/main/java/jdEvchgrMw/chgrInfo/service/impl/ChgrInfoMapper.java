@@ -1,6 +1,7 @@
 package jdEvchgrMw.chgrInfo.service.impl;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 import jdEvchgrMw.vo.ChgrInfoVO;
 
 /**
@@ -20,6 +21,9 @@ import jdEvchgrMw.vo.ChgrInfoVO;
 
 @Mapper("chgrInfoMapper")
 public interface ChgrInfoMapper {
+
+    /*충전기 유효성 체크*/
+    EgovMap chgrCheckValidation(ChgrInfoVO chgrInfoVO) throws Exception;
 
     /*충전기 설지 정보 수정*/
     int chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception;

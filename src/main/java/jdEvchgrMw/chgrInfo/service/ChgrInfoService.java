@@ -19,6 +19,9 @@ import jdEvchgrMw.vo.ChgrInfoVO;
 
 public interface ChgrInfoService {
 
+    /*충전기 유효성 체크*/
+    String chgrCheckValidation(ChgrInfoVO chgrInfoVO) throws Exception;
+
     /*충전기 설지 정보 UPDATE*/
     int chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception;
 

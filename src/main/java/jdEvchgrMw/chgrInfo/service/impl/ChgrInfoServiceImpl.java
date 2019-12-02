@@ -1,6 +1,7 @@
 package jdEvchgrMw.chgrInfo.service.impl;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
 import jdEvchgrMw.vo.ChgrInfoVO;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,21 @@ public class ChgrInfoServiceImpl extends EgovAbstractServiceImpl implements Chgr
 
     @Resource(name = "chgrInfoMapper")
     private ChgrInfoMapper chgrInfoMapper;
+
+    /*충전기 유효성 체크*/
+    public String chgrCheckValidation(ChgrInfoVO chgrInfoVO) throws Exception {
+
+        EgovMap resultMap = chgrInfoMapper.chgrCheckValidation(chgrInfoVO);
+
+        String result = "";
+
+        if(resultMap != null)                   //TRUE
+            result = "1";
+        else                                    //FALSE
+            result = "0";
+
+        return result;
+    }
 
     /*충전기 설지 정보 수정*/
     public int chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception {

@@ -2,6 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jdEvchgrMw.chgrInfo.service.impl.ChgrInfoMapper">
 
+    <select id="chgrCheckValidation" parameterType="chgrInfoVO" resultType="egovMap">
+
+        SELECT PROVIDER_ID
+             , ST_ID
+             , CHGR_ID
+
+          FROM chgr
+
+         WHERE 1=1
+
+           AND PROVIDER_ID = #{providerId}
+           AND ST_ID       = #{stId}
+           AND CHGR_ID     = #{chgrId}
+
+    </select>
+
     <update id="chgrInfoUpdate" parameterType="chgrInfoVO" >
 
         UPDATE chgr
