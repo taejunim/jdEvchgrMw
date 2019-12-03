@@ -1,5 +1,7 @@
 package jdEvchgrMw.sendSms.service;
 
+import jdEvchgrMw.vo.SendSmsVO;
+
 /**
  * @ interface Name  : SendSmsService.java
  * @ Description : 문자 전송 SERVICE
@@ -15,7 +17,9 @@ package jdEvchgrMw.sendSms.service;
  * Copyright (C) by MetisInfo All right reserved.
  **/
 
-
 public interface SendSmsService {
+
+    /*문자 전송 등록*/
+    int msgSndListInsert(SendSmsVO sendSmsVO) throws Exception;
 
 }

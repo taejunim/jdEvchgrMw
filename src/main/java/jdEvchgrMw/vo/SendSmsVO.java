@@ -20,4 +20,18 @@ import lombok.Data;
 @Data
 public class SendSmsVO {
 
+    public String msgSndListId;         //전문송신이력ID
+    public String providerId;           //충전사업자 ID
+    public String stId;                 //충전소 ID
+    public String chgrId;               //충전기 ID
+    public int chId;                    //채널 ID
+    public String msgKindCd;            //전문 종류 코드
+    public String tel;                  //전화번호
+    public String rechgTime;            //충전시간
+    public int rechgWh;                 //충전 WH
+    public int rehcgAmt;                //충전 금액
+    public String dataCreateDt;         //데이터 생성 일시
+    public String chgrTxDt;             //충전기 전송 일시
+    public String regDt;                //등록 일시
+
 }

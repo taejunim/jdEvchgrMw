@@ -1,6 +1,7 @@
 package jdEvchgrMw.sendSms.service.impl;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import jdEvchgrMw.vo.SendSmsVO;
 
 /**
  * @ interface Name  : SendSmsMapper.java
@@ -19,5 +20,8 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 @Mapper("sendSmsMapper")
 public interface SendSmsMapper {
+
+    /*문자 전송 등록*/
+    int msgSndListInsert(SendSmsVO sendSmsVO) throws Exception;
 
 }

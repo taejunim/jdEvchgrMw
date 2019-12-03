@@ -2,7 +2,10 @@ package jdEvchgrMw.sendSms.service.impl;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import jdEvchgrMw.sendSms.service.SendSmsService;
+import jdEvchgrMw.vo.SendSmsVO;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @ class Name  : SendSmsServiceImpl.java
@@ -21,5 +24,14 @@ import org.springframework.stereotype.Service;
 
 @Service("sendSmsService")
 public class SendSmsServiceImpl extends EgovAbstractServiceImpl implements SendSmsService {
+
+    @Resource(name = "sendSmsMapper")
+    private SendSmsMapper sendSmsMapper;
+
+    /*문자 전송 등록*/
+    public int msgSndListInsert(SendSmsVO sendSmsVO) throws Exception {
+
+        return sendSmsMapper.msgSndListInsert(sendSmsVO);
+    }
 
 }
