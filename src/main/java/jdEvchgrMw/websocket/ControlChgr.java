@@ -15,7 +15,7 @@ import java.util.List;
 import static jdEvchgrMw.websocket.jdEvChgrMwMain.sessionList;
 
 @ServerEndpoint(value="/chgr/{action_type}")
-public class ControlMw {
+public class ControlChgr {
 
     SimpleDateFormat responseDateFormat = new SimpleDateFormat ( "yyyyMMddHHmmss");
 
@@ -52,8 +52,6 @@ public class ControlMw {
 
         CommonVO commonVO = new CommonVO();
 
-        //commonVO.setStationId(stationId);
-        //commonVO.setChgrId(chgrId);
         commonVO.setUserSession(session);
         commonVO.setRcvMsg(message);
         commonVO.setActionType(actionType);
@@ -62,7 +60,7 @@ public class ControlMw {
         commonVO.setResponseDate(responseDateFormat.format(dt));
 
         System.out.println("[ MSG Start.. 현재 session 수 : " + sessionList.size() + " ]");
-        System.out.println("[ MSG -> M/W : "+ commonVO.getRcvMsg() +" ]");
+        System.out.println("[ 관제 -> M/W : "+ commonVO.getRcvMsg() +" ]");
 
         if (actionType.equals("") || actionType == null || message.equals("") || message == null) {
             jdp.protocolErrorMsgSend(commonVO);

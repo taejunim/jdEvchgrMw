@@ -23,8 +23,10 @@ public class jdEvChgrMwMain {
     @OnOpen
     public void handleOpen(@PathParam("stationId") String stationId, @PathParam("chgrId") String chgrId, Session session){
 
+        String stationChgrId = (stationId.length() > 6 ? stationId.substring(2) : stationId) + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
+
         SessionVO sessionVO = new SessionVO();
-        sessionVO.setStationChgrId(stationId + chgrId);
+        sessionVO.setStationChgrId(stationChgrId);
         sessionVO.setUserSession(session);
 
         sessionList.add(sessionVO);
@@ -34,9 +36,7 @@ public class jdEvChgrMwMain {
 
         sessionList = tempList;
 
-        System.out.println("[ 충전소 : " + stationId + " - 충전기  "+ chgrId +"(가)이 접속 하였습니다. ]");
-        System.out.println("[ 접속한 충전기 : " + stationId + chgrId + ", 현재 sessionList : " + sessionList + " ]");
-
+        System.out.println("[ 충전소 : " + stationId + " - 충전기  "+ chgrId +"(가)이 접속 하였습니다.\n현재 sessionList : " + sessionList + " ]");
     }
     
     /**
@@ -46,34 +46,19 @@ public class jdEvChgrMwMain {
     @OnMessage
     public void handleMessage(@PathParam("stationId") String stationId, @PathParam("chgrId") String chgrId, String message, Session session) {
 
-    	JsonDataParsing jdp         = new JsonDataParsing();
-    	//CommonFunction  function 	= new CommonFunction();
-
         CommonVO commonVO = new CommonVO();
 
-        if (stationId.length() > 6) {
-            commonVO.setProviderId(stationId.substring(0,2));
-            commonVO.setStationId(stationId.substring(2));
-        } else {
-            commonVO.setProviderId("JD");
-            commonVO.setStationId(stationId);
-        }
-
-    	//충전기ID는 두자리
-        if (chgrId.length() > 2) {
-            commonVO.setChgrId(chgrId.substring(0,2));
-        } else {
-            commonVO.setChgrId(chgrId);
-        }
+        commonVO.setProviderId(stationId.length() > 6 ? stationId.substring(0,2) : "JD");   //사업자ID -> 2자리
+        commonVO.setStationId(stationId.length() > 6 ? stationId.substring(2) : stationId); //충전소ID -> 6자리인데 그 이상길면 2번째 자리부터
+        commonVO.setChgrId(chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);           //충전기ID -> 2자리
 
     	commonVO.setUserSession(session);
     	commonVO.setRcvMsg(message);
 
-        //function.clientSetting(commonVO);						//CHGR 및 SESSION SETTING CALL
-
         System.out.println("[ MSG Start.. 현재 session 수 : " + sessionList.size() + " ]");
-    	System.out.println("[ MSG -> M/W : "+ commonVO.getRcvMsg() +" ]");
-    	
+    	System.out.println("[ 충전기 -> M/W : "+ commonVO.getRcvMsg() +" ]");
+
+        JsonDataParsing jdp         = new JsonDataParsing();
     	jdp.jsonDataParsingMain(commonVO);
     }
     
@@ -83,15 +68,15 @@ public class jdEvChgrMwMain {
     @OnClose
     public void handleClose(@PathParam("stationId") String stationId, @PathParam("chgrId") String chgrId, Session session) {
 
-    	System.out.println("[ 클라이언트가 접속을 종료 하였습니다. 종료 충전기 :  " + stationId + chgrId + " ]");
+        String stationChgrId = (stationId.length() > 6 ? stationId.substring(2) : stationId) + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
 
         for (int i=0; i < sessionList.size(); i++) {
 
             System.out.println("[" + i + "]");
 
-            if (sessionList.get(i).getStationChgrId().equals(stationId + chgrId)) {
+            if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
 
-                System.out.println("[ 종료된 충전기 : " + sessionList.get(i).getStationChgrId() + " ]");
+                System.out.println("[ 클라이언트가 접속을 종료 하였습니다. 종료된 충전기 : " + sessionList.get(i).getStationChgrId() + " ]");
 
                 sessionList.remove(i);
 

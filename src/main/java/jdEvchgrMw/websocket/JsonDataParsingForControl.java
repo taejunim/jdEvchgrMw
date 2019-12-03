@@ -79,22 +79,22 @@ public class JsonDataParsingForControl {
             else {
 
                 if (commonVO.getActionType().equals("reset")) {
-                    commonVO = resetParsingData(commonVO);                        //충전기 RESET 요청(충전기정보시스템 -> 충전기) CALL
+                    commonVO = resetParsingData(commonVO);                        //충전기 RESET 요청(관제 -> 충전기) CALL
 
                 } else if (commonVO.getActionType().equals("prices")) {
-                    commonVO = pricesParsingData(commonVO);                        //단가정보(충전기정보시스템 -> 충전기) CALL
+                    commonVO = pricesParsingData(commonVO);                        //단가정보(관제 -> 충전기) CALL
 
                 } else if (commonVO.getActionType().equals("changeMode")) {
-                    commonVO = changeModeParsingData(commonVO);                        //충전기모드변경(충전기정보시스템 -> 충전기) CALL
+                    commonVO = changeModeParsingData(commonVO);                        //충전기모드변경(관제 -> 충전기) CALL
 
                 } else if (commonVO.getActionType().equals("displayBrightness")) {
-                    commonVO = displayBrightnessParsingData(commonVO);                        //충전기 화면밝기정보(충전기정보시스템 -> 충전기) CALL
+                    commonVO = displayBrightnessParsingData(commonVO);                        //충전기 화면밝기정보(관제 -> 충전기) CALL
 
                 } else if (commonVO.getActionType().equals("sound")) {
-                    commonVO = soundParsingData(commonVO);                        //충전기 소리정보(충전기정보시스템 -> 충전기) CALL
+                    commonVO = soundParsingData(commonVO);                        //충전기 소리정보(관제 -> 충전기) CALL
 
                 } else if (commonVO.getActionType().equals("askVer")) {
-                    commonVO = askVerParsingData(commonVO);                        //펌웨어 버전 정보 확인(충전기정보시스템 -> 충전기) CALL
+                    commonVO = askVerParsingData(commonVO);                        //펌웨어 버전 정보 확인(관제 -> 충전기) CALL
 
                 } else {
                     System.out.println("[ 정의 되지 않은 PACKET 입니다. ]");
@@ -173,38 +173,6 @@ public class JsonDataParsingForControl {
                 sendData.put("chgr_id", commonVO.getChgrId());
             }
 
-            //응답 성공 -> data Json으로 만들어서 보내줌 실패시 data 없이 보냄
-            /*if (commonVO.getResponseReceive().equals("1")) {
-
-                if (commonVO.getActionType().equals("reset")) {
-                    resetParsingData(commonVO);                        //충전기 RESET 요청(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("prices")) {
-                    pricesParsingData(commonVO);                        //단가정보(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("changeMode")) {
-                    changeModeParsingData(commonVO);                        //충전기모드변경(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("displayBrightness")) {
-                    displayBrightnessParsingData(commonVO);                        //충전기 화면밝기정보(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("sound")) {
-                    soundParsingData(commonVO);                        //충전기 소리정보(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("askVer")) {
-                    askVerParsingData(commonVO);                        //펌웨어 버전 정보 확인(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("notifyVerUpgrade")) {
-                    notifyVerUpgradeParsingData(commonVO);                        //펌웨어 버전 정보 업그레이드 알림(충전기정보시스템 -> 충전기) CALL
-
-                } else {
-                    System.out.println("[ 정의 되지 않은 PACKET 입니다. ]");
-                    //undefinedActionErrorMsgSend(commonVO);
-                    protocolErrorMsgSend(commonVO);
-                    return;
-                }
-            }*/
-
             sendJsonObject.put("data", sendData);
 
             System.out.println("관제로 보낼 JSON : " + sendJsonObject);
@@ -238,13 +206,15 @@ public class JsonDataParsingForControl {
             sendJsonObject.put("send_type", "req");
             sendJsonObject.put("action_type", commonVO.getActionType());
 
-            JSONObject sendData = new JSONObject();
 
-            sendData.put("station_id", commonVO.getStationId());
-            sendData.put("chgr_id", commonVO.getChgrId());
-            sendData.put("send_date", commonVO.getResponseDate());
-
+            //단가 제외한 제어 명령
             if (!commonVO.getActionType().equals("prices")) {
+
+                JSONObject sendData = new JSONObject();
+
+                sendData.put("station_id", commonVO.getStationId());
+                sendData.put("chgr_id", commonVO.getChgrId());
+                sendData.put("send_date", commonVO.getResponseDate());
 
                 if (commonVO.getActionType().equals("changeMode")) {
                     sendData.put("change_mode", commonVO.getChangeModeVO().getChangeMode()); //충전기모드변경(충전기정보시스템 -> 충전기) CALL or 충전기 소리정보(충전기정보시스템 -> 충전기) CALL
@@ -290,13 +260,24 @@ public class JsonDataParsingForControl {
                     return;
                 }
 
+                sendJsonObject.put("data", sendData);
+
+                for (int i=0; i<sessionList.size(); i++) {
+
+                    System.out.println("충전기로 보낼 JSON : " + sendJsonObject);
+
+                    if (sessionList.get(i).getStationChgrId().equals(commonVO.getStationId() + commonVO.getChgrId())) {
+                        System.out.println("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getStationId() + commonVO.getChgrId());
+                        sessionList.get(i).getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
+                        break;
+                    }
+                }
             }
 
             //단가 제어
             else {
 
                 for (int i=0; i<sessionList.size(); i++) {
-
 
                     for (int j=0; j<commonVO.getControlChgrVOArrayList().size(); j++) {
 
@@ -342,60 +323,8 @@ public class JsonDataParsingForControl {
                             sessionList.get(i).getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
                         }
                     }
-
-
-                }
-
-            }
-
-
-
-            //응답 성공 -> data Json으로 만들어서 보내줌 실패시 data 없이 보냄
-            /*if (commonVO.getResponseReceive().equals("1")) {
-
-                if (commonVO.getActionType().equals("reset")) {
-                    resetParsingData(commonVO);                        //충전기 RESET 요청(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("prices")) {
-                    pricesParsingData(commonVO);                        //단가정보(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("changeMode")) {
-                    changeModeParsingData(commonVO);                        //충전기모드변경(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("displayBrightness")) {
-                    displayBrightnessParsingData(commonVO);                        //충전기 화면밝기정보(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("sound")) {
-                    soundParsingData(commonVO);                        //충전기 소리정보(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("askVer")) {
-                    askVerParsingData(commonVO);                        //펌웨어 버전 정보 확인(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("notifyVerUpgrade")) {
-                    notifyVerUpgradeParsingData(commonVO);                        //펌웨어 버전 정보 업그레이드 알림(충전기정보시스템 -> 충전기) CALL
-
-                } else {
-                    System.out.println("[ 정의 되지 않은 PACKET 입니다. ]");
-                    //undefinedActionErrorMsgSend(commonVO);
-                    protocolErrorMsgSend(commonVO);
-                    return;
-                }
-            }*/
-
-            sendJsonObject.put("data", sendData);
-
-            for (int i=0; i<sessionList.size(); i++) {
-
-                System.out.println("충전기로 보낼 JSON : " + sendJsonObject);
-
-                if (sessionList.get(i).getStationChgrId().equals(commonVO.getStationId() + commonVO.getChgrId())) {
-                    System.out.println("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getStationId() + commonVO.getChgrId());
-                    sessionList.get(i).getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
-                    break;
                 }
             }
-
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -419,10 +348,10 @@ public class JsonDataParsingForControl {
             String send_date = (String) data.get("send_date");
 
             if (ctrl_list_id.equals("") || ctrl_list_id == null || station_id.equals("") || station_id == null ||
-                chgr_id.equals("") || chgr_id == null || send_date.equals("") || send_date == null) {
+                    chgr_id.equals("") || chgr_id == null || send_date.equals("") || send_date == null) {
 
                 commonVO.setResponseReceive("0");   //실패
-                commonVO.setResponseReason("12");   //파리미터 오류
+                commonVO.setResponseReason("12");   //파라미터 오류
                 return commonVO;
             }
 
@@ -493,7 +422,7 @@ public class JsonDataParsingForControl {
 
                 if (ctrl_list_id.equals("") || ctrl_list_id == null || station_id.equals("") || station_id == null || chgr_id.equals("") || chgr_id == null) {
                     commonVO.setResponseReceive("0");   //실패
-                    commonVO.setResponseReason("12");   //파리미터 오류
+                    commonVO.setResponseReason("12");   //파라미터 오류
                     return commonVO;
                 }
 
@@ -567,7 +496,7 @@ public class JsonDataParsingForControl {
             if (send_date.equals("") || send_date == null || cost_sdd.equals("") || cost_sdd == null) {
 
                 commonVO.setResponseReceive("0");   //실패
-                commonVO.setResponseReason("12");   //파리미터 오류
+                commonVO.setResponseReason("12");   //파라미터 오류
                 return commonVO;
             }
             System.out.println("controlChgrVOArrayList : " + controlChgrVOArrayList);
@@ -655,7 +584,7 @@ public class JsonDataParsingForControl {
                     chgr_id.equals("") || chgr_id == null || send_date.equals("") || send_date == null || change_mode.equals("") || change_mode == null) {
 
                 commonVO.setResponseReceive("0");   //실패
-                commonVO.setResponseReason("12");   //파리미터 오류
+                commonVO.setResponseReason("12");   //파라미터 오류
                 return commonVO;
             }
 
@@ -778,7 +707,7 @@ public class JsonDataParsingForControl {
                     chgr_id.equals("") || chgr_id == null || send_date.equals("") || send_date == null) {
 
                 commonVO.setResponseReceive("0");   //실패
-                commonVO.setResponseReason("12");   //파리미터 오류
+                commonVO.setResponseReason("12");   //파라미터 오류
                 return commonVO;
             }
 
@@ -924,7 +853,7 @@ public class JsonDataParsingForControl {
                     chgr_id.equals("") || chgr_id == null || send_date.equals("") || send_date == null) {
 
                 commonVO.setResponseReceive("0");   //실패
-                commonVO.setResponseReason("12");   //파리미터 오류
+                commonVO.setResponseReason("12");   //파라미터 오류
                 return commonVO;
             }
 
@@ -1021,7 +950,7 @@ public class JsonDataParsingForControl {
                     chgr_id.equals("") || chgr_id == null || send_date.equals("") || send_date == null  || fw_type.equals("") || fw_type == null) {
 
                 commonVO.setResponseReceive("0");   //실패
-                commonVO.setResponseReason("12");   //파리미터 오류
+                commonVO.setResponseReason("12");   //파라미터 오류
                 return commonVO;
             }
 
@@ -1088,12 +1017,23 @@ public class JsonDataParsingForControl {
         return;
     }
 
-    //파리미터 오류
+    //파라미터 오류
     public void parameterErrorMsgSend(CommonVO commonVO) {
         System.out.println("JSON Parsing 중 오류 입니다. 받은 Data : " + commonVO.getData());
 
         commonVO.setResponseReceive("0");   //실패
-        commonVO.setResponseReason("12");   //파리미터 오류
+        commonVO.setResponseReason("12");   //파라미터 오류
+        sendMessage(commonVO);
+
+        return;
+    }
+
+    //충전소(기)ID 오류
+    public void invalidErrorMsgSend(CommonVO commonVO) {
+        System.out.println("충전소(기)ID 중 오류 입니다. 받은 Data : " + commonVO.getData());
+
+        commonVO.setResponseReceive("0");   //실패
+        commonVO.setResponseReason("13");   //파라미터 오류
         sendMessage(commonVO);
 
         return;

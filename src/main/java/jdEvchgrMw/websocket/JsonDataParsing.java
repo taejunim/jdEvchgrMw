@@ -69,12 +69,29 @@ public class JsonDataParsing {
             commonVO.setResponseReceive("1");
             commonVO.setResponseReason("");
 
-            System.out.println("[ responseDate : " + commonVO.getResponseDate() + " ]");
+            String chgrCheckValidation;
+            String chgrCheckValidationText;
+
+            ChgrInfoVO chgrInfoVO = new ChgrInfoVO();
+            chgrInfoVO.setProviderId(commonVO.getProviderId());
+            chgrInfoVO.setStId(commonVO.getStationId());
+            chgrInfoVO.setChgrId(commonVO.getChgrId());
+
+            chgrCheckValidation = csb.beanChgrInfoService().chgrCheckValidation(chgrInfoVO);
+            chgrCheckValidationText = chgrCheckValidation.equals("1") ? "유효한" : "무효한";
+           System.out.println(chgrCheckValidationText + " 충전기 [ responseDate : " + commonVO.getResponseDate() + " ]");
+
+           //무효한 충전기 -> 요청실패 응답 : 13
+           if (chgrCheckValidation.equals("0")) {
+               invalidErrorMsgSend(commonVO);
+               return;
+           }
 
             //데이터 공백 체크
             if (uuid.equals("") || uuid == null || send_type.equals("") || send_type == null || action_type.equals("") || action_type == null || data.equals("") || data == null) {
 
                 protocolErrorMsgSend(commonVO);
+                return;
 
             }
 
@@ -82,70 +99,57 @@ public class JsonDataParsing {
             else {
 
                 if (commonVO.getActionType().equals("chgrInfo")) {
-                    chgrInfoParsingData(commonVO);                        //충전기 설치정보(충전기 -> 충전기정보시스템) CALL
+                    commonVO = chgrInfoParsingData(commonVO);                        //충전기 설치정보(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("chgrStatus")) {
-                    chgrStatusParsingData(commonVO);                        //충전기 상태정보(충전기 -> 충전기정보시스템) CALL
+                    commonVO = chgrStatusParsingData(commonVO);                        //충전기 상태정보(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("user")) {
                     commonVO = userParsingData(commonVO);                        //사용자 인증요청(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("chargingStart")) {
-                    chargingStartParsingData(commonVO);                        //충전 시작정보(충전기 -> 충전기정보시스템) CALL
+                    commonVO = chargingStartParsingData(commonVO);                        //충전 시작정보(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("chargingInfo")) {
-                    chargingInfoParsingData(commonVO);                        //충전 진행정보(충전기 -> 충전기정보시스템) CALL
+                    commonVO = chargingInfoParsingData(commonVO);                        //충전 진행정보(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("chargingEnd")) {
-                    chargingEndParsingData(commonVO);                        //충전 완료정보(충전기 -> 충전기정보시스템) CALL
+                    commonVO = chargingEndParsingData(commonVO);                        //충전 완료정보(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("chargePayment")) {
-                    chargePaymentParsingData(commonVO);                        //충전 결제정보(충전기 -> 충전기정보시스템) CALL
+                    commonVO = chargePaymentParsingData(commonVO);                        //충전 결제정보(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("sendSms")) {
-                    sendSmsParsingData(commonVO);                        //문자 전송(충전기 -> 충전기정보시스템) CALL
+                    commonVO = sendSmsParsingData(commonVO);                        //문자 전송(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("alarmHistory")) {
-                    alarmHistoryParsingData(commonVO);                        //경보 이력(충전기 -> 충전기정보시스템) CALL
+                    commonVO = alarmHistoryParsingData(commonVO);                        //경보 이력(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("reportUpdate")) {
-                    reportUpdateParsingData(commonVO);                        //펌웨어 업데이트 결과 알림(충전기 -> 충전기정보시스템) CALL
+                    commonVO = reportUpdateParsingData(commonVO);                        //펌웨어 업데이트 결과 알림(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("dChargingStart")) {
-                    dChargingStartParsingData(commonVO);                        //덤프_충전 시작정보(충전기 -> 충전기정보시스템) CALL
+                    commonVO = dChargingStartParsingData(commonVO);                        //덤프_충전 시작정보(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("dChargingEnd")) {
-                    dChargingEndParsingData(commonVO);                        //덤프_충전 완료정보(충전기 -> 충전기정보시스템) CALL
+                    commonVO = dChargingEndParsingData(commonVO);                        //덤프_충전 완료정보(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("dChargePayment")) {
-                    dChargePaymentParsingData(commonVO);                        //덤프_충전 결제정보(충전기 -> 충전기정보시스템) CALL
+                    commonVO = dChargePaymentParsingData(commonVO);                        //덤프_충전 결제정보(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("dAlarmHistory")) {
-                    dAlarmHistoryParsingData(commonVO);                        //덤프_경보이력(충전기 -> 충전기정보시스템) CALL
+                    commonVO = dAlarmHistoryParsingData(commonVO);                        //덤프_경보이력(충전기 -> 충전기정보시스템) CALL
 
                 } else if (commonVO.getActionType().equals("dReportUpdate")) {
-                    dReportUpdateParsingData(commonVO);                        //덤프_펌웨어 업데이트 결과 알림(충전기 -> 충전기정보시스템) CALL
+                    commonVO = dReportUpdateParsingData(commonVO);                        //덤프_펌웨어 업데이트 결과 알림(충전기 -> 충전기정보시스템) CALL
 
-                } else if (commonVO.getActionType().equals("reset")) {
-                    resetParsingData(commonVO);                        //충전기 RESET 요청(충전기정보시스템 -> 충전기) CALL
+                }
 
-                } else if (commonVO.getActionType().equals("prices")) {
-                    pricesParsingData(commonVO);                        //단가정보(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("changeMode")) {
-                    changeModeParsingData(commonVO);                        //충전기모드변경(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("displayBrightness")) {
-                    displayBrightnessParsingData(commonVO);                        //충전기 화면밝기정보(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("sound")) {
-                    soundParsingData(commonVO);                        //충전기 소리정보(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("askVer")) {
-                    askVerParsingData(commonVO);                        //펌웨어 버전 정보 확인(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("notifyVerUpgrade")) {
-                    notifyVerUpgradeParsingData(commonVO);                        //펌웨어 버전 정보 업그레이드 알림(충전기정보시스템 -> 충전기) CALL
+                //충전기 제어 응답(충전기 -> M/W) CALL
+                else if (commonVO.getActionType().equals("reset") || commonVO.getActionType().equals("prices") || commonVO.getActionType().equals("changeMode")
+                        || commonVO.getActionType().equals("displayBrightness") || commonVO.getActionType().equals("sound") || commonVO.getActionType().equals("askVer")) {
+                    chgrResponse(commonVO);
+                    return;
 
                 } else {
                     System.out.println("[ 정의 되지 않은 PACKET 입니다. ]");
@@ -157,7 +161,6 @@ public class JsonDataParsing {
 
         } catch (ParseException e) {
             e.printStackTrace();
-
             protocolErrorMsgSend(commonVO);
             return;
 
@@ -165,24 +168,6 @@ public class JsonDataParsing {
             e.printStackTrace();
 
             unknownErrorMsgSend(commonVO, "알 수 없는 오류입니다. 담당자에게 문의주세요.");
-            return;
-
-        }
-
-        // req Data DB Insert
-        try {
-            ChgrInfoVO chgrInfoVO = new ChgrInfoVO();
-            chgrInfoVO.setMsgSendType(commonVO.getSendType());
-            chgrInfoVO.setMsgActionType(commonVO.getActionType());
-            chgrInfoVO.setMsgData(commonVO.getData());
-
-            //csb.beanChgrInfoService().chgrInfoDataInsert(chgrInfoVO);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            return;
         }
 
         //응답 보내기 - 응답시에는 다시 사업자ID + 충전소ID로 보내야함
@@ -211,7 +196,6 @@ public class JsonDataParsing {
             sendData.put("station_id", commonVO.getStationId());
             sendData.put("chgr_id", commonVO.getChgrId());
             sendData.put("response_date", commonVO.getResponseDate());
-            //sendData.put("req_create_date", commonVO.getReqCreateDate());
             sendData.put("response_receive", commonVO.getResponseReceive());
             sendData.put("response_reason", commonVO.getResponseReason());
 
@@ -303,27 +287,6 @@ public class JsonDataParsing {
                     sendData.put("member_company", commonVO.getUserVO().getBId());
                     sendData.put("current_unit_cost", commonVO.getUserVO().getCurrentUnitCost());
 
-                } else if (commonVO.getActionType().equals("reset")) {
-                    resetParsingData(commonVO);                        //충전기 RESET 요청(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("prices")) {
-                    pricesParsingData(commonVO);                        //단가정보(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("changeMode")) {
-                    changeModeParsingData(commonVO);                        //충전기모드변경(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("displayBrightness")) {
-                    displayBrightnessParsingData(commonVO);                        //충전기 화면밝기정보(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("sound")) {
-                    soundParsingData(commonVO);                        //충전기 소리정보(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("askVer")) {
-                    askVerParsingData(commonVO);                        //펌웨어 버전 정보 확인(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("notifyVerUpgrade")) {
-                    notifyVerUpgradeParsingData(commonVO);                        //펌웨어 버전 정보 업그레이드 알림(충전기정보시스템 -> 충전기) CALL
-
                 } else {
                     System.out.println("[ 정의 되지 않은 PACKET 입니다. ]");
                     //undefinedActionErrorMsgSend(commonVO);
@@ -355,7 +318,7 @@ public class JsonDataParsing {
     }
 
     /*충전기 설치정보(충전기 -> 충전기정보시스템)*/
-    private void chgrInfoParsingData(CommonVO commonVO) {
+    private CommonVO chgrInfoParsingData(CommonVO commonVO) {
 
         try {
             JSONParser jParser = new JSONParser();
@@ -469,20 +432,22 @@ public class JsonDataParsing {
             }
 
         } catch (ParseException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
-
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
             e.printStackTrace();
 
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
-            unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            return;
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
     //충전기 상태정보(충전기 -> 충전기정보시스템) CALL
-    private void chgrStatusParsingData(CommonVO commonVO) {
+    private CommonVO chgrStatusParsingData(CommonVO commonVO) {
 
         try {
             JSONParser jParser = new JSONParser();
@@ -569,14 +534,16 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
             e.printStackTrace();
 
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
-            unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            return;
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
     //사용자 인증요청(충전기 -> 충전기정보시스템) CALL
@@ -622,6 +589,7 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
             commonVO = parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
             e.printStackTrace();
@@ -634,7 +602,7 @@ public class JsonDataParsing {
     }
 
     //충전 시작정보(충전기 -> 충전기정보시스템) CALL
-    private void chargingStartParsingData(CommonVO commonVO) {
+    private CommonVO chargingStartParsingData(CommonVO commonVO) {
 
         try {
             JSONParser jParser = new JSONParser();
@@ -702,18 +670,20 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
             e.printStackTrace();
 
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
-            unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            return;
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
     //충전 진행정보(충전기 -> 충전기정보시스템) CALL
-    private void chargingInfoParsingData(CommonVO commonVO) {
+    private CommonVO chargingInfoParsingData(CommonVO commonVO) {
 
         try {
             JSONParser jParser = new JSONParser();
@@ -764,12 +734,20 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
     //충전 완료정보(충전기 -> 충전기정보시스템) CALL
-    private void chargingEndParsingData(CommonVO commonVO) {
+    private CommonVO chargingEndParsingData(CommonVO commonVO) {
 
         try {
             JSONParser jParser = new JSONParser();
@@ -826,12 +804,20 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
     //충전 결제정보(충전기 -> 충전기정보시스템) CALL
-    private void chargePaymentParsingData(CommonVO commonVO) {
+    private CommonVO chargePaymentParsingData(CommonVO commonVO) {
         try {
             JSONParser jParser = new JSONParser();
             JSONObject data = (JSONObject) jParser.parse(commonVO.getData());
@@ -864,12 +850,20 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
     //문자 전송(충전기 -> 충전기정보시스템) CALL
-    private void sendSmsParsingData(CommonVO commonVO) {
+    private CommonVO sendSmsParsingData(CommonVO commonVO) {
 
         try {
             JSONParser jParser = new JSONParser();
@@ -900,12 +894,20 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
     //경보 이력(충전기 -> 충전기정보시스템) CALL
-    private void alarmHistoryParsingData(CommonVO commonVO) {
+    private CommonVO alarmHistoryParsingData(CommonVO commonVO) {
 
         try {
             JSONParser jParser = new JSONParser();
@@ -929,42 +931,41 @@ public class JsonDataParsing {
             System.out.println("alarm_code : " + alarm_code);
             System.out.println("<------------------------------------------------>");
 
+            AlarmHistoryVO alarmHistoryVO = new AlarmHistoryVO();
+
+            //추후 PROVIDER_ID 하드코딩한거 수정해야 함
+            //chgrInfoVO.setProviderId(commonVO.getStationId().substring(0,2));
+            alarmHistoryVO.setAlarmStateCd(alarm_type);
+            alarmHistoryVO.setOccurDt(alarm_date);
+            alarmHistoryVO.setAlarmCd(alarm_code);
+            alarmHistoryVO.setProviderId(commonVO.getProviderId());
+            alarmHistoryVO.setStId(commonVO.getStationId());
+            alarmHistoryVO.setChId(alarm_plug);
+            alarmHistoryVO.setChgrId(commonVO.getChgrId());
+            alarmHistoryVO.setChgrTxDt(create_date);
+            alarmHistoryVO.setMwKindCd("WS");
+            alarmHistoryVO.setRTimeYn("Y");
+
             // req Data DB Insert
-            try {
-                AlarmHistoryVO alarmHistoryVO = new AlarmHistoryVO();
-
-                //추후 PROVIDER_ID 하드코딩한거 수정해야 함
-                //chgrInfoVO.setProviderId(commonVO.getStationId().substring(0,2));
-                alarmHistoryVO.setAlarmStateCd(alarm_type);
-                alarmHistoryVO.setOccurDt(alarm_date);
-                alarmHistoryVO.setAlarmCd(alarm_code);
-                alarmHistoryVO.setProviderId(commonVO.getProviderId());
-                alarmHistoryVO.setStId(commonVO.getStationId());
-                alarmHistoryVO.setChId(alarm_plug);
-                alarmHistoryVO.setChgrId(commonVO.getChgrId());
-                alarmHistoryVO.setChgrTxDt(create_date);
-                alarmHistoryVO.setMwKindCd("WS");
-                alarmHistoryVO.setRTimeYn("Y");
-
-                System.out.println("<----------------------- Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                System.out.println("<----------------------- DB Insert 오류 ------------------------->");
-                unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-                return;
-            }
+            System.out.println("<----------------------- Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));
 
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
     //펌웨어 업데이트 결과 알림(충전기 -> 충전기정보시스템) CALL
-    private void reportUpdateParsingData(CommonVO commonVO) {
+    private CommonVO reportUpdateParsingData(CommonVO commonVO) {
 
         try {
             JSONParser jParser = new JSONParser();
@@ -1002,12 +1003,20 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
     //덤프_충전 시작정보(충전기 -> 충전기정보시스템) CALL
-    private void dChargingStartParsingData(CommonVO commonVO) {
+    private CommonVO dChargingStartParsingData(CommonVO commonVO) {
 
         try {
             JSONParser jParser = new JSONParser();
@@ -1061,12 +1070,20 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
     //덤프_충전 완료정보(충전기 -> 충전기정보시스템) CALL
-    private void dChargingEndParsingData(CommonVO commonVO) {
+    private CommonVO dChargingEndParsingData(CommonVO commonVO) {
 
         try {
             JSONParser jParser = new JSONParser();
@@ -1125,12 +1142,20 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
     //덤프_충전 결제정보(충전기 -> 충전기정보시스템) CALL
-    private void dChargePaymentParsingData(CommonVO commonVO) {
+    private CommonVO dChargePaymentParsingData(CommonVO commonVO) {
 
         try {
             JSONParser jParser = new JSONParser();
@@ -1167,12 +1192,20 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
     //덤프_경보이력(충전기 -> 충전기정보시스템) CALL
-    private void dAlarmHistoryParsingData(CommonVO commonVO) {
+    private CommonVO dAlarmHistoryParsingData(CommonVO commonVO) {
 
         try {
             JSONParser jParser = new JSONParser();
@@ -1201,12 +1234,20 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
     //덤프_펌웨어 업데이트 결과 알림(충전기 -> 충전기정보시스템) CALL
-    private void dReportUpdateParsingData(CommonVO commonVO) {
+    private CommonVO dReportUpdateParsingData(CommonVO commonVO) {
 
         try {
             JSONParser jParser = new JSONParser();
@@ -1248,12 +1289,92 @@ public class JsonDataParsing {
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            parameterErrorMsgSend(commonVO);
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
+
+        return commonVO;
     }
 
-    private void resetParsingData(CommonVO commonVO) {
+    //reset
+    private CommonVO chgrResponse(CommonVO commonVO) {
 
+        try {
+            JSONParser jParser = new JSONParser();
+            JSONObject data = (JSONObject) jParser.parse(commonVO.getData());
+
+            System.out.println("data : " + data.toString());
+
+            String station_id = (String) data.get("station_id");
+            String chgr_id = (String) data.get("chgr_id");
+            String response_date = (String) data.get("response_date");
+            String response_receive = (String) data.get("response_receive");
+            String response_reason = (String) data.get("response_reason");
+
+            String before_mode = "";
+            String after_mode = "";
+
+            String fw_type = "";
+            String curr_ver = "";
+
+            String logText = "";
+            if (commonVO.getActionType().equals("reset")) {
+                logText = "리셋";
+            } else if (commonVO.getActionType().equals("prices")) {
+                logText = "단가";
+            } else if (commonVO.getActionType().equals("changeMode")) {
+                logText = "모드 변경";
+
+                before_mode = (String) data.get("before_mode");
+                after_mode = (String) data.get("after_mode");
+
+            } else if (commonVO.getActionType().equals("displayBrightness")) {
+                logText = "화면 밝기 정보";
+            } else if (commonVO.getActionType().equals("sound")) {
+                logText = "소리 정보";
+            } else if (commonVO.getActionType().equals("askVer")) {
+                logText = "펌웨어 버전 정보";
+
+                fw_type = (String) data.get("fw_type");
+                curr_ver = (String) data.get("curr_ver");
+            }
+
+            System.out.println("<----------- [제어 응답] 충전기 -> M/W " + logText + " Parsing Data ----------->");
+            System.out.println("providerId : " + commonVO.getProviderId());
+            System.out.println("stationId : " + commonVO.getStationId());
+            System.out.println("chgrId : " + commonVO.getChgrId());
+            System.out.println("uuid : " + commonVO.getUuid());
+            System.out.println("send_type : " + commonVO.getSendType());
+            System.out.println("action_type : " + commonVO.getActionType());
+            System.out.println("station_id : " + station_id);
+            System.out.println("chgr_id : " + chgr_id);
+            System.out.println("response_date : " + response_date);
+            System.out.println("response_receive : " + response_receive);
+            System.out.println("response_reason : " + response_reason);
+            System.out.println("before_mode : " + before_mode);
+            System.out.println("after_mode : " + after_mode);
+            System.out.println("fw_type : " + fw_type);
+            System.out.println("curr_ver : " + curr_ver);
+            System.out.println("<------------------------------------------------>");
+
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            System.out.println("<----------------------- 파싱 오류 ------------------------->");
+            commonVO = parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+        }
+
+        return commonVO;
     }
 
     private void pricesParsingData(CommonVO commonVO) {
@@ -1292,14 +1413,25 @@ public class JsonDataParsing {
         return;
     }
 
-    //파리미터 오류
+    //파라미터 오류
     public CommonVO parameterErrorMsgSend(CommonVO commonVO) {
         System.out.println("JSON Parsing 중 오류 입니다. 받은 Data : " + commonVO.getData());
 
         commonVO.setResponseReceive("0");   //실패
-        commonVO.setResponseReason("12");   //파리미터 오류
+        commonVO.setResponseReason("12");   //파라미터 오류
 
         return commonVO;
+    }
+
+    //충전소(기)ID 오류
+    public void invalidErrorMsgSend(CommonVO commonVO) {
+        System.out.println("충전소(기)ID 중 오류 입니다. 받은 Data : " + commonVO.getData());
+
+        commonVO.setResponseReceive("0");   //실패
+        commonVO.setResponseReason("13");   //파라미터 오류
+        sendMessage(commonVO);
+
+        return;
     }
 
     //데이터형식 오류
