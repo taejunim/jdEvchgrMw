@@ -60,7 +60,6 @@
                  ON DUPLICATE KEY UPDATE
                   , PLUG_TYPE_CD    = #{plugTypeCd}
 
-
     </insert>
 
     <insert id="chgrFwVerInfoInsUpdate" parameterType="chgrInfoVO" >

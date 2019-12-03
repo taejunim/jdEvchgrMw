@@ -155,12 +155,12 @@ public class JsonDataParsingForControl {
 
                 JSONArray pricesArray = new JSONArray();
 
-                for (int i = 0; i < commonVO.getPricesVOArrayList().size(); i++) {
+                for (int i = 0; i < commonVO.getControlChgrVOArrayList().size(); i++) {
 
                     JSONObject pricesData = new JSONObject();
-                    pricesData.put("ctrl_list_id", commonVO.getPricesVOArrayList().get(i).getCtrlListId());
-                    pricesData.put("station_id", commonVO.getPricesVOArrayList().get(i).getStationId());
-                    pricesData.put("chgr_id", commonVO.getPricesVOArrayList().get(i).getChgrId());
+                    pricesData.put("ctrl_list_id", commonVO.getControlChgrVOArrayList().get(i).getCtrlListId());
+                    pricesData.put("station_id", commonVO.getControlChgrVOArrayList().get(i).getStationId());
+                    pricesData.put("chgr_id", commonVO.getControlChgrVOArrayList().get(i).getChgrId());
 
                     pricesArray.add(pricesData);
                 }
@@ -298,9 +298,9 @@ public class JsonDataParsingForControl {
                 for (int i=0; i<sessionList.size(); i++) {
 
 
-                    for (int j=0; j<commonVO.getPricesVOArrayList().size(); j++) {
+                    for (int j=0; j<commonVO.getControlChgrVOArrayList().size(); j++) {
 
-                        if (sessionList.get(i).getStationChgrId().equals(commonVO.getPricesVOArrayList().get(j).getStationId() + commonVO.getPricesVOArrayList().get(j).getChgrId())) {
+                        if (sessionList.get(i).getStationChgrId().equals(commonVO.getControlChgrVOArrayList().get(j).getStationId() + commonVO.getControlChgrVOArrayList().get(j).getChgrId())) {
 
                             JSONObject pricesData = new JSONObject();
 
@@ -332,8 +332,8 @@ public class JsonDataParsingForControl {
                             pricesData.put("h22", commonVO.getHourVO().getH22());
                             pricesData.put("h23", commonVO.getHourVO().getH23());
 
-                            pricesData.put("station_id", commonVO.getPricesVOArrayList().get(j).getStationId());
-                            pricesData.put("chgr_id", commonVO.getPricesVOArrayList().get(j).getChgrId());
+                            pricesData.put("station_id", commonVO.getControlChgrVOArrayList().get(j).getStationId());
+                            pricesData.put("chgr_id", commonVO.getControlChgrVOArrayList().get(j).getChgrId());
 
                             sendJsonObject.put("data", pricesData);
 
@@ -480,7 +480,7 @@ public class JsonDataParsingForControl {
 
             System.out.println("data : " + data.toString());
 
-            ArrayList<PricesVO> pricesVOArrayList = new ArrayList<>();
+            ArrayList<ControlChgrVO> controlChgrVOArrayList = new ArrayList<>();
 
             JSONArray reqChgrArr = (JSONArray) data.get("req_chgr");
 
@@ -503,11 +503,11 @@ public class JsonDataParsingForControl {
                 System.out.println("chgr_id : " + chgr_id);
 
 
-                PricesVO pricesVO = new PricesVO();
-                pricesVO.setCtrlListId(ctrl_list_id);
-                pricesVO.setStationId(station_id);
-                pricesVO.setChgrId(chgr_id);
-                pricesVOArrayList.add(pricesVO);
+                ControlChgrVO controlChgrVO = new ControlChgrVO();
+                controlChgrVO.setCtrlListId(ctrl_list_id);
+                controlChgrVO.setStationId(station_id);
+                controlChgrVO.setChgrId(chgr_id);
+                controlChgrVOArrayList.add(controlChgrVO);
             }
 
             String send_date = (String) data.get("send_date");
@@ -570,7 +570,7 @@ public class JsonDataParsingForControl {
                 commonVO.setResponseReason("12");   //파리미터 오류
                 return commonVO;
             }
-            System.out.println("pricesVOArrayList : " + pricesVOArrayList);
+            System.out.println("controlChgrVOArrayList : " + controlChgrVOArrayList);
             System.out.println("send_date : " + send_date);
             System.out.println("cost_sdd : " + cost_sdd);
             System.out.println("h00 : " + h00);
@@ -600,7 +600,7 @@ public class JsonDataParsingForControl {
             System.out.println("<------------------------------------------------>");
 
             commonVO.setCostSdd(cost_sdd);
-            commonVO.setPricesVOArrayList(pricesVOArrayList);
+            commonVO.setControlChgrVOArrayList(controlChgrVOArrayList);
 
             // req Data DB Insert
             /*try {

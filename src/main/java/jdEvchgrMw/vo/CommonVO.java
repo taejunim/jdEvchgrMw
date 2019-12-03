@@ -32,5 +32,5 @@ public class CommonVO {
 	private FwVerInfoVO fwVerInfoVO;	//충전기 버전 VO
 	private UserVO userVO;				//사용자 인증 VO
 
-	private ArrayList<PricesVO> pricesVOArrayList = new ArrayList<>();	//관제에서 설정한 단가 리스트
+	private ArrayList<ControlChgrVO> controlChgrVOArrayList = new ArrayList<>();	//관제에서 설정한 단가 리스트
 }

@@ -5,7 +5,6 @@
     <typeAliases>
 		<typeAlias alias="egovMap" 		    type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
         <typeAlias alias="alarmHistoryVO"   type="jdEvchgrMw.vo.AlarmHistoryVO"/>
-        <typeAlias alias="askVerVO"	        type="jdEvchgrMw.vo.AskVerVO"/>
         <typeAlias alias="changeModeVO"	    type="jdEvchgrMw.vo.ChangeModeVO"/>
         <typeAlias alias="chargerPlugVO"	type="jdEvchgrMw.vo.ChargerPlugVO"/>
         <typeAlias alias="chgrInfoVO"	    type="jdEvchgrMw.vo.ChgrInfoVO"/>
@@ -15,5 +14,6 @@
         <typeAlias alias="userVO"           type="jdEvchgrMw.vo.UserVO"/>
         <typeAlias alias="chargeVO"         type="jdEvchgrMw.vo.ChargeVO"/>
         <typeAlias alias="chargePaymentVO"  type="jdEvchgrMw.vo.ChargePaymentVO"/>
+        <typeAlias alias="controlChgrVO"    type="jdEvchgrMw.vo.ControlChgrVO"/>
     </typeAliases>
 </configuration>
