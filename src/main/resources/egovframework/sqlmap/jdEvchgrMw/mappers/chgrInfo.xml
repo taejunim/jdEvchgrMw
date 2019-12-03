@@ -2,6 +2,69 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jdEvchgrMw.chgrInfo.service.impl.ChgrInfoMapper">
 
+    <select id="deviceConfigSelect" parameterType="chgrInfoVO">
+
+        SELECT PROVIDER_ID
+             , ST_ID
+             , CHGR_ID
+             , BRIGHT_H00
+             , BRIGHT_H01
+             , BRIGHT_H02
+             , BRIGHT_H03
+             , BRIGHT_H04
+             , BRIGHT_H05
+             , BRIGHT_H06
+             , BRIGHT_H07
+             , BRIGHT_H08
+             , BRIGHT_H09
+             , BRIGHT_H10
+             , BRIGHT_H11
+             , BRIGHT_H12
+             , BRIGHT_H13
+             , BRIGHT_H14
+             , BRIGHT_H15
+             , BRIGHT_H16
+             , BRIGHT_H17
+             , BRIGHT_H18
+             , BRIGHT_H19
+             , BRIGHT_H20
+             , BRIGHT_H21
+             , BRIGHT_H22
+             , BRIGHT_H23
+             , SOUND_H00
+             , SOUND_H01
+             , SOUND_H02
+             , SOUND_H03
+             , SOUND_H04
+             , SOUND_H05
+             , SOUND_H06
+             , SOUND_H07
+             , SOUND_H08
+             , SOUND_H09
+             , SOUND_H10
+             , SOUND_H11
+             , SOUND_H12
+             , SOUND_H13
+             , SOUND_H14
+             , SOUND_H15
+             , SOUND_H16
+             , SOUND_H17
+             , SOUND_H18
+             , SOUND_H19
+             , SOUND_H20
+             , SOUND_H21
+             , SOUND_H22
+             , SOUND_H23
+          FROM device_config
+
+         WHERE 1=1
+
+           AND PROVIDER_ID = #{providerId}
+           AND ST_ID       = #{stId}
+           AND CHGR_ID     = #{chgrId}
+
+    </select>
+
     <select id="chgrCheckValidation" parameterType="chgrInfoVO" resultType="egovMap">
 
         SELECT PROVIDER_ID

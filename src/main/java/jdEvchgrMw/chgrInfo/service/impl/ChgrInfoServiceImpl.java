@@ -44,6 +44,12 @@ public class ChgrInfoServiceImpl extends EgovAbstractServiceImpl implements Chgr
         return result;
     }
 
+    /*충전기 사운드 및 밝기 조회*/
+    public EgovMap deviceConfigSelect(ChgrInfoVO chgrInfoVO) throws Exception {
+
+        return chgrInfoMapper.deviceConfigSelect(chgrInfoVO);
+    }
+
     /*충전기 설지 정보 수정*/
     public int chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception {
 
