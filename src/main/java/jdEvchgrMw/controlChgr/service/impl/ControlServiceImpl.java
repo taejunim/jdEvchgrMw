@@ -28,10 +28,22 @@ public class ControlServiceImpl extends EgovAbstractServiceImpl implements Contr
     @Resource(name = "controlChgrMapper")
     private ControlChgrMapper controlChgrMapper;
 
-    /*제어 이력 등록*/
+    /*제어 이력 수정(TABLE: CTRL_LIST / M/W->관제)*/
     public int ctrlListUpdate(ControlChgrVO controlChgrVO) throws Exception {
 
         return controlChgrMapper.ctrlListUpdate(controlChgrVO);
+    }
+
+    /*제어 이력 등록(TABLE: TX_MSG_LIST / M/W->충전기)*/
+    public int txMsgListInsert(ControlChgrVO controlChgrVO) throws Exception {
+
+        return controlChgrMapper.txMsgListInsert(controlChgrVO);
+    }
+
+    /*제어 이력 수정(TABLE: TX_MSG_LIST / 충전기->M/W)*/
+    public int txMsgListUpdate(ControlChgrVO controlChgrVO) throws Exception {
+
+        return controlChgrMapper.txMsgListUpdate(controlChgrVO);
     }
 
 }

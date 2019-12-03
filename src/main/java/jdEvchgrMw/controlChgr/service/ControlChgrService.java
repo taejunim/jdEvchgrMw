@@ -19,7 +19,13 @@ import jdEvchgrMw.vo.ControlChgrVO;
 
 public interface ControlChgrService {
 
-    /*제어 이력 등록*/
+    /*제어 이력 수정(TABLE: CTRL_LIST / M/W->관제)*/
     int ctrlListUpdate(ControlChgrVO controlChgrVO) throws Exception;
+
+    /*제어 이력 등록(TABLE: TX_MSG_LIST / M/W->충전기)*/
+    int txMsgListInsert(ControlChgrVO controlChgrVO) throws Exception;
+
+    /*제어 이력 수정(TABLE: TX_MSG_LIST / 충전기->M/W)*/
+    int txMsgListUpdate(ControlChgrVO controlChgrVO) throws Exception;
     
 }

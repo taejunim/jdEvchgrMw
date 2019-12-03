@@ -21,12 +21,17 @@ import lombok.Data;
 public class ControlChgrVO {
 
     private String ctrlListId;		//제어 이력 ID
+    private String uuid;            //UUID
     private String stationId;		//충전소 ID
     private String chgrId;			//충전기 ID
     private String providerId;		//충전사업자 ID
     private String mwKindCd;        //미들웨어 종류 코드
+    private String dataCreateDt;    //데이터 생성 일시
+    private String chgrTtxDt;	    //충전기 전송 일시
+    private String txMsg;	        //전송 전문
     private String resDt;	        //응답 일시
     private int    resCd;	        //응답 코드
     private int    resRsnCd;	    //응답 사유 코드
+    private String resMsg;	        //응답 전문
 
 }

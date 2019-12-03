@@ -2,18 +2,55 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jdEvchgrMw.controlChgr.service.impl.ControlChgrMapper">
     
-        <update id="ctrlListUpdate" parameterType="controlChgrVO">
+    <update id="ctrlListUpdate" parameterType="controlChgrVO">
 
-            UPDATE ctrl_list
-               SET MW_KIND_CD   =   #{mwKindCd}
-                 , RES_DT       =   #{resDt}
-                 , RES_CD       =   #{resCd}
-                 , RES_RSN_CD   =   #{resRsnCd}
+        UPDATE ctrl_list
+           SET MW_KIND_CD   =   #{mwKindCd}
+             , RES_DT       =   #{resDt}
+             , RES_CD       =   #{resCd}
+             , RES_RSN_CD   =   #{resRsnCd}
 
-             WHERE 1=1
+         WHERE 1=1
 
-               AND CTRL_LIST_ID    =   #{ctrlListId}
+           AND CTRL_LIST_ID    =   #{ctrlListId}
 
-        </update>
+    </update>
+
+    <insert id="txMsgListInsert" parameterType="controlChgrVO">
+
+        INSERT INTO TX_MSG_LIST (
+                                    CTRL_LIST_ID
+                                    , UUID
+                                    , DATA_CREATE_DT
+                                    , CHGR_TX_DT
+                                    , TX_MSG
+
+                      ) VALUES (
+
+                                    #{ctrlListId}
+                                    , #{uuid}
+                                    , #{dataCreateDt}
+                                    , #{chgrTxDt}
+                                    , #{txMsg}
+
+                                )
+
+    </insert>
+
+    <update id="txMsgListUpdate" parameterType="controlChgrVO">
+
+        UPDATE tx_msg_list
+
+           SET RES_DT       =   #{resDt}
+             , RES_CD       =   #{resCd}
+             , RES_RSN_CD   =   #{resRsnCd}
+             , RES_MSG      =   #{resMsg}
+
+         WHERE 1=1
+
+           AND UUID         =   #{uuid}
+
+    </update>
+
 
 </mapper>
