@@ -1,7 +1,7 @@
 package jdEvchgrMw.chgrInfo.service;
 
-import egovframework.rte.psl.dataaccess.util.EgovMap;
 import jdEvchgrMw.vo.ChgrInfoVO;
+import jdEvchgrMw.vo.DeviceConfigVO;
 
 /**
  * @ interface Name  : ChgrInfoService.java
@@ -24,7 +24,7 @@ public interface ChgrInfoService {
     String chgrCheckValidation(ChgrInfoVO chgrInfoVO) throws Exception;
 
     /*충전기 사운드 및 밝기 조회*/
-    EgovMap deviceConfigSelect(ChgrInfoVO chgrInfoVO) throws Exception;
+    DeviceConfigVO deviceConfigSelect(DeviceConfigVO deviceConfigVO) throws Exception;
 
     /*충전기 설지 정보 UPDATE*/
     int chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception;

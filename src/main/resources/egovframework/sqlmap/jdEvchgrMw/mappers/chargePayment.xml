@@ -4,10 +4,11 @@
 
     <select id="rechgSttInfoSelect" parameterType="chargePaymentVO" resultType="egovMap">
 
-        SELECT RECHGING_LIST_ID
+        SELECT RECHG_STT_LIST_ID
              , RECHG_DEMAND_AMT
              , CREDIT_P_PAY_TRX_NO
              , CREDIT_P_PAY_TRX_DT
+             , CHGR_TX_DT
 
           FROM RECHG_STT_LIST
 
@@ -17,7 +18,7 @@
            AND ST_ID       = #{stId}
            AND CHGR_ID     = #{chgrId}
            AND CH_ID       = #{chId}
-           AND R_TIME_YN   = 'Y'
+           AND CREDIT_P_PAY_TRX_NO   = #{pPayTrxNo}
 
       ORDER BY REG_DT
 

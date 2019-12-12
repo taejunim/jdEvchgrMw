@@ -2,9 +2,12 @@ package jdEvchgrMw.common;
 
 import jdEvchgrMw.alarmHistory.service.AlarmHistoryService;
 import jdEvchgrMw.charge.service.ChargeService;
+import jdEvchgrMw.chargePayment.service.ChargePaymentService;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
 import jdEvchgrMw.chgrState.service.ChgrStateService;
+import jdEvchgrMw.controlChgr.service.ControlChgrService;
 import jdEvchgrMw.revMsg.service.RevMsgService;
+import jdEvchgrMw.sendSms.service.SendSmsService;
 import jdEvchgrMw.user.service.UserService;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
@@ -86,6 +89,18 @@ public class CollectServiceBean {
 	}
 
 	/**
+	 * ChargePaymentService Bean 생성
+	 * @return
+	 * @throws Exception
+	 */
+	public ChargePaymentService chargePaymentService()throws Exception{
+
+		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+
+		return (ChargePaymentService)context.getBean("chargePaymentService");
+	}
+
+	/**
 	 * UserService Bean 생성
 	 * @return
 	 * @throws Exception
@@ -95,6 +110,30 @@ public class CollectServiceBean {
 		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
 
 		return (UserService)context.getBean("userService");
+	}
+
+	/**
+	 * SendSmsService Bean 생성
+	 * @return
+	 * @throws Exception
+	 */
+	public SendSmsService sendSmsService()throws Exception{
+
+		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+
+		return (SendSmsService)context.getBean("sendSmsService");
+	}
+
+	/**
+	 * ControlChgrService Bean 생성
+	 * @return
+	 * @throws Exception
+	 */
+	public ControlChgrService controlChgrService()throws Exception{
+
+		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+
+		return (ControlChgrService)context.getBean("controlChgrService");
 	}
 
 }

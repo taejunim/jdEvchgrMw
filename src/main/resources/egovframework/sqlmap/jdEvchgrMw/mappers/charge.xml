@@ -17,10 +17,13 @@
                                     , RECHG_SDT
                                     , RECHG_DEMAND_AMT
                                     , RECHG_EST_TIME
+                                    , CHGR_PAYING_YN
                                     , PAY_TYPE_CD
                                     , MEM_AUTH_ID
                                     , CREDIT_P_PAY_TRX_NO
+                                    <if test = "creditPPayTrxDt != '' and creditPPayTrxDt != null">
                                     , CREDIT_P_PAY_TRX_DT
+                                    </if>
                                     , INTEGRATED_WH
                                     , CURR_VOLT
                                     , CURR_C
@@ -43,6 +46,13 @@
                                     , #{rechgSdt}
                                     , #{rechgDemandAmt}
                                     , #{rechgEstTime}
+                                    , (SELECT chgr.PAYING_YN AS PAYING_YN
+                                         FROM chgr chgr
+                                        WHERE 1=1
+                                          AND chgr.PROVIDER_ID = #{providerId}
+                                          AND chgr.ST_ID       = #{stId}
+                                          AND chgr.CHGR_ID     = #{chgrId}
+                                      )
                                     , #{payTypeCd}
                                     , (
                                         SELECT mal.MEM_AUTH_ID MEM_AUTH_ID
@@ -56,7 +66,9 @@
                                           DESC LIMIT 1
                                       )
                                     , #{creditPPayTrxNo}
+                                    <if test = "creditPPayTrxDt != '' and creditPPayTrxDt != null">
                                     , #{creditPPayTrxDt}
+                                    </if>
                                     , #{integratedWh}
                                     , #{currVolt}
                                     , #{currC}
@@ -89,7 +101,9 @@
                                     , PAY_TYPE_CD
                                     , MEM_AUTH_ID
                                     , CREDIT_P_PAY_TRX_NO
+                                    <if test = "creditPPayTrxDt != '' and creditPPayTrxDt != null">
                                     , CREDIT_P_PAY_TRX_DT
+                                    </if>
                                     , INTEGRATED_WH
                                     , CURR_VOLT
                                     , CURR_C
@@ -126,7 +140,13 @@
                                     , #{rechgingAmt}
                                     , #{rechgingWh}
                                     , #{rechgRemainTime}
-                                    , #{chgrPayingYn}
+                                    , (SELECT chgr.PAYING_YN AS PAYING_YN
+                                         FROM chgr chgr
+                                        WHERE 1=1
+                                          AND chgr.PROVIDER_ID = #{providerId}
+                                          AND chgr.ST_ID       = #{stId}
+                                          AND chgr.CHGR_ID     = #{chgrId}
+                                      )
                                     , #{payTypeCd}
                                     , (
                                         SELECT mal.MEM_AUTH_ID MEM_AUTH_ID
@@ -140,7 +160,9 @@
                                           DESC LIMIT 1
                                       )
                                     , #{creditPPayTrxNo}
+                                    <if test = "creditPPayTrxDt != '' and creditPPayTrxDt != null">
                                     , #{creditPPayTrxDt}
+                                    </if>
                                     , #{integratedWh}
                                     , #{currVolt}
                                     , #{currC}
@@ -175,7 +197,9 @@
                                         , PAY_TYPE_CD
                                         , MEM_AUTH_ID
                                         , CREDIT_P_PAY_TRX_NO
+                                        <if test = "creditPPayTrxDt != '' and creditPPayTrxDt != null">
                                         , CREDIT_P_PAY_TRX_DT
+                                        </if>
                                         , CANCEL_AMT
                                         , CANCEL_DETL
                                         , INTEGRATED_WH
@@ -216,7 +240,13 @@
                                         , #{rechgAmt}
                                         , #{rechgWh}
                                         , #{rechgTime}
-                                        , #{chgrPayingYn}
+                                        , (SELECT chgr.PAYING_YN AS PAYING_YN
+                                             FROM chgr chgr
+                                            WHERE 1=1
+                                              AND chgr.PROVIDER_ID = #{providerId}
+                                              AND chgr.ST_ID       = #{stId}
+                                              AND chgr.CHGR_ID     = #{chgrId}
+                                      )
                                         , #{payTypeCd}
                                         , (
                                             SELECT mal.MEM_AUTH_ID MEM_AUTH_ID
@@ -230,7 +260,9 @@
                                               DESC LIMIT 1
                                           )
                                         , #{creditPPayTrxNo}
+                                        <if test = "creditPPayTrxDt != '' and creditPPayTrxDt != null">
                                         , #{creditPPayTrxDt}
+                                        </if>
                                         , #{cancelAmt}
                                         , #{cancelDetl}
                                         , #{integratedWh}

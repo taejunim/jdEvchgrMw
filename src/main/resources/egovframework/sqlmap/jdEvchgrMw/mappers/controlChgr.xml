@@ -22,7 +22,7 @@
                                     CTRL_LIST_ID
                                     , UUID
                                     , DATA_CREATE_DT
-                                    , CHGR_TX_DT
+                                    , TX_DT
                                     , TX_MSG
 
                       ) VALUES (

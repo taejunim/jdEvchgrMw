@@ -4,19 +4,19 @@
 
     <select id="userAuthSelect" parameterType="userVO" resultType="egovMap">
 
-        SELECT mci.MEMSH_CARD_NO    MEMSH_CARD_NO
-             , mci.CUST_ID          CUST_ID
-             , mci.PAY_KIND_CD      PAY_KIND_CD
-             , mci.SPOT_PAY_YN      SPOT_PAY_YN
-             , mci.STOP_YN          STOP_YN
-             , mci.STOP_RSN         STOP_RSN
-             , mci.VALID_YN         VALID_YN
-             , mci.REG_UID          REG_UID
-             , mci.REG_DT           REG_DT
-             , mci.MOD_UID          MOD_UID
-             , mci.MOD_DT           MOD_DT
-             , ct.PROVIDER_ID       PROVIDER_ID
-             , ct.B_ID              B_ID
+        SELECT mci.MEMSH_CARD_NO
+             , mci.CUST_ID
+             , mci.PAY_KIND_CD
+             , mci.SPOT_PAY_YN
+             , mci.STOP_YN
+             , mci.STOP_RSN
+             , mci.VALID_YN
+             , mci.REG_UID
+             , mci.REG_DT
+             , mci.MOD_UID
+             , mci.MOD_DT
+             , ct.PROVIDER_ID
+             , ct.B_ID
 
           FROM memsh_card_info mci INNER JOIN cust ct ON mci.CUST_ID = ct.CUST_ID AND mci.MEMSH_CARD_NO = #{memAuthInputNo}
 
@@ -51,8 +51,7 @@
                                   , MEM_AUTH_INPUT_NO
                                   , RES_DT
                                   , AUTH_RSLT_CD
-                                  , SPOT_PAY_YN
-                                  , CHGR_PAYING_YN
+                                  , AUTH_RSLT_VALID
                                   , MEM_PROVIDER_ID
                                   , PRICE
                                   , CHGR_TX_DT
@@ -71,8 +70,7 @@
                                   , #{memAuthInputNo}
                                   , #{resDt}
                                   , #{authRsltCd}
-                                  , #{spotPayYn}
-                                  , #{chgrPayingYn}
+                                  , #{authRsltValid}
                                   , #{memProviderId}
                                   , #{price}
                                   , #{chgrTxDt}

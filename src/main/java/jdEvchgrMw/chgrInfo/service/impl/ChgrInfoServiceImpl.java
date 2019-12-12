@@ -4,6 +4,7 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
 import jdEvchgrMw.vo.ChgrInfoVO;
+import jdEvchgrMw.vo.DeviceConfigVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -45,9 +46,9 @@ public class ChgrInfoServiceImpl extends EgovAbstractServiceImpl implements Chgr
     }
 
     /*충전기 사운드 및 밝기 조회*/
-    public EgovMap deviceConfigSelect(ChgrInfoVO chgrInfoVO) throws Exception {
+    public DeviceConfigVO deviceConfigSelect(DeviceConfigVO deviceConfigVO) throws Exception {
 
-        return chgrInfoMapper.deviceConfigSelect(chgrInfoVO);
+        return chgrInfoMapper.deviceConfigSelect(deviceConfigVO);
     }
 
     /*충전기 설지 정보 수정*/

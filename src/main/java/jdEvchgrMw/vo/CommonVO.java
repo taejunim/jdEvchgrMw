@@ -18,6 +18,7 @@ public class CommonVO {
 	private String sendType;		//SEND TYPE
 	private String actionType;		//ACTION TYPE
 	private String data;			//DATA
+	private String sendDate;		//전송일시 - YYYYMMDDhhmmss
 
 	private String responseDate;	//응답일시 - YYYYMMDDhhmmss
 	//private String reqCreateDate;	//정보생성일시
@@ -26,11 +27,13 @@ public class CommonVO {
 
 	private String ctrlListId;		//제어이력 ID
 	private String costSdd;			//요금적용시작일자 - YYYYMMDD
+	private String price;			//단가
 
-	private ChangeModeVO changeModeVO;	//충전기 모드 변경 VO
-	private HourVO hourVO; 				//시간 VO
-	private FwVerInfoVO fwVerInfoVO;	//충전기 버전 VO
-	private UserVO userVO;				//사용자 인증 VO
+	private ChangeModeVO changeModeVO;		//충전기 모드 변경 VO
+	private HourVO hourVO; 					//시간 VO
+	private FwVerInfoVO fwVerInfoVO;		//충전기 버전 VO
+	private UserVO userVO;					//사용자 인증 VO
+	private DeviceConfigVO deviceConfigVO;	//충전기 사운드 및 밝기 VO
 
 	private ArrayList<ControlChgrVO> controlChgrVOArrayList = new ArrayList<>();	//관제에서 설정한 단가 리스트
 }

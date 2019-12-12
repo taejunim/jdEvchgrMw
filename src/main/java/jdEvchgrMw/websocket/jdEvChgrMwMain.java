@@ -23,7 +23,7 @@ public class jdEvChgrMwMain {
     @OnOpen
     public void handleOpen(@PathParam("stationId") String stationId, @PathParam("chgrId") String chgrId, Session session){
 
-        String stationChgrId = (stationId.length() > 6 ? stationId.substring(2) : stationId) + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
+        String stationChgrId = stationId + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
 
         SessionVO sessionVO = new SessionVO();
         sessionVO.setStationChgrId(stationChgrId);
@@ -36,11 +36,11 @@ public class jdEvChgrMwMain {
 
         sessionList = tempList;
 
-        System.out.println("[ 충전소 : " + stationId + " - 충전기  "+ chgrId +"(가)이 접속 하였습니다.\n현재 sessionList : " + sessionList + " ]");
+        System.out.println("[ 충전소 : " + stationId + " - 충전기  "+ chgrId +"(가)이 접속 하였습니다. ]\n [ 현재 sessionList : " + sessionList + " ]");
     }
     
     /**
-     * MSG RECIEVE CALL EVENET
+     * MSG RECEIVE CALL EVENT
      * @param message
      */
     @OnMessage
@@ -55,8 +55,9 @@ public class jdEvChgrMwMain {
     	commonVO.setUserSession(session);
     	commonVO.setRcvMsg(message);
 
-        System.out.println("[ MSG Start.. 현재 session 수 : " + sessionList.size() + " ]");
-    	System.out.println("[ 충전기 -> M/W : "+ commonVO.getRcvMsg() +" ]");
+    	//세션 로그 출력
+        sessionListLog();
+        System.out.println("[ 충전기 -> M/W : "+ commonVO.getRcvMsg() +" ]");
 
         JsonDataParsing jdp         = new JsonDataParsing();
     	jdp.jsonDataParsingMain(commonVO);
@@ -68,11 +69,9 @@ public class jdEvChgrMwMain {
     @OnClose
     public void handleClose(@PathParam("stationId") String stationId, @PathParam("chgrId") String chgrId, Session session) {
 
-        String stationChgrId = (stationId.length() > 6 ? stationId.substring(2) : stationId) + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
+        String stationChgrId = stationId + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
 
         for (int i=0; i < sessionList.size(); i++) {
-
-            System.out.println("[" + i + "]");
 
             if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
 
@@ -83,6 +82,9 @@ public class jdEvChgrMwMain {
                 break;
             }
         }
+
+        //세션 로그 출력
+        sessionListLog();
 
         System.out.println("[ 현재 session 수 : " + sessionList.size() + ", 현재 sessionList : " + sessionList + " ]");
     }
@@ -98,6 +100,17 @@ public class jdEvChgrMwMain {
         t.printStackTrace();
     }
     
+    public void sessionListLog() {
 
+        System.out.println("[ MSG Start.. 현재 session 수 : " + sessionList.size() + " ]");
+        System.out.println("  현재 session 목록 -> ");
+
+        for (int i=0; i<sessionList.size(); i++) {
+            System.out.println("[" + (i+1) + "] : " + sessionList.get(i).getStationChgrId());
+        }
+
+        System.out.println("[ 총 session 수 : " + sessionList.size() + " ]");
+        System.out.println("--------------------------------------------------------------------------");
+    }
 
 }

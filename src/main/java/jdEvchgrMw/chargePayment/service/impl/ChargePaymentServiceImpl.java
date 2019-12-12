@@ -36,8 +36,8 @@ public class ChargePaymentServiceImpl extends EgovAbstractServiceImpl implements
 
         if(egovMap != null) {
 
-            if(egovMap.get("rechgingListId") != null )
-                chargePaymentVO.setRechgSttListId(egovMap.get("rechgingListId").toString());
+            if(egovMap.get("rechgSttListId") != null )
+                chargePaymentVO.setRechgSttListId(egovMap.get("rechgSttListId").toString());
 
             if(egovMap.get("rechgDemandAmt") != null )
                 chargePaymentVO.setPPayAmt(Integer.valueOf(egovMap.get("rechgDemandAmt").toString()));      //충전 결제 정보의 선결제 정보 조회 CALL
@@ -47,6 +47,9 @@ public class ChargePaymentServiceImpl extends EgovAbstractServiceImpl implements
 
             if(egovMap.get("creditPPayTrxDt") != null )
                 chargePaymentVO.setPPayTrxDt(egovMap.get("creditPPayTrxDt").toString());
+
+            if(egovMap.get("chgrTxDt") != null )
+                chargePaymentVO.setPPayTxDt(egovMap.get("chgrTxDt").toString());
 
         }
 
@@ -60,8 +63,8 @@ public class ChargePaymentServiceImpl extends EgovAbstractServiceImpl implements
 
         if(egovMap != null) {
 
-            if(egovMap.get("rechgingListId") != null )
-                chargePaymentVO.setRechgSttListId(egovMap.get("rechgingListId").toString());
+            if(egovMap.get("rechgSttListId") != null )
+                chargePaymentVO.setRechgSttListId(egovMap.get("rechgSttListId").toString());
         }
 
         return chargePaymentMapper.creditTrxInfoUpdate(chargePaymentVO);

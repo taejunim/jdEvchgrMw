@@ -29,8 +29,9 @@ public class UserVO {
     private String memAuthInputNo;          //회원 인증 입력 번호
     private String resDt;                   //응답 일시
     private String authRsltCd;              //인증 결과 코드
-    private String spotPayYn;               //현장 결제 여부
-    private String chgrPayingYn;            //충전기 유료 여부
+    private String authRsltValid;           //인증 결과 유효
+
+
     private String memProviderId;           //회원 충전사업자 ID
     private String price;                   //단가
     private String chgrTxDt;                //충전기 전송 일시

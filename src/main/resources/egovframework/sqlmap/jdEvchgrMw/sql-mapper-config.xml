@@ -2,12 +2,18 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
+    <settings>
+        <!-- 자동으로 카멜케이스 규칙으로 변환 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
     <typeAliases>
 		<typeAlias alias="egovMap" 		    type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
         <typeAlias alias="alarmHistoryVO"   type="jdEvchgrMw.vo.AlarmHistoryVO"/>
         <typeAlias alias="changeModeVO"	    type="jdEvchgrMw.vo.ChangeModeVO"/>
         <typeAlias alias="chargerPlugVO"	type="jdEvchgrMw.vo.ChargerPlugVO"/>
         <typeAlias alias="chgrInfoVO"	    type="jdEvchgrMw.vo.ChgrInfoVO"/>
+        <typeAlias alias="deviceConfigVO"	type="jdEvchgrMw.vo.DeviceConfigVO"/>
         <typeAlias alias="fwVerInfoVO"	    type="jdEvchgrMw.vo.FwVerInfoVO"/>
         <typeAlias alias="revMsgVO"         type="jdEvchgrMw.vo.RevMsgVO"/>
         <typeAlias alias="chgrStatusVO"     type="jdEvchgrMw.vo.ChgrStatusVO"/>

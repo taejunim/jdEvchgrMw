@@ -65,7 +65,4 @@ public class ChgrInfoVO extends FwVerInfoVO {
 	private String plugTypeCd;			//플러그 타입 코드
 	private int chId;					//채널 ID
 	//private String chargerPayYn;		//충전기 과금 여부
-
-	private FwVerInfoVO fwVerInfoVO;
-
 }

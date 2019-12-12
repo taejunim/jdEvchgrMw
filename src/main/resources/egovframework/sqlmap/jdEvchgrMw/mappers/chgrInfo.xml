@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jdEvchgrMw.chgrInfo.service.impl.ChgrInfoMapper">
 
-    <select id="deviceConfigSelect" parameterType="chgrInfoVO">
+    <select id="deviceConfigSelect" parameterType="deviceConfigVO" resultType="deviceConfigVO">
 
         SELECT PROVIDER_ID
              , ST_ID
@@ -121,7 +121,7 @@
                   , PLUG_TYPE_CD    = #{plugTypeCd}
 
                  ON DUPLICATE KEY UPDATE
-                  , PLUG_TYPE_CD    = #{plugTypeCd}
+                    PLUG_TYPE_CD    = #{plugTypeCd}
 
     </insert>
 
@@ -135,7 +135,7 @@
                   , FW_TP           = #{fwType}
 
                  ON DUPLICATE KEY UPDATE
-                  , VER    = #{currVer}
+                    VER             = #{currVer}
 
     </insert>
 

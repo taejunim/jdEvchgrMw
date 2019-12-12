@@ -34,7 +34,7 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
 
         EgovMap egovMap = userMapper.userAuthSelect(userVO);               //회원 인증 조회 CALL
 
-        if(egovMap != null){
+        if (egovMap != null) {
 
             userVO.setCustId(egovMap.get("custId").toString());             //고객 ID
             userVO.setPayKindCd(egovMap.get("payKindCd").toString());       //결제 종류 코드
@@ -46,18 +46,30 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
             userVO.setModDt(egovMap.get("modDt") == null ? "" : egovMap.get("modDt").toString());               //수정 일시
             userVO.setModUid(egovMap.get("modUid") == null ? "" : egovMap.get("modUid").toString());             //수정 UID
             userVO.setProviderId(egovMap.get("providerId").toString());     //충전사업자 ID
-            userVO.setProviderId(egovMap.get("bId").toString());     //충전사업자 ID
+            userVO.setBId(egovMap.get("bId").toString());     //충전사업자 ID
 
-            if (userVO.getStopYn().equals("Y") || userVO.getValidYn().equals("N"))  //카드 정지 또는  유효여부 체크
+            //카드 정지 또는  유효여부 체크
+            if (userVO.getStopYn().equals("Y") || userVO.getValidYn().equals("N")) {
+
                 userVO.setAuthResult("2");
+                userVO.setAuthRsltCd("0"); //인증실패
+            }
 
-            else {                                                                  //성공
+            //성공
+            else {
 
                 userVO.setAuthResult("3");
-                userVO.setCurrentUnitCost(userMapper.userPriceSelect(userVO));      //단가 정보 조회 SET
+                userVO.setAuthRsltCd("1"); //인증성공
+                userVO.setCurrentUnitCost(userMapper.userPriceSelect(userVO));  //단가 정보 조회 SET
             }
-        }else                                                                      //카드번호 오류
+        }
+
+        //카드번호 오류
+        else {
+
             userVO.setAuthResult("4");
+            userVO.setAuthRsltCd("0");  //인증실패
+        }
 
         return userVO;
     }

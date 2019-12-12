@@ -15,13 +15,13 @@ import java.util.UUID;
 import static jdEvchgrMw.websocket.jdEvChgrMwMain.sessionList;
 
 /**
- * @ Class Name  : JsonDataParsing.java
- * @ Description : JSON DATA PARSING
+ * @ Class Name  : JsonDataParsingForControl.java
+ * @ Description : 관제 제어 JSON DATA PARSING
  * @ Modification Information
  * @
  * @ 수정일      		  수정자                 			         수정 내용
  * @ ----------   ----------   -------------------------------
- * @ 2018.07.02              고재훈    				 	최초 생성
+ * @ 2018.07.02              임태준    				 	최초 생성
  * @ since
  * @ version
  * @ see
@@ -33,6 +33,7 @@ public class JsonDataParsingForControl {
 
     CollectServiceBean csb = new CollectServiceBean();
     SimpleDateFormat sdf = new SimpleDateFormat ( "yyyy년 MM월 dd일 HH시 mm분 ss초");
+    SimpleDateFormat responseDateFormat = new SimpleDateFormat ( "yyyyMMddHHmmss");
 
     /**
      * JSON DATA PARSING MAIN
@@ -63,7 +64,8 @@ public class JsonDataParsingForControl {
             commonVO.setSendType(send_type);
             commonVO.setActionType(action_type);
             commonVO.setData(data);
-
+            commonVO.setResponseDate(responseDateFormat.format(dt));
+            commonVO.setStationId("");
             commonVO.setResponseReceive("1");
             commonVO.setResponseReason("");
 
@@ -72,7 +74,6 @@ public class JsonDataParsingForControl {
 
                 protocolErrorMsgSend(commonVO);
                 return;
-
             }
 
             //데이터 정상 -> 파싱 시작
@@ -123,10 +124,13 @@ public class JsonDataParsingForControl {
         //응답 보내기
         sendMessage(commonVO);
 
-        if (commonVO.getStationId().length() <= 6) {
+        //충전기가 stationId 를 받을 때는 providerId 도 받아야 함
+        if (!commonVO.getStationId().equals("") && commonVO.getStationId() != null && commonVO.getStationId().length() <= 6) {
             commonVO.setStationId(commonVO.getProviderId() + commonVO.getStationId());
         }
+        System.out.println("[ before commonVO.getStationId() : "+ commonVO.getStationId() +" ]");
 
+        //충전기에 제어 보내기
         controlMw(commonVO);
 
     }
@@ -151,6 +155,7 @@ public class JsonDataParsingForControl {
             sendData.put("response_receive", commonVO.getResponseReceive());
             sendData.put("response_reason", commonVO.getResponseReason());
 
+            //단가 제어
             if (commonVO.getActionType().equals("prices")) {
 
                 JSONArray pricesArray = new JSONArray();
@@ -167,7 +172,10 @@ public class JsonDataParsingForControl {
 
                 sendData.put("req_chgr", pricesArray);
 
-            } else {
+            }
+
+            //그 외
+            else {
                 sendData.put("ctrl_list_id", commonVO.getCtrlListId());
                 sendData.put("station_id", commonVO.getStationId());
                 sendData.put("chgr_id", commonVO.getChgrId());
@@ -176,14 +184,6 @@ public class JsonDataParsingForControl {
             sendJsonObject.put("data", sendData);
 
             System.out.println("관제로 보낼 JSON : " + sendJsonObject);
-
-            //응답 데이터 DB에 저장
-            ChgrInfoVO chgrInfoVO = new ChgrInfoVO();
-            chgrInfoVO.setMsgSendType(sendJsonObject.get("send_type").toString());
-            chgrInfoVO.setMsgActionType(sendJsonObject.get("action_type").toString());
-            chgrInfoVO.setMsgData(sendJsonObject.get("data").toString());
-
-            //csb.beanChgrInfoService().chgrInfoDataInsert(chgrInfoVO);
 
             commonVO.getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
 
@@ -265,6 +265,8 @@ public class JsonDataParsingForControl {
                 for (int i=0; i<sessionList.size(); i++) {
 
                     System.out.println("충전기로 보낼 JSON : " + sendJsonObject);
+                    System.out.println("sessionList.get(i).getStationChgrId() : " + sessionList.get(i).getStationChgrId());
+                    System.out.println("commonVO.getStationId() + commonVO.getChgrId() : " + commonVO.getStationId() + commonVO.getChgrId());
 
                     if (sessionList.get(i).getStationChgrId().equals(commonVO.getStationId() + commonVO.getChgrId())) {
                         System.out.println("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getStationId() + commonVO.getChgrId());
@@ -326,6 +328,10 @@ public class JsonDataParsingForControl {
                 }
             }
 
+            //전문 이력 인서트
+            commonVO.setRcvMsg(sendJsonObject.toString());
+            commonVO = txMsgListInsert(commonVO);
+
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -334,6 +340,7 @@ public class JsonDataParsingForControl {
         }
     }
 
+    //제어 - 충전기 리셋
     private CommonVO resetParsingData(CommonVO commonVO) {
 
         try {
@@ -347,11 +354,17 @@ public class JsonDataParsingForControl {
             String chgr_id = (String) data.get("chgr_id");
             String send_date = (String) data.get("send_date");
 
+            commonVO.setCtrlListId(ctrl_list_id);
+            commonVO.setStationId(station_id);
+            commonVO.setChgrId(chgr_id);
+            commonVO.setSendDate(send_date);
+
             if (ctrl_list_id.equals("") || ctrl_list_id == null || station_id.equals("") || station_id == null ||
                     chgr_id.equals("") || chgr_id == null || send_date.equals("") || send_date == null) {
 
                 commonVO.setResponseReceive("0");   //실패
                 commonVO.setResponseReason("12");   //파라미터 오류
+                commonVO = ctrlListUpdate(commonVO);
                 return commonVO;
             }
 
@@ -362,45 +375,24 @@ public class JsonDataParsingForControl {
             System.out.println("send_date : " + send_date);
             System.out.println("<------------------------------------------------>");
 
-            commonVO.setCtrlListId(ctrl_list_id);
-            commonVO.setStationId(station_id);
-            commonVO.setChgrId(chgr_id);
-
-            // req Data DB Insert
-            /*try {
-                AlarmHistoryVO alarmHistoryVO = new AlarmHistoryVO();
-
-                //추후 PROVIDER_ID 하드코딩한거 수정해야 함
-                //chgrInfoVO.setProviderId(commonVO.getStationId().substring(0,2));
-                alarmHistoryVO.setAlarmStateCd(alarm_type);
-                alarmHistoryVO.setOccurDt(alarm_date);
-                alarmHistoryVO.setAlarmCd(alarm_code);
-                alarmHistoryVO.setProviderId("JD");
-                alarmHistoryVO.setStId(commonVO.getStationId());
-                alarmHistoryVO.setChgrId(commonVO.getChgrId());
-                alarmHistoryVO.setChgrTxDt(create_date);
-                alarmHistoryVO.setMwKindCd("WS");
-                alarmHistoryVO.setRTimeYn("Y");
-
-                System.out.println("<----------------------- Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                System.out.println("<----------------------- DB Insert 오류 ------------------------->");
-                unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-                return;
-            }*/
+            //제어 이력 업데이트
+            commonVO = ctrlListUpdate(commonVO);
 
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
             parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
 
         return commonVO;
     }
 
+    //제어 - 단가
     private CommonVO pricesParsingData(CommonVO commonVO) {
 
         try {
@@ -420,9 +412,12 @@ public class JsonDataParsingForControl {
                 String station_id = (String) tmp.get("station_id");
                 String chgr_id = (String) tmp.get("chgr_id");
 
+                commonVO.setCtrlListId(ctrl_list_id);
+
                 if (ctrl_list_id.equals("") || ctrl_list_id == null || station_id.equals("") || station_id == null || chgr_id.equals("") || chgr_id == null) {
                     commonVO.setResponseReceive("0");   //실패
                     commonVO.setResponseReason("12");   //파라미터 오류
+                    commonVO = ctrlListUpdate(commonVO);
                     return commonVO;
                 }
 
@@ -437,6 +432,9 @@ public class JsonDataParsingForControl {
                 controlChgrVO.setStationId(station_id);
                 controlChgrVO.setChgrId(chgr_id);
                 controlChgrVOArrayList.add(controlChgrVO);
+
+                //제어 이력 업데이트
+                commonVO = ctrlListUpdate(commonVO);
             }
 
             String send_date = (String) data.get("send_date");
@@ -497,6 +495,7 @@ public class JsonDataParsingForControl {
 
                 commonVO.setResponseReceive("0");   //실패
                 commonVO.setResponseReason("12");   //파라미터 오류
+                commonVO = ctrlListUpdate(commonVO);
                 return commonVO;
             }
             System.out.println("controlChgrVOArrayList : " + controlChgrVOArrayList);
@@ -528,37 +527,13 @@ public class JsonDataParsingForControl {
             System.out.println("h23 : " + h23);
             System.out.println("<------------------------------------------------>");
 
+            commonVO.setHourVO(hourVO);
             commonVO.setCostSdd(cost_sdd);
             commonVO.setControlChgrVOArrayList(controlChgrVOArrayList);
-
-            // req Data DB Insert
-            /*try {
-                AlarmHistoryVO alarmHistoryVO = new AlarmHistoryVO();
-
-                //추후 PROVIDER_ID 하드코딩한거 수정해야 함
-                //chgrInfoVO.setProviderId(commonVO.getStationId().substring(0,2));
-                alarmHistoryVO.setAlarmStateCd(alarm_type);
-                alarmHistoryVO.setOccurDt(alarm_date);
-                alarmHistoryVO.setAlarmCd(alarm_code);
-                alarmHistoryVO.setProviderId("JD");
-                alarmHistoryVO.setStId(commonVO.getStationId());
-                alarmHistoryVO.setChgrId(commonVO.getChgrId());
-                alarmHistoryVO.setChgrTxDt(create_date);
-                alarmHistoryVO.setMwKindCd("WS");
-                alarmHistoryVO.setRTimeYn("Y");
-
-                System.out.println("<----------------------- Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                System.out.println("<----------------------- DB Insert 오류 ------------------------->");
-                unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-                return;
-            }*/
+            commonVO.setSendDate(send_date);
 
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
             parameterErrorMsgSend(commonVO);
         }
@@ -566,6 +541,7 @@ public class JsonDataParsingForControl {
         return commonVO;
     }
 
+    //제어 - 운영 모드 변경
     private CommonVO changeModeParsingData(CommonVO commonVO) {
 
         try {
@@ -580,11 +556,17 @@ public class JsonDataParsingForControl {
             String send_date = (String) data.get("send_date");
             String change_mode = (String) data.get("change_mode");
 
+            commonVO.setCtrlListId(ctrl_list_id);
+            commonVO.setStationId(station_id);
+            commonVO.setChgrId(chgr_id);
+            commonVO.setSendDate(send_date);
+
             if (ctrl_list_id.equals("") || ctrl_list_id == null || station_id.equals("") || station_id == null ||
                     chgr_id.equals("") || chgr_id == null || send_date.equals("") || send_date == null || change_mode.equals("") || change_mode == null) {
 
                 commonVO.setResponseReceive("0");   //실패
                 commonVO.setResponseReason("12");   //파라미터 오류
+                commonVO = ctrlListUpdate(commonVO);
                 return commonVO;
             }
 
@@ -596,42 +578,15 @@ public class JsonDataParsingForControl {
             System.out.println("change_mode : " + change_mode);
             System.out.println("<------------------------------------------------>");
 
-            commonVO.setCtrlListId(ctrl_list_id);
-            commonVO.setStationId(station_id);
-            commonVO.setChgrId(chgr_id);
-
             ChangeModeVO changeModeVO = new ChangeModeVO();
             changeModeVO.setChangeMode(change_mode);
             commonVO.setChangeModeVO(changeModeVO);
 
-            // req Data DB Insert
-            /*try {
-                AlarmHistoryVO alarmHistoryVO = new AlarmHistoryVO();
-
-                //추후 PROVIDER_ID 하드코딩한거 수정해야 함
-                //chgrInfoVO.setProviderId(commonVO.getStationId().substring(0,2));
-                alarmHistoryVO.setAlarmStateCd(alarm_type);
-                alarmHistoryVO.setOccurDt(alarm_date);
-                alarmHistoryVO.setAlarmCd(alarm_code);
-                alarmHistoryVO.setProviderId("JD");
-                alarmHistoryVO.setStId(commonVO.getStationId());
-                alarmHistoryVO.setChgrId(commonVO.getChgrId());
-                alarmHistoryVO.setChgrTxDt(create_date);
-                alarmHistoryVO.setMwKindCd("WS");
-                alarmHistoryVO.setRTimeYn("Y");
-
-                System.out.println("<----------------------- Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                System.out.println("<----------------------- DB Insert 오류 ------------------------->");
-                unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-                return;
-            }*/
+            //제어 이력 업데이트
+            commonVO = ctrlListUpdate(commonVO);
 
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
             parameterErrorMsgSend(commonVO);
         }
@@ -639,6 +594,7 @@ public class JsonDataParsingForControl {
         return commonVO;
     }
 
+    //제어 - 화면 밝기 정보
     private CommonVO displayBrightnessParsingData(CommonVO commonVO) {
 
         try {
@@ -703,11 +659,18 @@ public class JsonDataParsingForControl {
             hourVO.setH22(h22);
             hourVO.setH23(h23);
 
+            commonVO.setCtrlListId(ctrl_list_id);
+            commonVO.setStationId(station_id);
+            commonVO.setChgrId(chgr_id);
+            commonVO.setHourVO(hourVO);
+            commonVO.setSendDate(send_date);
+
             if (ctrl_list_id.equals("") || ctrl_list_id == null || station_id.equals("") || station_id == null ||
                     chgr_id.equals("") || chgr_id == null || send_date.equals("") || send_date == null) {
 
                 commonVO.setResponseReceive("0");   //실패
                 commonVO.setResponseReason("12");   //파라미터 오류
+                commonVO = ctrlListUpdate(commonVO);
                 return commonVO;
             }
 
@@ -743,41 +706,11 @@ public class JsonDataParsingForControl {
             System.out.println("h23 : " + h23);
             System.out.println("<------------------------------------------------>");
 
-            commonVO.setCtrlListId(ctrl_list_id);
-            commonVO.setStationId(station_id);
-            commonVO.setChgrId(chgr_id);
-            commonVO.setHourVO(hourVO);
-
-
-
-            // req Data DB Insert
-            /*try {
-                AlarmHistoryVO alarmHistoryVO = new AlarmHistoryVO();
-
-                //추후 PROVIDER_ID 하드코딩한거 수정해야 함
-                //chgrInfoVO.setProviderId(commonVO.getStationId().substring(0,2));
-                alarmHistoryVO.setAlarmStateCd(alarm_type);
-                alarmHistoryVO.setOccurDt(alarm_date);
-                alarmHistoryVO.setAlarmCd(alarm_code);
-                alarmHistoryVO.setProviderId("JD");
-                alarmHistoryVO.setStId(commonVO.getStationId());
-                alarmHistoryVO.setChgrId(commonVO.getChgrId());
-                alarmHistoryVO.setChgrTxDt(create_date);
-                alarmHistoryVO.setMwKindCd("WS");
-                alarmHistoryVO.setRTimeYn("Y");
-
-                System.out.println("<----------------------- Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                System.out.println("<----------------------- DB Insert 오류 ------------------------->");
-                unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-                return;
-            }*/
+            //제어 이력 업데이트
+            commonVO = ctrlListUpdate(commonVO);
 
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
             parameterErrorMsgSend(commonVO);
         }
@@ -785,6 +718,7 @@ public class JsonDataParsingForControl {
         return commonVO;
     }
 
+    //제어 - 소리 정보
     private CommonVO soundParsingData(CommonVO commonVO) {
 
         try {
@@ -849,11 +783,18 @@ public class JsonDataParsingForControl {
             hourVO.setH22(h22);
             hourVO.setH23(h23);
 
+            commonVO.setCtrlListId(ctrl_list_id);
+            commonVO.setStationId(station_id);
+            commonVO.setChgrId(chgr_id);
+            commonVO.setHourVO(hourVO);
+            commonVO.setSendDate(send_date);
+
             if (ctrl_list_id.equals("") || ctrl_list_id == null || station_id.equals("") || station_id == null ||
                     chgr_id.equals("") || chgr_id == null || send_date.equals("") || send_date == null) {
 
                 commonVO.setResponseReceive("0");   //실패
                 commonVO.setResponseReason("12");   //파라미터 오류
+                commonVO = ctrlListUpdate(commonVO);
                 return commonVO;
             }
 
@@ -890,41 +831,11 @@ public class JsonDataParsingForControl {
 
             System.out.println("<------------------------------------------------>");
 
-            commonVO.setCtrlListId(ctrl_list_id);
-            commonVO.setStationId(station_id);
-            commonVO.setChgrId(chgr_id);
-            commonVO.setHourVO(hourVO);
-
-
-
-            // req Data DB Insert
-            /*try {
-                AlarmHistoryVO alarmHistoryVO = new AlarmHistoryVO();
-
-                //추후 PROVIDER_ID 하드코딩한거 수정해야 함
-                //chgrInfoVO.setProviderId(commonVO.getStationId().substring(0,2));
-                alarmHistoryVO.setAlarmStateCd(alarm_type);
-                alarmHistoryVO.setOccurDt(alarm_date);
-                alarmHistoryVO.setAlarmCd(alarm_code);
-                alarmHistoryVO.setProviderId("JD");
-                alarmHistoryVO.setStId(commonVO.getStationId());
-                alarmHistoryVO.setChgrId(commonVO.getChgrId());
-                alarmHistoryVO.setChgrTxDt(create_date);
-                alarmHistoryVO.setMwKindCd("WS");
-                alarmHistoryVO.setRTimeYn("Y");
-
-                System.out.println("<----------------------- Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                System.out.println("<----------------------- DB Insert 오류 ------------------------->");
-                unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-                return;
-            }*/
+            //제어 이력 업데이트
+            commonVO = ctrlListUpdate(commonVO);
 
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
             parameterErrorMsgSend(commonVO);
         }
@@ -932,6 +843,7 @@ public class JsonDataParsingForControl {
         return commonVO;
     }
 
+    //제어 - 펌웨어 버전 정보 확인
     private CommonVO askVerParsingData(CommonVO commonVO) {
 
         try {
@@ -946,11 +858,17 @@ public class JsonDataParsingForControl {
             String send_date = (String) data.get("send_date");
             String fw_type = (String) data.get("fw_type");
 
+            commonVO.setCtrlListId(ctrl_list_id);
+            commonVO.setStationId(station_id);
+            commonVO.setChgrId(chgr_id);
+            commonVO.setSendDate(send_date);
+
             if (ctrl_list_id.equals("") || ctrl_list_id == null || station_id.equals("") || station_id == null ||
                     chgr_id.equals("") || chgr_id == null || send_date.equals("") || send_date == null  || fw_type.equals("") || fw_type == null) {
 
                 commonVO.setResponseReceive("0");   //실패
                 commonVO.setResponseReason("12");   //파라미터 오류
+                commonVO = ctrlListUpdate(commonVO);
                 return commonVO;
             }
 
@@ -962,44 +880,57 @@ public class JsonDataParsingForControl {
             System.out.println("fw_type : " + fw_type);
             System.out.println("<------------------------------------------------>");
 
-            commonVO.setCtrlListId(ctrl_list_id);
-            commonVO.setStationId(station_id);
-            commonVO.setChgrId(chgr_id);
-
             FwVerInfoVO fwVerInfoVO = new FwVerInfoVO();
             fwVerInfoVO.setFwType(fw_type);
             commonVO.setFwVerInfoVO(fwVerInfoVO);
 
-            // req Data DB Insert
-            /*try {
-                AlarmHistoryVO alarmHistoryVO = new AlarmHistoryVO();
-
-                //추후 PROVIDER_ID 하드코딩한거 수정해야 함
-                //chgrInfoVO.setProviderId(commonVO.getStationId().substring(0,2));
-                alarmHistoryVO.setAlarmStateCd(alarm_type);
-                alarmHistoryVO.setOccurDt(alarm_date);
-                alarmHistoryVO.setAlarmCd(alarm_code);
-                alarmHistoryVO.setProviderId("JD");
-                alarmHistoryVO.setStId(commonVO.getStationId());
-                alarmHistoryVO.setChgrId(commonVO.getChgrId());
-                alarmHistoryVO.setChgrTxDt(create_date);
-                alarmHistoryVO.setMwKindCd("WS");
-                alarmHistoryVO.setRTimeYn("Y");
-
-                System.out.println("<----------------------- Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-
-                System.out.println("<----------------------- DB Insert 오류 ------------------------->");
-                unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-                return;
-            }*/
+            //제어 이력 업데이트
+            commonVO = ctrlListUpdate(commonVO);
 
         } catch (ParseException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
             parameterErrorMsgSend(commonVO);
+        }
+
+        return commonVO;
+    }
+
+    //제어 이력 업데이트(관제 <-> M/W)
+    public CommonVO ctrlListUpdate(CommonVO commonVO) {
+
+        ControlChgrVO controlChgrVO = new ControlChgrVO();
+        controlChgrVO.setCtrlListId(commonVO.getCtrlListId());
+        controlChgrVO.setMwKindCd("WS");
+        controlChgrVO.setResDt(commonVO.getResponseDate());
+        controlChgrVO.setResCd(commonVO.getResponseReceive());
+        controlChgrVO.setResRsnCd(commonVO.getResponseReason());
+
+        try {
+            System.out.println("<----------------------- 제어 이력 Update OK -------------------------> : " + csb.controlChgrService().ctrlListUpdate(controlChgrVO));
+        } catch (Exception e) {
+            e.printStackTrace();
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+        }
+
+        return commonVO;
+    }
+
+    //전문 이력 인서트(M/W <-> 충전기)
+    public CommonVO txMsgListInsert(CommonVO commonVO) {
+
+        ControlChgrVO controlChgrVO = new ControlChgrVO();
+        controlChgrVO.setCtrlListId(commonVO.getCtrlListId());
+        controlChgrVO.setUuid(commonVO.getUuid());
+        controlChgrVO.setDataCreateDt(commonVO.getSendDate());
+        controlChgrVO.setTxDt(commonVO.getResponseDate());
+        controlChgrVO.setTxMsg(commonVO.getRcvMsg());
+
+        try {
+            System.out.println("<----------------------- 전문 이력 Insert OK -------------------------> : " + csb.controlChgrService().txMsgListInsert(controlChgrVO));
+        } catch (Exception e) {
+            e.printStackTrace();
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
 
         return commonVO;
@@ -1051,7 +982,7 @@ public class JsonDataParsingForControl {
         return;
     }
 
-    public void unknownErrorMsgSend(CommonVO commonVO, String msg) {
+    public CommonVO unknownErrorMsgSend(CommonVO commonVO, String msg) {
 
         System.out.println("내부 오류 입니다. 받은 uuid : " + commonVO.getUuid() + ", 받은 send_type : "
                 + commonVO.getSendType() + ", 받은 action_type : " + commonVO.getActionType() + ", 받은 data : " + commonVO.getData());
@@ -1059,8 +990,7 @@ public class JsonDataParsingForControl {
 
         commonVO.setResponseReceive("0");
         commonVO.setResponseReason("15");
-        sendMessage(commonVO);
 
-        return;
+        return commonVO;
     }
 }

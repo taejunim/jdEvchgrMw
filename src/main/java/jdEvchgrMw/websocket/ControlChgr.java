@@ -42,7 +42,7 @@ public class ControlChgr {
     }
     
     /**
-     * MSG RECIEVE CALL EVENET
+     * MSG RECEIVE CALL EVENT
      * @param message
      */
     @OnMessage
