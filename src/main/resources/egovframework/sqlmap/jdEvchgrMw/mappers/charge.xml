@@ -62,6 +62,7 @@
                                            AND mal.ST_ID       = #{stId}
                                            AND mal.CHGR_ID     = #{chgrId}
                                            AND mal.CH_ID       = #{chId}
+                                           AND mal.MEM_AUTH_INPUT_NO = #{memAuthInputNo}
                                       ORDER BY mal.REG_DT
                                           DESC LIMIT 1
                                       )
@@ -131,7 +132,7 @@
                                            AND rsl.ST_ID       = #{stId}
                                            AND rsl.CHGR_ID     = #{chgrId}
                                            AND rsl.CH_ID       = #{chId}
-                                           AND rsl.R_TIME_YN   = 'Y'
+                                           AND rsl.RECHG_SDT   = #{rechgSdt}
                                       ORDER BY rsl.REG_DT
                                           DESC LIMIT 1
                                       )
@@ -156,6 +157,7 @@
                                            AND mal.ST_ID       = #{stId}
                                            AND mal.CHGR_ID     = #{chgrId}
                                            AND mal.CH_ID       = #{chId}
+                                           AND mal.MEM_AUTH_INPUT_NO = #{memAuthInputNo}
                                       ORDER BY mal.REG_DT
                                           DESC LIMIT 1
                                       )
@@ -229,7 +231,7 @@
                                                AND rsl.ST_ID       = #{stId}
                                                AND rsl.CHGR_ID     = #{chgrId}
                                                AND rsl.CH_ID       = #{chId}
-                                               AND rsl.R_TIME_YN   = 'Y'
+                                               AND rsl.RECHG_SDT   = #{rechgSdt}
                                           ORDER BY rsl.REG_DT
                                               DESC LIMIT 1
                                           )
@@ -256,6 +258,7 @@
                                                AND mal.ST_ID       = #{stId}
                                                AND mal.CHGR_ID     = #{chgrId}
                                                AND mal.CH_ID       = #{chId}
+                                               AND mal.MEM_AUTH_INPUT_NO = #{memAuthInputNo}
                                           ORDER BY mal.REG_DT
                                               DESC LIMIT 1
                                           )

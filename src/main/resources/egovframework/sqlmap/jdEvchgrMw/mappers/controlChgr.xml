@@ -30,7 +30,7 @@
                                     #{ctrlListId}
                                     , #{uuid}
                                     , #{dataCreateDt}
-                                    , #{chgrTxDt}
+                                    , #{txDt}
                                     , #{txMsg}
 
                                 )
