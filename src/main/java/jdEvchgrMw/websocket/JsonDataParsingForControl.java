@@ -274,6 +274,11 @@ public class JsonDataParsingForControl {
                         break;
                     }
                 }
+
+                //전문 이력 인서트
+                commonVO.setRcvMsg(sendJsonObject.toString());
+                commonVO = txMsgListInsert(commonVO);
+
             }
 
             //단가 제어
@@ -323,14 +328,15 @@ public class JsonDataParsingForControl {
                             System.out.println("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getStationId() + commonVO.getChgrId());
                             System.out.println("충전기로 보낼 JSON : " + sendJsonObject);
                             sessionList.get(i).getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
+
+                            //전문 이력 인서트
+                            commonVO.setRcvMsg(sendJsonObject.toString());
+                            commonVO.setCtrlListId(commonVO.getControlChgrVOArrayList().get(j).getCtrlListId());
+                            commonVO = txMsgListInsert(commonVO);
                         }
                     }
                 }
             }
-
-            //전문 이력 인서트
-            commonVO.setRcvMsg(sendJsonObject.toString());
-            commonVO = txMsgListInsert(commonVO);
 
         } catch (Exception e) {
             e.printStackTrace();

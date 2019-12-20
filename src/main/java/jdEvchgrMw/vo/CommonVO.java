@@ -19,6 +19,9 @@ public class CommonVO {
 	private String actionType;		//ACTION TYPE
 	private String data;			//DATA
 	private String sendDate;		//전송일시 - YYYYMMDDhhmmss
+	private String createDate;		//데이터 생성 일시
+	private String rTimeYn;         //실시간 여부
+	private String recvLogId;       //수신 로그 ID
 
 	private String responseDate;	//응답일시 - YYYYMMDDhhmmss
 	//private String reqCreateDate;	//정보생성일시
