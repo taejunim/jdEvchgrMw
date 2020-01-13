@@ -230,7 +230,7 @@
                                                AND rsl.PROVIDER_ID = #{providerId}
                                                AND rsl.ST_ID       = #{stId}
                                                AND rsl.CHGR_ID     = #{chgrId}
-                                               AND rsl.CH_ID       = #{chId}
+                                               AND rsl.PLUG_TYPE_CD= #{plugTypeCd}
                                                AND rsl.RECHG_SDT   = #{rechgSdt}
                                           ORDER BY rsl.REG_DT
                                               DESC LIMIT 1

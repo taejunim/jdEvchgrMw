@@ -57,12 +57,37 @@ public class jdEvChgrMwMain {
 
     	//세션 로그 출력
         sessionListLog();
+        System.out.println("[ Bytes: " + getByteLength(message) + " ]");
         System.out.println("[ 충전기 -> M/W : "+ commonVO.getRcvMsg() +" ]");
 
         JsonDataParsing jdp         = new JsonDataParsing();
     	jdp.jsonDataParsingMain(commonVO);
     }
-    
+
+    public int getByteLength(String str) {
+
+        int strLength = 0;
+
+        char tempChar[] = new char[str.length()];
+
+        for (int i = 0; i < tempChar.length; i++) {
+
+            tempChar[i] = str.charAt(i);
+
+            if (tempChar[i] < 128) {
+
+                strLength++;
+
+            } else {
+
+                strLength += 2;
+            }
+        }
+
+        return strLength;
+
+    }
+
     /**
      * WEBSOCKET DISCONNECTED CALL EVENT
      */

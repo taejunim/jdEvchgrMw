@@ -17,7 +17,9 @@
                , CH3_RECHG_STATE_CD     = #{ch3RechgStateCd}
                , CH3_DOOR_STATE_CD      = #{ch3DoorStateCd}
                , CH3_PLUG_STATE_CD      = #{ch3PlugStateCd}
+               <if test = "powerboxState != '' and powerboxState != null">
                , POWERBOX_STATE         = #{powerboxState}
+               </if>
                , INTEGRATED_KWH         = #{integratedKwh}
                , MOD_DT                 = now()
 
@@ -48,7 +50,9 @@
                                     ,   CH3_RECHG_STATE_CD
                                     ,   CH3_DOOR_STATE_CD
                                     ,   CH3_PLUG_STATE_CD
+                                    <if test = "powerboxState != '' and powerboxState != null">
                                     ,   POWERBOX_STATE
+                                    </if>
                                     ,   INTEGRATED_KWH
                                     ,   CHGR_TX_DT
                                     ,   REG_DT
@@ -70,7 +74,9 @@
                                     ,   #{ch3RechgStateCd}
                                     ,   #{ch3DoorStateCd}
                                     ,   #{ch3PlugStateCd}
+                                    <if test = "powerboxState != '' and powerboxState != null">
                                     ,   #{powerboxState}
+                                    </if>
                                     ,   #{integratedKwh}
                                     ,   #{chgrTxDt}
                                     ,   now()
