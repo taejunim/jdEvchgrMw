@@ -181,7 +181,8 @@ public class JsonDataParsing {
 
         } catch (Exception e) {
             e.printStackTrace();
-            unknownErrorMsgSend(commonVO, "알 수 없는 오류입니다. 담당자에게 문의주세요.");
+            commonVO = unknownErrorMsgSend(commonVO, "알 수 없는 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         //응답 보내기 - 응답시에는 다시 사업자ID + 충전소ID로 보내야함
@@ -414,14 +415,15 @@ public class JsonDataParsing {
             System.out.println("보낼 JSON : " + sendJsonObject);
 
             commonVO.getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
-            commonVO.setRcvMsg(sendJsonObject.toString());
+            commonVO.setResMsg(sendJsonObject.toString());
 
             //수신 전문 이력 업데이트(M/W -> 충전기)
             commonVO = recvMsg(commonVO);
 
         } catch (Exception e) {
             e.printStackTrace();
-            unknownErrorMsgSend(commonVO, "예외 발생 : 클라이언트가 종료되어 MSG를 전송하지 못하였습니다.");
+            commonVO = unknownErrorMsgSend(commonVO, "예외 발생 : 클라이언트가 종료되어 MSG를 전송하지 못하였습니다.");
+            recvMsg(commonVO);
             return;
         }
     }
@@ -608,9 +610,6 @@ public class JsonDataParsing {
             commonVO.setSendDate(send_date);
             commonVO.setCreateDate(create_date);
 
-            //수신 전문 이력 인서트(충전기 -> M/W)
-            commonVO = recvMsg(commonVO);
-
         } catch (ParseException e) {
             e.printStackTrace();
             System.out.println("<----------------------- 파싱 오류 ------------------------->");
@@ -619,6 +618,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -710,8 +710,8 @@ public class JsonDataParsing {
             commonVO.setSendDate(send_date);
             commonVO.setCreateDate(create_date);
 
-            //수신 전문 이력 인서트(충전기 -> M/W)
-            commonVO = recvMsg(commonVO);
+
+
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -721,6 +721,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -771,8 +772,8 @@ public class JsonDataParsing {
             commonVO.setSendDate(send_date);
             commonVO.setCreateDate(create_date);
 
-            //수신 전문 이력 인서트(충전기 -> M/W)
-            commonVO = recvMsg(commonVO);
+
+
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -782,6 +783,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -888,8 +890,8 @@ public class JsonDataParsing {
             commonVO.setSendDate(send_date);
             commonVO.setCreateDate(create_date);
 
-            //수신 전문 이력 인서트(충전기 -> M/W)
-            commonVO = recvMsg(commonVO);
+
+
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -899,6 +901,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -975,11 +978,45 @@ public class JsonDataParsing {
 
             System.out.println("<----------------------- 충전 진행정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgingInsert(chargeVO));
 
+            //충전기 상태 변경
+            ChgrStatusVO chgrStatusVO = new ChgrStatusVO();
+            chgrStatusVO.setProviderId(commonVO.getProviderId());
+            chgrStatusVO.setStId(commonVO.getStationId());
+            chgrStatusVO.setChgrId(commonVO.getChgrId());
+            chgrStatusVO.setStateDt(create_date);
+            chgrStatusVO.setMwKindCd("WS");
+            chgrStatusVO.setRTimeYn("Y");
+            chgrStatusVO.setOpModeCd("1");
+            chgrStatusVO.setIntegratedKwh(String.valueOf(integrated_power));
+            chgrStatusVO.setChgrTxDt(send_date);
+
+            if (String.valueOf(plug_id).equals("1")) {
+
+                chgrStatusVO.setCh1RechgStateCd("2");
+                chgrStatusVO.setCh1DoorStateCd("2");
+                chgrStatusVO.setCh1PlugStateCd("2");
+
+            } else if (String.valueOf(plug_id).equals("2")) {
+
+                chgrStatusVO.setCh2RechgStateCd("2");
+                chgrStatusVO.setCh2DoorStateCd("2");
+                chgrStatusVO.setCh2PlugStateCd("2");
+
+            } else if (String.valueOf(plug_id).equals("3")) {
+
+                chgrStatusVO.setCh3RechgStateCd("2");
+                chgrStatusVO.setCh3DoorStateCd("2");
+                chgrStatusVO.setCh3PlugStateCd("2");
+            }
+
+            System.out.println("<----------------------- Insert OK -------------------------> : " + csb.chgrStateService().chgrStateInsert(chgrStatusVO));
+            System.out.println("<----------------------- Update OK -------------------------> : " + csb.chgrStateService().chgrCurrStateUpdate(chgrStatusVO));
+
             commonVO.setSendDate(send_date);
             commonVO.setCreateDate(create_date);
 
-            //수신 전문 이력 인서트(충전기 -> M/W)
-            commonVO = recvMsg(commonVO);
+
+
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -989,6 +1026,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1024,6 +1062,12 @@ public class JsonDataParsing {
             int charge_W = Integer.parseInt((String) data.get("charge_W"));
             int charge_cost = Integer.parseInt((String) data.get("charge_cost"));
 
+            String pay_fnsh_yn = "";
+
+            if (data.get("pay_fnsh_yn") != null && !(data.get("pay_fnsh_yn").equals(""))) {
+                pay_fnsh_yn = (String) data.get("pay_fnsh_yn");
+            }
+
             System.out.println("<----------- 충전 완료정보 Parsing Data ----------->");
             System.out.println("send_date : " + send_date);
             System.out.println("create_date : " + create_date);
@@ -1045,6 +1089,7 @@ public class JsonDataParsing {
             System.out.println("end_date : " + end_date);
             System.out.println("charge_cost : " + charge_cost);
             System.out.println("cancel_cost : " + cancel_cost);
+            System.out.println("pay_fnsh_yn : " + pay_fnsh_yn);
             System.out.println("<------------------------------------------------>");
 
             ChargeVO chargeVO = new ChargeVO();
@@ -1073,6 +1118,7 @@ public class JsonDataParsing {
             chargeVO.setCurrC(current_A);
             chargeVO.setDataCreateDt(create_date);
             chargeVO.setChgrTxDt(send_date);
+            chargeVO.setPayFnshYn(pay_fnsh_yn);
 
             System.out.println("<----------------------- 충전 완료정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgFnshInsert(chargeVO));
 
@@ -1113,8 +1159,8 @@ public class JsonDataParsing {
             commonVO.setSendDate(send_date);
             commonVO.setCreateDate(create_date);
 
-            //수신 전문 이력 인서트(충전기 -> M/W)
-            commonVO = recvMsg(commonVO);
+
+
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -1124,6 +1170,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1188,8 +1235,8 @@ public class JsonDataParsing {
             commonVO.setSendDate(send_date);
             commonVO.setCreateDate(create_date);
 
-            //수신 전문 이력 인서트(충전기 -> M/W)
-            commonVO = recvMsg(commonVO);
+
+
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -1199,6 +1246,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1251,8 +1299,8 @@ public class JsonDataParsing {
             commonVO.setSendDate(send_date);
             commonVO.setCreateDate(create_date);
 
-            //수신 전문 이력 인서트(충전기 -> M/W)
-            commonVO = recvMsg(commonVO);
+
+
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -1262,6 +1310,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1311,8 +1360,8 @@ public class JsonDataParsing {
             commonVO.setSendDate(send_date);
             commonVO.setCreateDate(create_date);
 
-            //수신 전문 이력 인서트(충전기 -> M/W)
-            commonVO = recvMsg(commonVO);
+
+
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -1322,6 +1371,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1379,8 +1429,8 @@ public class JsonDataParsing {
             commonVO.setSendDate(send_date);
             commonVO.setCreateDate(create_date);
 
-            //수신 전문 이력 인서트(충전기 -> M/W)
-            commonVO = recvMsg(commonVO);
+
+
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -1390,6 +1440,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1466,8 +1517,8 @@ public class JsonDataParsing {
                 commonVO.setSendDate(send_date);
                 commonVO.setCreateDate(create_date);
 
-                //수신 전문 이력 인서트(충전기 -> M/W)
-                commonVO = recvMsg(commonVO);
+
+
             }
 
         } catch (ParseException e) {
@@ -1478,6 +1529,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1572,8 +1624,8 @@ public class JsonDataParsing {
                 commonVO.setSendDate(send_date);
                 commonVO.setCreateDate(create_date);
 
-                //수신 전문 이력 인서트(충전기 -> M/W)
-                commonVO = recvMsg(commonVO);
+
+
             }
 
         } catch (ParseException e) {
@@ -1584,6 +1636,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1652,8 +1705,8 @@ public class JsonDataParsing {
                 commonVO.setSendDate(send_date);
                 commonVO.setCreateDate(create_date);
 
-                //수신 전문 이력 인서트(충전기 -> M/W)
-                commonVO = recvMsg(commonVO);
+
+
             }
 
         } catch (ParseException e) {
@@ -1664,6 +1717,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1717,8 +1771,8 @@ public class JsonDataParsing {
                 commonVO.setSendDate(send_date);
                 commonVO.setCreateDate(create_date);
 
-                //수신 전문 이력 인서트(충전기 -> M/W)
-                commonVO = recvMsg(commonVO);
+
+
             }
 
         } catch (ParseException e) {
@@ -1729,6 +1783,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1789,8 +1844,8 @@ public class JsonDataParsing {
                 commonVO.setSendDate(send_date);
                 commonVO.setCreateDate(create_date);
 
-                //수신 전문 이력 인서트(충전기 -> M/W)
-                commonVO = recvMsg(commonVO);
+
+
             }
 
         } catch (ParseException e) {
@@ -1801,6 +1856,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1884,6 +1940,7 @@ public class JsonDataParsing {
             e.printStackTrace();
             System.out.println("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+
             //전문 이력 업데이트
             commonVO = txMsgListUpdate(commonVO);
         }
@@ -1895,41 +1952,29 @@ public class JsonDataParsing {
     public CommonVO recvMsg(CommonVO commonVO) {
 
         try {
-            
+
             RevMsgVO revMsgVO = new RevMsgVO();
-            
-            //충전기 -> M/W  --Insert
-            if (commonVO.getSendType().equals("req")) {
 
-                String recvLogId = csb.revMsgService().getRecvLogId();
+            String providerId = commonVO.getProviderId();
+            String stationId = commonVO.getStationId();
 
-                revMsgVO.setRecvLogId(recvLogId);
-                revMsgVO.setProviderId(commonVO.getProviderId());
-                revMsgVO.setStId(commonVO.getStationId());
-                revMsgVO.setChgrId(commonVO.getChgrId());
-                revMsgVO.setMwKindCd("WS");
-                revMsgVO.setCmdTp(commonVO.getActionType());
-                revMsgVO.setRTimeYn(commonVO.getRTimeYn());
-                revMsgVO.setDataCreateDt(commonVO.getCreateDate());
-                revMsgVO.setChgrTxDt(commonVO.getSendDate());
-                revMsgVO.setRecvMsg(commonVO.getRcvMsg());
+            revMsgVO.setProviderId(commonVO.getProviderId());
+            revMsgVO.setStId(stationId.indexOf(providerId) != -1 ? stationId.replace(providerId, "") : stationId);
 
-                System.out.println("<----------------------- 수신 전문 이력 Insert OK -------------------------> : " + csb.revMsgService().recvMsgInsert(revMsgVO));
+            revMsgVO.setChgrId(commonVO.getChgrId());
+            revMsgVO.setMwKindCd("WS");
+            revMsgVO.setCmdTp(commonVO.getActionType());
+            revMsgVO.setRTimeYn(commonVO.getRTimeYn());
+            revMsgVO.setDataCreateDt(commonVO.getCreateDate());
+            revMsgVO.setChgrTxDt(commonVO.getSendDate());
+            revMsgVO.setRecvMsg(commonVO.getRcvMsg());
 
-                commonVO.setRecvLogId(recvLogId);
-            }
+            revMsgVO.setResDt(commonVO.getResponseDate());
+            revMsgVO.setResCd(commonVO.getResponseReceive());
+            revMsgVO.setResRsnCd(commonVO.getResponseReason());
+            revMsgVO.setResMsg(commonVO.getResMsg());
 
-            //M/W -> 충전기  --Update
-            else if (commonVO.getSendType().equals("res")) {
-
-                revMsgVO.setRecvLogId(commonVO.getRecvLogId());
-                revMsgVO.setResDt(commonVO.getResponseDate());
-                revMsgVO.setResCd(commonVO.getResponseReceive());
-                revMsgVO.setResRsnCd(commonVO.getResponseReason());
-                revMsgVO.setResMsg(commonVO.getRcvMsg());
-
-                System.out.println("<----------------------- 수신 전문 이력 Update OK -------------------------> : " + csb.revMsgService().recvMsgUpdate(revMsgVO));
-            }
+            System.out.println("<----------------------- 수신 전문 이력 Insert OK -------------------------> : " + csb.revMsgService().recvMsgInsert(revMsgVO));
 
         } catch (Exception e) {
             e.printStackTrace();

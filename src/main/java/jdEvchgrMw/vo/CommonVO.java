@@ -13,7 +13,7 @@ public class CommonVO {
 	private String stationId;		//STATION ID
 	private String chgrId;			//CHGR ID
 	private String rcvMsg;			//REV
-	private String sndMsg;			//SEND MESSAGE
+	private String resMsg;			//RESPONSE MESSAGE
 	private String uuid;			//uuid
 	private String sendType;		//SEND TYPE
 	private String actionType;		//ACTION TYPE

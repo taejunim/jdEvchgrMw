@@ -52,5 +52,6 @@ public class ChargeVO {
     private String currC;                   //현재 전류
     private String dataCreateDt;            //데이터 생성 일시
     private String chgrTxDt;                //충전기 전송 일시
+    private String payFnshYn;               //결제 완료 여부
 
 }

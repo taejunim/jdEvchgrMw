@@ -25,6 +25,10 @@
                                     , DATA_CREATE_DT
                                     , CHGR_TX_DT
                                     , RECV_MSG
+                                    , RES_DT
+                                    , RES_CD
+                                    , RES_RSN_CD
+                                    , RES_MSG
                         ) VALUES (
                                     (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(RECV_LOG_ID,5)), 0)+1, 8, '0'))
                                        FROM recv_msg_list AS RECV_LOG_ID
@@ -38,6 +42,10 @@
                                     , #{dataCreateDt}
                                     , #{chgrTxDt}
                                     , #{recvMsg}
+                                    , #{resDt}
+                                    , #{resCd}
+                                    , #{resRsnCd}
+                                    , #{resMsg}
                                   )
 
     </insert>
