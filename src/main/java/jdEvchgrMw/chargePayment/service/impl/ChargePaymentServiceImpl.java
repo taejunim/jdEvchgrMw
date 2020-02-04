@@ -4,6 +4,8 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import jdEvchgrMw.chargePayment.service.ChargePaymentService;
 import jdEvchgrMw.vo.ChargePaymentVO;
+import jdEvchgrMw.vo.PaymentInfoVO;
+import jdEvchgrMw.vo.PaymentListVO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -70,4 +72,21 @@ public class ChargePaymentServiceImpl extends EgovAbstractServiceImpl implements
         return chargePaymentMapper.creditTrxInfoUpdate(chargePaymentVO);
     }
 
+    /*신용승인 결제정보 등록*/
+    public int paymentInfoInsert(PaymentInfoVO paymentInfoVO) throws Exception {
+
+        return chargePaymentMapper.paymentInfoInsert(paymentInfoVO);
+    }
+
+    /*신용승인 결제정보 수정*/
+    public int paymentInfoUpdate(PaymentInfoVO paymentInfoVO) throws Exception {
+
+        return chargePaymentMapper.paymentInfoUpdate(paymentInfoVO);
+    }
+
+    /*신용승인 결제 리스트 등록*/
+    public int paymentListInsert(PaymentListVO paymentListVO) throws Exception {
+
+        return chargePaymentMapper.paymentListInsert(paymentListVO);
+    }
 }

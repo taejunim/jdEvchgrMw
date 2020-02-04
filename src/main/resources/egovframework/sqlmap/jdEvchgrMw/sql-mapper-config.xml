@@ -20,6 +20,8 @@
         <typeAlias alias="userVO"           type="jdEvchgrMw.vo.UserVO"/>
         <typeAlias alias="chargeVO"         type="jdEvchgrMw.vo.ChargeVO"/>
         <typeAlias alias="chargePaymentVO"  type="jdEvchgrMw.vo.ChargePaymentVO"/>
+        <typeAlias alias="paymentInfoVO"    type="jdEvchgrMw.vo.PaymentInfoVO"/>
+        <typeAlias alias="paymentListVO"    type="jdEvchgrMw.vo.PaymentListVO"/>
         <typeAlias alias="controlChgrVO"    type="jdEvchgrMw.vo.ControlChgrVO"/>
         <typeAlias alias="sendSmsVO"        type="jdEvchgrMw.vo.SendSmsVO"/>
     </typeAliases>

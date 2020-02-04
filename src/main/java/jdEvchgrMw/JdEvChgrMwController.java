@@ -1,17 +1,14 @@
 package jdEvchgrMw;
 
-import jdEvchgrMw.vo.SessionVO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Controller
 public class JdEvChgrMwController {
 
-	static List<SessionVO> sessionList2= Collections.synchronizedList(new ArrayList<SessionVO>());
+	Logger logger = LogManager.getLogger(JdEvChgrMwController.class);
 
 	/**
 	 * MAIN PAGE
@@ -22,7 +19,7 @@ public class JdEvChgrMwController {
 	@RequestMapping(value = "/main.do")
 	public String main() throws Exception {
 		
-		System.out.println("MAIN");
+		logger.info("MAIN");
 
 		return "jdEvchgrMw/main";
 	}

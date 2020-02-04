@@ -2,6 +2,8 @@ package jdEvchgrMw.websocket;
 
 import jdEvchgrMw.vo.CommonVO;
 import jdEvchgrMw.vo.SessionVO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -12,10 +14,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-import static jdEvchgrMw.websocket.jdEvChgrMwMain.sessionList;
+import static jdEvchgrMw.websocket.JdEvChgrMwMain.sessionList;
 
 @ServerEndpoint(value="/chgr/{action_type}")
 public class ControlChgr {
+
+    Logger logger = LogManager.getLogger(ControlChgr.class);
 
     SimpleDateFormat responseDateFormat = new SimpleDateFormat ( "yyyyMMddHHmmss");
 
@@ -25,7 +29,7 @@ public class ControlChgr {
     @OnOpen
     public void handleOpen(@PathParam("action_type") String actionType, Session session){
 
-        System.out.println("[ 관제 접속 : " + session + " ]");
+        logger.info("[ 관제 접속 : " + session + " ]");
         SessionVO sessionVO = new SessionVO();
 
         sessionVO.setStationChgrId("ctrl");
@@ -38,7 +42,7 @@ public class ControlChgr {
 
         sessionList = tempList;
 
-        System.out.println("[ 관제 제어 명령 : " + actionType + ", 현재 sessionList : " + sessionList + " ]");
+        logger.info("[ 관제 제어 명령 : " + actionType + ", 현재 sessionList : " + sessionList + " ]");
     }
     
     /**
@@ -59,8 +63,8 @@ public class ControlChgr {
         Date dt = new Date();
         commonVO.setResponseDate(responseDateFormat.format(dt));
 
-        System.out.println("[ MSG Start.. 현재 session 수 : " + sessionList.size() + " ]");
-        System.out.println("[ 관제 -> M/W : "+ commonVO.getRcvMsg() +" ]");
+        logger.info("[ MSG Start.. 현재 session 수 : " + sessionList.size() + " ]");
+        logger.info("[ 관제 -> M/W : "+ commonVO.getRcvMsg() +" ]");
 
         if (actionType.equals("") || actionType == null || message.equals("") || message == null) {
             jdp.protocolErrorMsgSend(commonVO);
@@ -75,16 +79,16 @@ public class ControlChgr {
     @OnClose
     public void handleClose(Session session) {
 
-    	System.out.println("[ 관제 접속이 종료 되었습니다. ]");
+    	logger.info("[ 관제 접속이 종료 되었습니다. ]");
 
         for (int i=0; i < sessionList.size(); i++) {
 
-            System.out.println("[" + i + "]");
+            logger.info("[" + i + "]");
 
             if (sessionList.get(i).getStationChgrId().equals("ctrl")) {
 
-                System.out.println("[ sessionList.get(i).getStationChgrId() : " + sessionList.get(i).getStationChgrId() + " / stationId + chgrId : ctrl ]");
-                System.out.println("[ 삭제된 세션 : " + sessionList.get(i).getStationChgrId() + " ]");
+                logger.info("[ sessionList.get(i).getStationChgrId() : " + sessionList.get(i).getStationChgrId() + " / stationId + chgrId : ctrl ]");
+                logger.info("[ 삭제된 세션 : " + sessionList.get(i).getStationChgrId() + " ]");
 
                 sessionList.remove(i);
 
@@ -92,7 +96,7 @@ public class ControlChgr {
             }
         }
 
-        System.out.println("[ 현재 session 수 : " + sessionList.size() + ", 현재 sessionList : " + sessionList + " ]");
+        logger.info("[ 현재 session 수 : " + sessionList.size() + ", 현재 sessionList : " + sessionList + " ]");
 
     }
     
@@ -103,7 +107,7 @@ public class ControlChgr {
     @OnError
     public void handleError(Throwable t) {
     	
-    	System.out.println("error...");
+    	logger.info("error...");
         t.printStackTrace();
     }
     

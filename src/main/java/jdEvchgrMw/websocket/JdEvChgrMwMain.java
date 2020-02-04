@@ -2,6 +2,8 @@ package jdEvchgrMw.websocket;
 
 import jdEvchgrMw.vo.CommonVO;
 import jdEvchgrMw.vo.SessionVO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -12,7 +14,9 @@ import java.util.HashSet;
 import java.util.List;
 
 @ServerEndpoint(value="/station/{stationId}/{chgrId}")
-public class jdEvChgrMwMain {
+public class JdEvChgrMwMain {
+
+    Logger logger = LogManager.getLogger(JdEvChgrMwMain.class);
 
     //세션 집합 리스트
     static List<SessionVO> sessionList= Collections.synchronizedList(new ArrayList<SessionVO>());
@@ -36,7 +40,7 @@ public class jdEvChgrMwMain {
 
         sessionList = tempList;
 
-        System.out.println("[ 충전소 : " + stationId + " - 충전기  "+ chgrId +"(가)이 접속 하였습니다. ]\n [ 현재 sessionList : " + sessionList + " ]");
+        logger.info("[ 충전소 : " + stationId + " - 충전기  "+ chgrId +"(가)이 접속 하였습니다. ]\n [ 현재 sessionList : " + sessionList + " ]");
     }
     
     /**
@@ -57,8 +61,8 @@ public class jdEvChgrMwMain {
 
     	//세션 로그 출력
         sessionListLog();
-        System.out.println("[ Bytes: " + getByteLength(message) + " ]");
-        System.out.println("[ 충전기 -> M/W : "+ commonVO.getRcvMsg() +" ]");
+        logger.info("[ Bytes: " + getByteLength(message) + " ]");
+        logger.info("[ 충전기 -> M/W : "+ commonVO.getRcvMsg() +" ]");
 
         JsonDataParsing jdp         = new JsonDataParsing();
     	jdp.jsonDataParsingMain(commonVO);
@@ -100,7 +104,7 @@ public class jdEvChgrMwMain {
 
             if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
 
-                System.out.println("[ 클라이언트가 접속을 종료 하였습니다. 종료된 충전기 : " + sessionList.get(i).getStationChgrId() + " ]");
+                logger.info("[ 클라이언트가 접속을 종료 하였습니다. 종료된 충전기 : " + sessionList.get(i).getStationChgrId() + " ]");
 
                 sessionList.remove(i);
 
@@ -111,7 +115,7 @@ public class jdEvChgrMwMain {
         //세션 로그 출력
         sessionListLog();
 
-        System.out.println("[ 현재 session 수 : " + sessionList.size() + ", 현재 sessionList : " + sessionList + " ]");
+        logger.info("[ 현재 session 수 : " + sessionList.size() + ", 현재 sessionList : " + sessionList + " ]");
     }
     
     /**
@@ -121,21 +125,21 @@ public class jdEvChgrMwMain {
     @OnError
     public void handleError(Throwable t) {
     	
-    	System.out.println("error...");
+    	logger.info("error...");
         t.printStackTrace();
     }
     
     public void sessionListLog() {
 
-        System.out.println("[ MSG Start.. 현재 session 수 : " + sessionList.size() + " ]");
-        System.out.println("  현재 session 목록 -> ");
+        logger.info("[ MSG Start.. 현재 session 수 : " + sessionList.size() + " ]");
+        logger.info("  현재 session 목록 -> ");
 
         for (int i=0; i<sessionList.size(); i++) {
-            System.out.println("[" + (i+1) + "] : " + sessionList.get(i).getStationChgrId());
+            logger.info("[" + (i+1) + "] : " + sessionList.get(i).getStationChgrId());
         }
 
-        System.out.println("[ 총 session 수 : " + sessionList.size() + " ]");
-        System.out.println("--------------------------------------------------------------------------");
+        logger.info("[ 총 session 수 : " + sessionList.size() + " ]");
+        logger.info("--------------------------------------------------------------------------");
     }
 
 }

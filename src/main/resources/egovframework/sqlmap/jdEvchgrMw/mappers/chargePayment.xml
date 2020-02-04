@@ -68,5 +68,107 @@
 
     </update>
 
+    <insert id="paymentInfoInsert" parameterType="paymentInfoVO">
+
+        INSERT INTO credit_pay_info (
+                                    CREDIT_PAY_ID
+                                    , PROVIDER_ID
+                                    , ST_ID
+                                    , CHGR_ID
+                                    , CH_ID
+                                    , PLUG_TYPE_CD
+                                    , CREDIT_TRX_NO
+                                    , CREDIT_TRX_DT
+                                    , PAY_AMT
+                                    , CREDIT_PAY_DETL
+                                    , P_PAY_FNSH_YN
+                                    , P_PAY_CHGR_TX_DT
+                                    , REG_DT
+
+                            ) VALUES (
+                                    (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(cpi.CREDIT_PAY_ID,5)), 0)+1, 8, '0')) AS CREDIT_PAY_ID
+                                     FROM credit_pay_info cpi
+                                     WHERE LEFT(cpi.CREDIT_PAY_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
+                                     )
+                                    , #{providerId}
+                                    , #{stId}
+                                    , #{chgrId}
+                                    , #{chId}
+                                    , #{plugTypeCd}
+                                    , #{creditTrxNo}
+                                    , #{creditTrxDt}
+                                    , #{payAmt}
+                                    , #{creditPayDetl}
+                                    , #{pPayFnshYn}
+                                    , #{pPayChgrTxDt}
+                                    , now()
+                            )
+
+    </insert>
+
+    <update id="paymentInfoUpdate" parameterType="paymentInfoVO">
+
+        UPDATE credit_pay_info
+
+           SET C_PAY_TYPE  = #{cPayType}
+             , C_PAY_AMT  = #{cPayAmt}
+             , C_PAY_FNSH_YN     = #{cPayFnshYn}
+             , C_PAY_CHGR_TX_DT   = #{cPayChgrTxDt}
+             , MOD_DT = now()
+
+         WHERE 1=1
+           AND PROVIDER_ID = #{providerId}
+           AND ST_ID = #{stId}
+           AND CHGR_ID = #{chgrId}
+           AND CH_ID = #{chId}
+           AND PLUG_TYPE_CD = #{plugTypeCd}
+           AND CREDIT_TRX_NO = #{creditTrxNo}
+           AND CREDIT_TRX_DT = #{creditTrxDt}
+
+    </update>
+
+    <insert id="paymentListInsert" parameterType="paymentListVO">
+
+        INSERT INTO credit_pay_list (
+                                    CREDIT_PAY_LIST_ID
+                                    , PROVIDER_ID
+                                    , ST_ID
+                                    , CHGR_ID
+                                    , CH_ID
+                                    , PLUG_TYPE_CD
+                                    , R_TIME_YN
+                                    , CREDIT_TRX_NO
+                                    , CREDIT_TRX_DT
+                                    , PAY_TYPE
+                                    , PAY_AMT
+                                    , C_PAY_AMT
+                                    , PAY_DETL
+                                    , PAY_FNSH_YN
+                                    , CHGR_TX_DT
+                                    , REG_DT
+
+                            ) VALUES (
+                                    (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(cpl.CREDIT_PAY_LIST_ID,5)), 0)+1, 8, '0')) AS CREDIT_PAY_LIST_ID
+                                     FROM credit_pay_list cpl
+                                     WHERE LEFT(cpl.CREDIT_PAY_LIST_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
+                                     )
+                                    , #{providerId}
+                                    , #{stId}
+                                    , #{chgrId}
+                                    , #{chId}
+                                    , #{plugTypeCd}
+                                    , #{rTimeYn}
+                                    , #{creditTrxNo}
+                                    , #{creditTrxDt}
+                                    , #{payType}
+                                    , #{payAmt}
+                                    , #{cPayAmt}
+                                    , #{payDetl}
+                                    , #{payFnshYn}
+                                    , #{chgrTxDt}
+                                    , now()
+                            )
+
+    </insert>
 
 </mapper>

@@ -2,6 +2,8 @@ package jdEvchgrMw.websocket;
 
 import jdEvchgrMw.common.CollectServiceBean;
 import jdEvchgrMw.vo.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
-import static jdEvchgrMw.websocket.jdEvChgrMwMain.sessionList;
+import static jdEvchgrMw.websocket.JdEvChgrMwMain.sessionList;
 
 /**
  * @ Class Name  : JsonDataParsingForControl.java
@@ -30,6 +32,8 @@ import static jdEvchgrMw.websocket.jdEvChgrMwMain.sessionList;
  */
 
 public class JsonDataParsingForControl {
+
+    Logger logger = LogManager.getLogger(JsonDataParsingForControl.class);
 
     CollectServiceBean csb = new CollectServiceBean();
     SimpleDateFormat sdf = new SimpleDateFormat ( "yyyy년 MM월 dd일 HH시 mm분 ss초");
@@ -54,7 +58,7 @@ public class JsonDataParsingForControl {
             Date dt = new Date();
             String time = sdf.format(dt);
 
-            System.out.println(time + " - [ 관제 명령 : " + commonVO.getActionType() + " ]");
+            logger.info(time + " - [ 관제 명령 : " + commonVO.getActionType() + " ]");
 
             String send_type = jObject.get("send_type").toString();
             String action_type = jObject.get("action_type").toString();
@@ -98,14 +102,14 @@ public class JsonDataParsingForControl {
                     commonVO = askVerParsingData(commonVO);                        //펌웨어 버전 정보 확인(관제 -> 충전기) CALL
 
                 } else {
-                    System.out.println("[ 정의 되지 않은 PACKET 입니다. ]");
+                    logger.info("[ 정의 되지 않은 PACKET 입니다. ]");
 
                     protocolErrorMsgSend(commonVO);
                     return;
                 }
             }
 
-            System.out.println("[ responseDate : " + commonVO.getResponseDate() + " ]");
+            logger.info("[ responseDate : " + commonVO.getResponseDate() + " ]");
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -128,7 +132,7 @@ public class JsonDataParsingForControl {
         if (!commonVO.getStationId().equals("") && commonVO.getStationId() != null && commonVO.getStationId().length() <= 6) {
             commonVO.setStationId(commonVO.getProviderId() + commonVO.getStationId());
         }
-        System.out.println("[ before commonVO.getStationId() : "+ commonVO.getStationId() +" ]");
+        logger.info("[ before commonVO.getStationId() : "+ commonVO.getStationId() +" ]");
 
         //충전기에 제어 보내기
         controlMw(commonVO);
@@ -183,7 +187,7 @@ public class JsonDataParsingForControl {
 
             sendJsonObject.put("data", sendData);
 
-            System.out.println("관제로 보낼 JSON : " + sendJsonObject);
+            logger.info("관제로 보낼 JSON : " + sendJsonObject);
 
             commonVO.getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
 
@@ -251,10 +255,10 @@ public class JsonDataParsingForControl {
 
                 } else if (commonVO.getActionType().equals("reset")) {
 
-                    System.out.println("reset data : " + sendData.toString());
+                    logger.info("reset data : " + sendData.toString());
 
                 } else {
-                    System.out.println("[ 정의 되지 않은 PACKET 입니다. ]");
+                    logger.info("[ 정의 되지 않은 PACKET 입니다. ]");
                     //undefinedActionErrorMsgSend(commonVO);
                     protocolErrorMsgSend(commonVO);
                     return;
@@ -264,12 +268,12 @@ public class JsonDataParsingForControl {
 
                 for (int i=0; i<sessionList.size(); i++) {
 
-                    System.out.println("충전기로 보낼 JSON : " + sendJsonObject);
-                    System.out.println("sessionList.get(i).getStationChgrId() : " + sessionList.get(i).getStationChgrId());
-                    System.out.println("commonVO.getStationId() + commonVO.getChgrId() : " + commonVO.getStationId() + commonVO.getChgrId());
+                    logger.info("충전기로 보낼 JSON : " + sendJsonObject);
+                    logger.info("sessionList.get(i).getStationChgrId() : " + sessionList.get(i).getStationChgrId());
+                    logger.info("commonVO.getStationId() + commonVO.getChgrId() : " + commonVO.getStationId() + commonVO.getChgrId());
 
                     if (sessionList.get(i).getStationChgrId().equals(commonVO.getStationId() + commonVO.getChgrId())) {
-                        System.out.println("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getStationId() + commonVO.getChgrId());
+                        logger.info("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getStationId() + commonVO.getChgrId());
                         sessionList.get(i).getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
                         break;
                     }
@@ -325,8 +329,8 @@ public class JsonDataParsingForControl {
 
                             sendJsonObject.put("data", pricesData);
 
-                            System.out.println("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getStationId() + commonVO.getChgrId());
-                            System.out.println("충전기로 보낼 JSON : " + sendJsonObject);
+                            logger.info("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getStationId() + commonVO.getChgrId());
+                            logger.info("충전기로 보낼 JSON : " + sendJsonObject);
                             sessionList.get(i).getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
 
                             //전문 이력 인서트
@@ -353,7 +357,7 @@ public class JsonDataParsingForControl {
             JSONParser jParser = new JSONParser();
             JSONObject data = (JSONObject) jParser.parse(commonVO.getData());
 
-            System.out.println("data : " + data.toString());
+            logger.info("data : " + data.toString());
 
             String ctrl_list_id = (String) data.get("ctrl_list_id");
             String station_id = (String) data.get("station_id");
@@ -374,12 +378,12 @@ public class JsonDataParsingForControl {
                 return commonVO;
             }
 
-            System.out.println("<----------- 리셋 Parsing Data ----------->");
-            System.out.println("ctrl_list_id : " + ctrl_list_id);
-            System.out.println("station_id : " + station_id);
-            System.out.println("chgr_id : " + chgr_id);
-            System.out.println("send_date : " + send_date);
-            System.out.println("<------------------------------------------------>");
+            logger.info("<----------- 리셋 Parsing Data ----------->");
+            logger.info("ctrl_list_id : " + ctrl_list_id);
+            logger.info("station_id : " + station_id);
+            logger.info("chgr_id : " + chgr_id);
+            logger.info("send_date : " + send_date);
+            logger.info("<------------------------------------------------>");
 
             //제어 이력 업데이트
             commonVO = ctrlListUpdate(commonVO);
@@ -391,7 +395,7 @@ public class JsonDataParsingForControl {
         } catch (Exception e) {
             e.printStackTrace();
 
-            System.out.println("<----------------------- DB Insert 오류 ------------------------->");
+            logger.info("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
         }
 
@@ -405,7 +409,7 @@ public class JsonDataParsingForControl {
             JSONParser jParser = new JSONParser();
             JSONObject data = (JSONObject) jParser.parse(commonVO.getData());
 
-            System.out.println("data : " + data.toString());
+            logger.info("data : " + data.toString());
 
             ArrayList<ControlChgrVO> controlChgrVOArrayList = new ArrayList<>();
 
@@ -427,10 +431,10 @@ public class JsonDataParsingForControl {
                     return commonVO;
                 }
 
-                System.out.println("<----------- 단가 변경 Parsing Data [" + (i+1) + "]----------->");
-                System.out.println("ctrl_list_id : " + ctrl_list_id);
-                System.out.println("station_id : " + station_id);
-                System.out.println("chgr_id : " + chgr_id);
+                logger.info("<----------- 단가 변경 Parsing Data [" + (i+1) + "]----------->");
+                logger.info("ctrl_list_id : " + ctrl_list_id);
+                logger.info("station_id : " + station_id);
+                logger.info("chgr_id : " + chgr_id);
 
 
                 ControlChgrVO controlChgrVO = new ControlChgrVO();
@@ -504,34 +508,34 @@ public class JsonDataParsingForControl {
                 commonVO = ctrlListUpdate(commonVO);
                 return commonVO;
             }
-            System.out.println("controlChgrVOArrayList : " + controlChgrVOArrayList);
-            System.out.println("send_date : " + send_date);
-            System.out.println("cost_sdd : " + cost_sdd);
-            System.out.println("h00 : " + h00);
-            System.out.println("h01 : " + h01);
-            System.out.println("h02 : " + h02);
-            System.out.println("h03 : " + h03);
-            System.out.println("h04 : " + h04);
-            System.out.println("h05 : " + h05);
-            System.out.println("h06 : " + h06);
-            System.out.println("h07 : " + h07);
-            System.out.println("h08 : " + h08);
-            System.out.println("h09 : " + h09);
-            System.out.println("h10 : " + h10);
-            System.out.println("h11 : " + h11);
-            System.out.println("h12 : " + h12);
-            System.out.println("h13 : " + h13);
-            System.out.println("h14 : " + h14);
-            System.out.println("h15 : " + h15);
-            System.out.println("h16 : " + h16);
-            System.out.println("h17 : " + h17);
-            System.out.println("h18 : " + h18);
-            System.out.println("h19 : " + h19);
-            System.out.println("h20 : " + h20);
-            System.out.println("h21 : " + h21);
-            System.out.println("h22 : " + h22);
-            System.out.println("h23 : " + h23);
-            System.out.println("<------------------------------------------------>");
+            logger.info("controlChgrVOArrayList : " + controlChgrVOArrayList);
+            logger.info("send_date : " + send_date);
+            logger.info("cost_sdd : " + cost_sdd);
+            logger.info("h00 : " + h00);
+            logger.info("h01 : " + h01);
+            logger.info("h02 : " + h02);
+            logger.info("h03 : " + h03);
+            logger.info("h04 : " + h04);
+            logger.info("h05 : " + h05);
+            logger.info("h06 : " + h06);
+            logger.info("h07 : " + h07);
+            logger.info("h08 : " + h08);
+            logger.info("h09 : " + h09);
+            logger.info("h10 : " + h10);
+            logger.info("h11 : " + h11);
+            logger.info("h12 : " + h12);
+            logger.info("h13 : " + h13);
+            logger.info("h14 : " + h14);
+            logger.info("h15 : " + h15);
+            logger.info("h16 : " + h16);
+            logger.info("h17 : " + h17);
+            logger.info("h18 : " + h18);
+            logger.info("h19 : " + h19);
+            logger.info("h20 : " + h20);
+            logger.info("h21 : " + h21);
+            logger.info("h22 : " + h22);
+            logger.info("h23 : " + h23);
+            logger.info("<------------------------------------------------>");
 
             commonVO.setHourVO(hourVO);
             commonVO.setCostSdd(cost_sdd);
@@ -554,7 +558,7 @@ public class JsonDataParsingForControl {
             JSONParser jParser = new JSONParser();
             JSONObject data = (JSONObject) jParser.parse(commonVO.getData());
 
-            System.out.println("data : " + data.toString());
+            logger.info("data : " + data.toString());
 
             String ctrl_list_id = (String) data.get("ctrl_list_id");
             String station_id = (String) data.get("station_id");
@@ -576,13 +580,13 @@ public class JsonDataParsingForControl {
                 return commonVO;
             }
 
-            System.out.println("<----------- 충전기 모드 변경 Parsing Data ----------->");
-            System.out.println("ctrl_list_id : " + ctrl_list_id);
-            System.out.println("station_id : " + station_id);
-            System.out.println("chgr_id : " + chgr_id);
-            System.out.println("send_date : " + send_date);
-            System.out.println("change_mode : " + change_mode);
-            System.out.println("<------------------------------------------------>");
+            logger.info("<----------- 충전기 모드 변경 Parsing Data ----------->");
+            logger.info("ctrl_list_id : " + ctrl_list_id);
+            logger.info("station_id : " + station_id);
+            logger.info("chgr_id : " + chgr_id);
+            logger.info("send_date : " + send_date);
+            logger.info("change_mode : " + change_mode);
+            logger.info("<------------------------------------------------>");
 
             ChangeModeVO changeModeVO = new ChangeModeVO();
             changeModeVO.setChangeMode(change_mode);
@@ -607,7 +611,7 @@ public class JsonDataParsingForControl {
             JSONParser jParser = new JSONParser();
             JSONObject data = (JSONObject) jParser.parse(commonVO.getData());
 
-            System.out.println("data : " + data.toString());
+            logger.info("data : " + data.toString());
 
             String ctrl_list_id = (String) data.get("ctrl_list_id");
             String station_id = (String) data.get("station_id");
@@ -680,37 +684,37 @@ public class JsonDataParsingForControl {
                 return commonVO;
             }
 
-            System.out.println("<----------- 충전기 밝기 정보 Parsing Data ----------->");
-            System.out.println("ctrl_list_id : " + ctrl_list_id);
-            System.out.println("station_id : " + station_id);
-            System.out.println("chgr_id : " + chgr_id);
-            System.out.println("send_date : " + send_date);
+            logger.info("<----------- 충전기 밝기 정보 Parsing Data ----------->");
+            logger.info("ctrl_list_id : " + ctrl_list_id);
+            logger.info("station_id : " + station_id);
+            logger.info("chgr_id : " + chgr_id);
+            logger.info("send_date : " + send_date);
 
-            System.out.println("h00 : " + h00);
-            System.out.println("h01 : " + h01);
-            System.out.println("h02 : " + h02);
-            System.out.println("h03 : " + h03);
-            System.out.println("h04 : " + h04);
-            System.out.println("h05 : " + h05);
-            System.out.println("h06 : " + h06);
-            System.out.println("h07 : " + h07);
-            System.out.println("h08 : " + h08);
-            System.out.println("h09 : " + h09);
-            System.out.println("h10 : " + h10);
-            System.out.println("h11 : " + h11);
-            System.out.println("h12 : " + h12);
-            System.out.println("h13 : " + h13);
-            System.out.println("h14 : " + h14);
-            System.out.println("h15 : " + h15);
-            System.out.println("h16 : " + h16);
-            System.out.println("h17 : " + h17);
-            System.out.println("h18 : " + h18);
-            System.out.println("h19 : " + h19);
-            System.out.println("h20 : " + h20);
-            System.out.println("h21 : " + h21);
-            System.out.println("h22 : " + h22);
-            System.out.println("h23 : " + h23);
-            System.out.println("<------------------------------------------------>");
+            logger.info("h00 : " + h00);
+            logger.info("h01 : " + h01);
+            logger.info("h02 : " + h02);
+            logger.info("h03 : " + h03);
+            logger.info("h04 : " + h04);
+            logger.info("h05 : " + h05);
+            logger.info("h06 : " + h06);
+            logger.info("h07 : " + h07);
+            logger.info("h08 : " + h08);
+            logger.info("h09 : " + h09);
+            logger.info("h10 : " + h10);
+            logger.info("h11 : " + h11);
+            logger.info("h12 : " + h12);
+            logger.info("h13 : " + h13);
+            logger.info("h14 : " + h14);
+            logger.info("h15 : " + h15);
+            logger.info("h16 : " + h16);
+            logger.info("h17 : " + h17);
+            logger.info("h18 : " + h18);
+            logger.info("h19 : " + h19);
+            logger.info("h20 : " + h20);
+            logger.info("h21 : " + h21);
+            logger.info("h22 : " + h22);
+            logger.info("h23 : " + h23);
+            logger.info("<------------------------------------------------>");
 
             //제어 이력 업데이트
             commonVO = ctrlListUpdate(commonVO);
@@ -731,7 +735,7 @@ public class JsonDataParsingForControl {
             JSONParser jParser = new JSONParser();
             JSONObject data = (JSONObject) jParser.parse(commonVO.getData());
 
-            System.out.println("data : " + data.toString());
+            logger.info("data : " + data.toString());
 
             String ctrl_list_id = (String) data.get("ctrl_list_id");
             String station_id = (String) data.get("station_id");
@@ -804,38 +808,38 @@ public class JsonDataParsingForControl {
                 return commonVO;
             }
 
-            System.out.println("<----------- 충전기 소리 정보 Parsing Data ----------->");
-            System.out.println("ctrl_list_id : " + ctrl_list_id);
-            System.out.println("station_id : " + station_id);
-            System.out.println("chgr_id : " + chgr_id);
-            System.out.println("send_date : " + send_date);
+            logger.info("<----------- 충전기 소리 정보 Parsing Data ----------->");
+            logger.info("ctrl_list_id : " + ctrl_list_id);
+            logger.info("station_id : " + station_id);
+            logger.info("chgr_id : " + chgr_id);
+            logger.info("send_date : " + send_date);
 
-            System.out.println("h00 : " + h00);
-            System.out.println("h01 : " + h01);
-            System.out.println("h02 : " + h02);
-            System.out.println("h03 : " + h03);
-            System.out.println("h04 : " + h04);
-            System.out.println("h05 : " + h05);
-            System.out.println("h06 : " + h06);
-            System.out.println("h07 : " + h07);
-            System.out.println("h08 : " + h08);
-            System.out.println("h09 : " + h09);
-            System.out.println("h10 : " + h10);
-            System.out.println("h11 : " + h11);
-            System.out.println("h12 : " + h12);
-            System.out.println("h13 : " + h13);
-            System.out.println("h14 : " + h14);
-            System.out.println("h15 : " + h15);
-            System.out.println("h16 : " + h16);
-            System.out.println("h17 : " + h17);
-            System.out.println("h18 : " + h18);
-            System.out.println("h19 : " + h19);
-            System.out.println("h20 : " + h20);
-            System.out.println("h21 : " + h21);
-            System.out.println("h22 : " + h22);
-            System.out.println("h23 : " + h23);
+            logger.info("h00 : " + h00);
+            logger.info("h01 : " + h01);
+            logger.info("h02 : " + h02);
+            logger.info("h03 : " + h03);
+            logger.info("h04 : " + h04);
+            logger.info("h05 : " + h05);
+            logger.info("h06 : " + h06);
+            logger.info("h07 : " + h07);
+            logger.info("h08 : " + h08);
+            logger.info("h09 : " + h09);
+            logger.info("h10 : " + h10);
+            logger.info("h11 : " + h11);
+            logger.info("h12 : " + h12);
+            logger.info("h13 : " + h13);
+            logger.info("h14 : " + h14);
+            logger.info("h15 : " + h15);
+            logger.info("h16 : " + h16);
+            logger.info("h17 : " + h17);
+            logger.info("h18 : " + h18);
+            logger.info("h19 : " + h19);
+            logger.info("h20 : " + h20);
+            logger.info("h21 : " + h21);
+            logger.info("h22 : " + h22);
+            logger.info("h23 : " + h23);
 
-            System.out.println("<------------------------------------------------>");
+            logger.info("<------------------------------------------------>");
 
             //제어 이력 업데이트
             commonVO = ctrlListUpdate(commonVO);
@@ -856,7 +860,7 @@ public class JsonDataParsingForControl {
             JSONParser jParser = new JSONParser();
             JSONObject data = (JSONObject) jParser.parse(commonVO.getData());
 
-            System.out.println("data : " + data.toString());
+            logger.info("data : " + data.toString());
 
             String ctrl_list_id = (String) data.get("ctrl_list_id");
             String station_id = (String) data.get("station_id");
@@ -878,13 +882,13 @@ public class JsonDataParsingForControl {
                 return commonVO;
             }
 
-            System.out.println("<----------- 충전기 펌웨어 버전 확인 Parsing Data ----------->");
-            System.out.println("ctrl_list_id : " + ctrl_list_id);
-            System.out.println("station_id : " + station_id);
-            System.out.println("chgr_id : " + chgr_id);
-            System.out.println("send_date : " + send_date);
-            System.out.println("fw_type : " + fw_type);
-            System.out.println("<------------------------------------------------>");
+            logger.info("<----------- 충전기 펌웨어 버전 확인 Parsing Data ----------->");
+            logger.info("ctrl_list_id : " + ctrl_list_id);
+            logger.info("station_id : " + station_id);
+            logger.info("chgr_id : " + chgr_id);
+            logger.info("send_date : " + send_date);
+            logger.info("fw_type : " + fw_type);
+            logger.info("<------------------------------------------------>");
 
             FwVerInfoVO fwVerInfoVO = new FwVerInfoVO();
             fwVerInfoVO.setFwType(fw_type);
@@ -913,7 +917,7 @@ public class JsonDataParsingForControl {
         controlChgrVO.setResRsnCd(commonVO.getResponseReason());
 
         try {
-            System.out.println("<----------------------- 제어 이력 Update OK -------------------------> : " + csb.controlChgrService().ctrlListUpdate(controlChgrVO));
+            logger.info("<----------------------- 제어 이력 Update OK -------------------------> : " + csb.controlChgrService().ctrlListUpdate(controlChgrVO));
         } catch (Exception e) {
             e.printStackTrace();
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
@@ -933,7 +937,7 @@ public class JsonDataParsingForControl {
         controlChgrVO.setTxMsg(commonVO.getRcvMsg());
 
         try {
-            System.out.println("<----------------------- 전문 이력 Insert OK -------------------------> : " + csb.controlChgrService().txMsgListInsert(controlChgrVO));
+            logger.info("<----------------------- 전문 이력 Insert OK -------------------------> : " + csb.controlChgrService().txMsgListInsert(controlChgrVO));
         } catch (Exception e) {
             e.printStackTrace();
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
@@ -944,7 +948,7 @@ public class JsonDataParsingForControl {
 
     public void protocolErrorMsgSend(CommonVO commonVO) {
 
-        System.out.println("필수항목 누락으로 인한 전문 오류 입니다. 받은 uuid : " + commonVO.getUuid() + ", 받은 send_type : "
+        logger.info("필수항목 누락으로 인한 전문 오류 입니다. 받은 uuid : " + commonVO.getUuid() + ", 받은 send_type : "
                 + commonVO.getSendType() + ", 받은 action_type : " + commonVO.getActionType() + ", 받은 data : " + commonVO.getData());
 
         commonVO.setResponseReceive("0");
@@ -956,7 +960,7 @@ public class JsonDataParsingForControl {
 
     //파라미터 오류
     public void parameterErrorMsgSend(CommonVO commonVO) {
-        System.out.println("JSON Parsing 중 오류 입니다. 받은 Data : " + commonVO.getData());
+        logger.info("JSON Parsing 중 오류 입니다. 받은 Data : " + commonVO.getData());
 
         commonVO.setResponseReceive("0");   //실패
         commonVO.setResponseReason("12");   //파라미터 오류
@@ -967,7 +971,7 @@ public class JsonDataParsingForControl {
 
     //충전소(기)ID 오류
     public void invalidErrorMsgSend(CommonVO commonVO) {
-        System.out.println("충전소(기)ID 중 오류 입니다. 받은 Data : " + commonVO.getData());
+        logger.info("충전소(기)ID 중 오류 입니다. 받은 Data : " + commonVO.getData());
 
         commonVO.setResponseReceive("0");   //실패
         commonVO.setResponseReason("13");   //파라미터 오류
@@ -984,15 +988,15 @@ public class JsonDataParsingForControl {
         commonVO.setResponseReason("14");   //데이터형식 오류
         sendMessage(commonVO);
 
-        System.out.println("JSON Parsing 중 오류 입니다. 받은 Data : " + commonVO.getData());
+        logger.info("JSON Parsing 중 오류 입니다. 받은 Data : " + commonVO.getData());
         return;
     }
 
     public CommonVO unknownErrorMsgSend(CommonVO commonVO, String msg) {
 
-        System.out.println("내부 오류 입니다. 받은 uuid : " + commonVO.getUuid() + ", 받은 send_type : "
+        logger.info("내부 오류 입니다. 받은 uuid : " + commonVO.getUuid() + ", 받은 send_type : "
                 + commonVO.getSendType() + ", 받은 action_type : " + commonVO.getActionType() + ", 받은 data : " + commonVO.getData());
-        System.out.println("내부 오류 : " + msg);
+        logger.info("내부 오류 : " + msg);
 
         commonVO.setResponseReceive("0");
         commonVO.setResponseReason("15");
