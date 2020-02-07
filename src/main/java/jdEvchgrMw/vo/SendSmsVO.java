@@ -29,7 +29,7 @@ public class SendSmsVO {
     public String tel;                  //전화번호
     public String rechgTime;            //충전시간
     public int rechgWh;                 //충전 WH
-    public int rehcgAmt;                //충전 금액
+    public int rechgAmt;                //충전 금액
     public String dataCreateDt;         //데이터 생성 일시
     public String chgrTxDt;             //충전기 전송 일시
     public String regDt;                //등록 일시

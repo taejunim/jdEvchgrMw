@@ -8,12 +8,14 @@
                                 ALARM_ID
                               , PROVIDER_ID
                               , ST_ID
+                              , CH_ID
                               , CHGR_ID
                               , MW_KIND_CD
                               , R_TIME_YN
                               , OCCUR_DT
                               , ALARM_STATE_CD
                               , ALARM_CD
+                              , MF_ALARM_CD
                               , CHGR_TX_DT
                               , REG_DT
                       )values (
@@ -24,12 +26,14 @@
                                 )
                               , #{providerId}
                               , #{stId}
+                              , #{chId}
                               , #{chgrId}
                               , #{mwKindCd}
                               , #{rTimeYn}
                               , #{occurDt}
                               , #{alarmStateCd}
                               , #{alarmCd}
+                              , #{mfAlarmCd}
                               , #{chgrTxDt}
                               , now()
                               )

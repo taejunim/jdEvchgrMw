@@ -86,10 +86,10 @@
         UPDATE chgr
 
            SET SPEED_TP_CD      = #{speedTpCd}
-             <if test = "gpsXpos == '0.0'">
+             <if test = "gpsXpos != '0.0'">
              , GPS_XPOS         = #{gpsXpos}
              </if>
-             <if test = "gpsYpos == '0.0'">
+             <if test = "gpsYpos != '0.0'">
              , GPS_YPOS         = #{gpsYpos}
              </if>
              , CHGR_TYPE_CD     = #{chgrTypeCd}

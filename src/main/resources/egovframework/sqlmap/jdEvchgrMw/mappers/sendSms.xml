@@ -14,7 +14,7 @@
                                     , TEL
                                     , RECHG_TIME
                                     , RECHG_WH
-                                    , REHCG_AMT
+                                    , RECHG_AMT
                                     , DATA_CREATE_DT
                                     , CHGR_TX_DT
                                     , REG_DT
@@ -32,7 +32,7 @@
                                     , #{tel}
                                     , #{rechgTime}
                                     , #{rechgWh}
-                                    , #{rehcgAmt}
+                                    , #{rechgAmt}
                                     , #{dataCreateDt}
                                     , #{chgrTxDt}
                                     , now()

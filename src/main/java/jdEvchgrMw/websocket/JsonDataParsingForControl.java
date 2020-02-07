@@ -35,7 +35,7 @@ public class JsonDataParsingForControl {
 
     Logger logger = LogManager.getLogger(JsonDataParsingForControl.class);
 
-    CollectServiceBean csb = new CollectServiceBean();
+    //CollectServiceBean csb = new CollectServiceBean();
     SimpleDateFormat sdf = new SimpleDateFormat ( "yyyy년 MM월 dd일 HH시 mm분 ss초");
     SimpleDateFormat responseDateFormat = new SimpleDateFormat ( "yyyyMMddHHmmss");
 
@@ -917,6 +917,7 @@ public class JsonDataParsingForControl {
         controlChgrVO.setResRsnCd(commonVO.getResponseReason());
 
         try {
+            CollectServiceBean csb = new CollectServiceBean();
             logger.info("<----------------------- 제어 이력 Update OK -------------------------> : " + csb.controlChgrService().ctrlListUpdate(controlChgrVO));
         } catch (Exception e) {
             e.printStackTrace();
@@ -937,6 +938,7 @@ public class JsonDataParsingForControl {
         controlChgrVO.setTxMsg(commonVO.getRcvMsg());
 
         try {
+            CollectServiceBean csb = new CollectServiceBean();
             logger.info("<----------------------- 전문 이력 Insert OK -------------------------> : " + csb.controlChgrService().txMsgListInsert(controlChgrVO));
         } catch (Exception e) {
             e.printStackTrace();

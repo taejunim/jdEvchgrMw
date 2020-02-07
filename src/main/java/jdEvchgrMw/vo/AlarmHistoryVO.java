@@ -31,5 +31,6 @@ public class AlarmHistoryVO {
     private String alarmStateCd;        //알람 상태 코드
     private String alarmCd;             //알람 코드
     private String chgrTxDt;            //충전기 전송 일시
+    private String mfAlarmCd;           //제조사별 경보코드
 
 }

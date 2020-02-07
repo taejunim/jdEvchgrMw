@@ -124,8 +124,9 @@ public class JdEvChgrMwMain {
      */
     @OnError
     public void handleError(Throwable t) {
-    	
-    	logger.info("error...");
+        logger.info("---------------------------------------------------");
+    	logger.info("---------------------error-------------------------");
+        logger.info("---------------------------------------------------");
         t.printStackTrace();
     }
     
