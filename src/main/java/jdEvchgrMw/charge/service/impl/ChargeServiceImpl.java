@@ -3,6 +3,8 @@ package jdEvchgrMw.charge.service.impl;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import jdEvchgrMw.charge.service.ChargeService;
 import jdEvchgrMw.vo.ChargeVO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,8 +27,16 @@ import javax.annotation.Resource;
 @Service("chargeService")
 public class ChargeServiceImpl extends EgovAbstractServiceImpl implements ChargeService {
 
+    Logger logger = LogManager.getLogger(ChargeServiceImpl.class);
+
     @Resource(name = "chargeMapper")
     private ChargeMapper chargeMapper;
+
+    /*충전 시작 이력의 ID GET*/
+    public String getRechgSttListId(ChargeVO chargeVO) throws Exception {
+
+        return chargeMapper.getRechgSttListId(chargeVO);
+    }
 
     /*충전 시작 이력 등록*/
     public int rechgSttInsert(ChargeVO chargeVO) throws Exception {
@@ -37,12 +47,24 @@ public class ChargeServiceImpl extends EgovAbstractServiceImpl implements Charge
     /*충전 진행 이력 등록*/
     public int rechgingInsert(ChargeVO chargeVO) throws Exception {
 
+        String rechgSttListId = getRechgSttListId(chargeVO);
+
+        logger.info("------------------------ 충전 진행 이력 등록 - rechgSttListId : " + rechgSttListId);
+        logger.info("------------------------ 충전 진행 이력 등록 - rechgingListId : " + chargeVO.getRechgingListId());
+
+        chargeVO.setRechgSttListId(rechgSttListId);
         return chargeMapper.rechgingInsert(chargeVO);
     }
 
     /*충전 완료 이력 등록*/
     public int rechgFnshInsert(ChargeVO chargeVO) throws Exception {
 
+        String rechgSttListId = getRechgSttListId(chargeVO);
+
+        logger.info("------------------------ 충전 완료 이력 등록 - rechgSttListId : " + rechgSttListId);
+        logger.info("------------------------ 충전 진행 이력 등록 - rechgFnshListId : " + chargeVO.getRechgFnshListId());
+
+        chargeVO.setRechgSttListId(rechgSttListId);
         return chargeMapper.rechgFnshInsert(chargeVO);
     }
 

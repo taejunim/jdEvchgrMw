@@ -21,6 +21,9 @@ import jdEvchgrMw.vo.ChargeVO;
 @Mapper("chargeMapper")
 public interface ChargeMapper {
 
+    /*충전 시작 이력의 ID GET*/
+    String getRechgSttListId(ChargeVO chargeVO) throws Exception;
+
     /*충전 시작 이력 등록*/
     int rechgSttInsert(ChargeVO chargeVO) throws Exception;
 

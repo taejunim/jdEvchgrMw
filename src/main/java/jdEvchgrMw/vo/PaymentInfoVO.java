@@ -29,6 +29,7 @@ public class PaymentInfoVO {
     private String creditTrxDt;         //신용카드 거래일시
     private int    payAmt;              //결제 금액
     private String cPayType;            //취소결제 타입
+    private String cPayTrxDt;           //취소결제 거래일시
     private int    cPayAmt;             //취소결제 금액
     private String creditPayDetl;       //신용카드 결제 상세정보
     private String pPayFnshYn;          //선결제 완료 여부

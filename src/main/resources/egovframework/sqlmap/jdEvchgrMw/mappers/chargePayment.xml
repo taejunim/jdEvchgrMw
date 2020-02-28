@@ -111,6 +111,7 @@
         UPDATE credit_pay_info
 
            SET C_PAY_TYPE  = #{cPayType}
+             , C_PAY_TRX_DT  = #{cPayTrxDt}
              , C_PAY_AMT  = #{cPayAmt}
              , C_PAY_FNSH_YN     = #{cPayFnshYn}
              , C_PAY_CHGR_TX_DT   = #{cPayChgrTxDt}

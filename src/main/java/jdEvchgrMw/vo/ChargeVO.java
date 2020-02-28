@@ -29,6 +29,8 @@ public class ChargeVO {
     private String plugTypeCd;              //플러그 타입 코드
     private String memAuthInputNo;          //회원 인증 입력 번호
     private String rechgSttListId;          //충전 시작이력 ID
+    private String rechgingListId;          //충전 진이력 ID
+    private String rechgFnshListId;         //충전 완료이력 ID
     private String rechgSdt;                //충전 시작일시
     private String rechgEdt;                //충전 종료일시
     private String rechgFnshTpCd;           //충전 완료 구분 코드

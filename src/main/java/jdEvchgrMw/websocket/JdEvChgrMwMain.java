@@ -40,7 +40,7 @@ public class JdEvChgrMwMain {
 
         sessionList = tempList;
 
-        logger.info("[ 충전소 : " + stationId + " - 충전기  "+ chgrId +"(가)이 접속 하였습니다. ]\n [ 현재 sessionList : " + sessionList + " ]");
+        logger.info("[ 충전소 : " + stationId + " - 충전기  "+ chgrId +"(가)이 접속 하였습니다. ]\n [ 접속중인 충전기 수 : " + sessionList.size() + " ]");
     }
     
     /**
@@ -60,8 +60,7 @@ public class JdEvChgrMwMain {
     	commonVO.setRcvMsg(message);
 
     	//세션 로그 출력
-        sessionListLog();
-        logger.info("[ Bytes: " + getByteLength(message) + " ]");
+        //sessionListLog();
         logger.info("[ 충전기 -> M/W : "+ commonVO.getRcvMsg() +" ]");
 
         JsonDataParsing jdp         = new JsonDataParsing();
@@ -104,7 +103,7 @@ public class JdEvChgrMwMain {
 
             if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
 
-                logger.info("[ 클라이언트가 접속을 종료 하였습니다. 종료된 충전기 : " + sessionList.get(i).getStationChgrId() + " ]");
+                logger.info("[ 충전기 (" + sessionList.get(i).getStationChgrId() + ") 연결이 끊어졌습니다. ]");
 
                 sessionList.remove(i);
 
@@ -113,9 +112,9 @@ public class JdEvChgrMwMain {
         }
 
         //세션 로그 출력
-        sessionListLog();
+        //sessionListLog();
 
-        logger.info("[ 현재 session 수 : " + sessionList.size() + ", 현재 sessionList : " + sessionList + " ]");
+        logger.info("[ 현재 session 수 : " + sessionList.size() + " ]");
     }
     
     /**

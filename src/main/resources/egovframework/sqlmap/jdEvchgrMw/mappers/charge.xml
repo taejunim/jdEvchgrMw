@@ -2,6 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jdEvchgrMw.charge.service.impl.ChargeMapper">
 
+    <select id="getRechgSttListId" parameterType="chargeVO" resultType="java.lang.String">
+
+        SELECT rsl.RECHG_STT_LIST_ID AS RECHG_STT_LIST_ID
+          FROM rechg_stt_list rsl
+         WHERE 1=1
+           AND rsl.PROVIDER_ID = #{providerId}
+           AND rsl.ST_ID       = #{stId}
+           AND rsl.CHGR_ID     = #{chgrId}
+           AND rsl.PLUG_TYPE_CD= #{plugTypeCd}
+           AND rsl.RECHG_SDT   = #{rechgSdt}
+      ORDER BY rsl.REG_DT
+          DESC LIMIT 1
+
+    </select>
+
     <insert id="rechgSttInsert" parameterType="chargeVO">
 
         INSERT INTO rechg_stt_list (
@@ -31,10 +46,7 @@
                                     , CHGR_TX_DT
                                     , REG_DT
                           ) VALUES (
-                                      (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(rsl.RECHG_STT_LIST_ID,5)), 0)+1, 8, '0')) AS RECHG_STT_LIST_ID
-                                         FROM rechg_stt_list rsl
-                                        WHERE LEFT(rsl.RECHG_STT_LIST_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
-                                      )
+                                      #{rechgSttListId}
                                     , #{providerId}
                                     , #{stId}
                                     , #{chgrId}
@@ -112,10 +124,7 @@
                                     , CHGR_TX_DT
                                     , REG_DT
                         ) VALUES (
-                                      (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(rl.RECHGING_LIST_ID,5)), 0)+1, 8, '0')) AS RECHGING_LIST_ID
-                                         FROM rechging_list rl
-                                        WHERE LEFT(rl.RECHGING_LIST_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
-                                      )
+                                      #{rechgingListId}
                                     , #{providerId}
                                     , #{stId}
                                     , #{chgrId}
@@ -124,18 +133,7 @@
                                     , #{chId}
                                     , #{plugTypeCd}
                                     , #{memAuthInputNo}
-                                    , (
-                                        SELECT rsl.RECHG_STT_LIST_ID RECHG_STT_LIST_ID
-                                          FROM rechg_stt_list rsl
-                                         WHERE 1=1
-                                           AND rsl.PROVIDER_ID = #{providerId}
-                                           AND rsl.ST_ID       = #{stId}
-                                           AND rsl.CHGR_ID     = #{chgrId}
-                                           AND rsl.PLUG_TYPE_CD= #{plugTypeCd}
-                                           AND rsl.RECHG_SDT   = #{rechgSdt}
-                                      ORDER BY rsl.REG_DT
-                                          DESC LIMIT 1
-                                      )
+                                    , #{rechgSttListId}
                                     , #{rechgSdt}
                                     , #{rechgDemandAmt}
                                     , #{rechgingAmt}
@@ -212,10 +210,7 @@
                                         , REG_DT
                                         , PAY_FNSH_YN
                             ) VALUES (
-                                          (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(rfl.RECHG_FNSH_LIST_ID,5)), 0)+1, 8, '0')) AS RECHG_FNSH_LIST_ID
-                                             FROM rechg_fnsh_list rfl
-                                            WHERE LEFT(rfl.RECHG_FNSH_LIST_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
-                                          )
+                                          #{rechgFnshListId}
                                         , #{providerId}
                                         , #{stId}
                                         , #{chgrId}
@@ -224,18 +219,7 @@
                                         , #{chId}
                                         , #{plugTypeCd}
                                         , #{memAuthInputNo}
-                                        , (
-                                            SELECT rsl.RECHG_STT_LIST_ID RECHG_STT_LIST_ID
-                                              FROM rechg_stt_list rsl
-                                             WHERE 1=1
-                                               AND rsl.PROVIDER_ID = #{providerId}
-                                               AND rsl.ST_ID       = #{stId}
-                                               AND rsl.CHGR_ID     = #{chgrId}
-                                               AND rsl.PLUG_TYPE_CD= #{plugTypeCd}
-                                               AND rsl.RECHG_SDT   = #{rechgSdt}
-                                          ORDER BY rsl.REG_DT
-                                              DESC LIMIT 1
-                                          )
+                                        , #{rechgSttListId}
                                         , #{rechgSdt}
                                         , #{rechgEdt}
                                         , #{rechgFnshTpCd}
