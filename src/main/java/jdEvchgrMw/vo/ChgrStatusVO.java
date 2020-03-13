@@ -20,6 +20,7 @@ import lombok.Data;
 @Data
 public class ChgrStatusVO{
 
+    private String stateListId;             //충전기 상태 로그 ID
     private String providerId;              //충전사업자 ID
     private String stId;                    //충전소 ID
     private String chgrId;                  //충전기 ID

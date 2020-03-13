@@ -34,7 +34,8 @@
     <insert id="chgrStateInsert" parameterType="chgrStatusVO">
 
         INSERT INTO chgr_state_list (
-                                        PROVIDER_ID
+                                        STATE_LIST_ID
+                                    ,   PROVIDER_ID
                                     ,   ST_ID
                                     ,   CHGR_ID
                                     ,   STATE_DT
@@ -58,7 +59,8 @@
                                     ,   REG_DT
 
                            ) VALUES (
-                                        #{providerId}
+                                        #{stateListId}
+                                    ,   #{providerId}
                                     ,   #{stId}
                                     ,   #{chgrId}
                                     ,   #{stateDt}

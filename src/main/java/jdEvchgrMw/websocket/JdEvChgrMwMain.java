@@ -8,10 +8,7 @@ import org.apache.logging.log4j.Logger;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @ServerEndpoint(value="/station/{stationId}/{chgrId}")
 public class JdEvChgrMwMain {
@@ -19,7 +16,8 @@ public class JdEvChgrMwMain {
     Logger logger = LogManager.getLogger(JdEvChgrMwMain.class);
 
     //세션 집합 리스트
-    static List<SessionVO> sessionList= Collections.synchronizedList(new ArrayList<SessionVO>());
+    static List<SessionVO> sessionList = new ArrayList();
+    static Queue<String> qList = new LinkedList<String>();
 
 	/**
      * WEBSOCKET CONNECTED CALL EVENT

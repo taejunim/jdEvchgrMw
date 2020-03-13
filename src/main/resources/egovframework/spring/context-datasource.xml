@@ -9,7 +9,10 @@
         <property name="driverClassName" value="#{global['db.driverClass']}"/>
         <property name="url"             value="#{global['db.url']}" />
         <property name="username" 		 value="#{global['db.userId']}"/>
-        <property name="password" 		 value="#{global['db.pw']}"/>        
+        <property name="password" 		 value="#{global['db.pw']}"/>
+        <property name="validationQuery" value="select 1 from dual" />
+        <property name="testWhileIdle" value="true" />
+        <property name="timeBetweenEvictionRunsMillis" value="600000" />
     </bean>
     
 </beans>

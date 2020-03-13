@@ -33,7 +33,7 @@
            AND PROVIDER_ID = #{providerId}
 
            <![CDATA[
-           AND COST_SDD < NOW() AND COST_EDD >= NOW()
+           AND COST_SDD <= DATE_FORMAT(NOW(), '%Y%m%d') AND COST_EDD >= DATE_FORMAT(NOW(), '%Y%m%d')
            ]]>
 
     </select>
