@@ -21,6 +21,10 @@ public class JdEvChgrMwController {
 		
 		logger.info("MAIN");
 
+		String profile = System.getProperty("spring.profiles.active");
+
+		logger.info("profile : " + profile);
+
 		return "jdEvchgrMw/main";
 	}
 	

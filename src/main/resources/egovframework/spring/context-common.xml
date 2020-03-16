@@ -24,7 +24,7 @@
 	</bean>
 	
 	<!-- GOLBAL SETTING -->
-	<util:properties id="global" location="classpath:egovframework/message/message-common.properties" />
+	<util:properties id="global" location="classpath:/egovframework/message/config_#{systemProperties['spring.profiles.active']}.properties" />
 	
 	<bean id="leaveaTrace" class="egovframework.rte.fdl.cmmn.trace.LeaveaTrace">
 		<property name="traceHandlerServices">
