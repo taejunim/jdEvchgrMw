@@ -4,6 +4,8 @@ import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import jdEvchgrMw.user.service.UserService;
 import jdEvchgrMw.vo.UserVO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,6 +27,8 @@ import javax.annotation.Resource;
 
 @Service("userService")
 public class UserServiceImpl extends EgovAbstractServiceImpl implements UserService {
+
+    Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
     @Resource(name = "userMapper")
     private UserMapper userMapper;
@@ -70,6 +74,12 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
             userVO.setAuthResult("4");
             userVO.setAuthRsltCd("0");  //인증실패
         }
+
+        userVO.setAuthRsltValid(userVO.getAuthResult());
+        userVO.setMemProviderId(userVO.getProviderId());
+        userVO.setPrice(userVO.getCurrentUnitCost());
+
+        logger.info("<----------------------- 회원 인증 이력 등록 OK -------------------------> : " + userMapper.userAuthListInert(userVO));
 
         return userVO;
     }

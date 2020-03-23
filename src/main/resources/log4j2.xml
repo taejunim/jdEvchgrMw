@@ -10,13 +10,13 @@
         </Console>
         //
         <RollingFile name="file" fileName="C:/apache-tomcat-8.5.50-windows-x64/apache-tomcat-8.5.50/logs/${logNm}.log"
-                     filePattern="C:/apache-tomcat-8.5.50-windows-x64/apache-tomcat-8.5.50/logs/${logNm}_%d{yyyy-MM-dd}_%i.log">
+                     filePattern="C:/apache-tomcat-8.5.50-windows-x64/apache-tomcat-8.5.50/logs/${logNm}_%d{yyyy-MM-dd}_%i.log.zip">
             <PatternLayout pattern="${layoutPattern}" />
             <Policies>
-                <SizeBasedTriggeringPolicy size="100MB" /> <!-- 100MB 용량이 초과시 DefaultRolloverStrategy 정책만큼 넘버링 -->
+                <SizeBasedTriggeringPolicy size="600MB" /> <!-- 600MB 용량이 초과시 DefaultRolloverStrategy 정책만큼 넘버링 -->
                 <TimeBasedTriggeringPolicy module="true" interval="1" /><!-- 일별 로그 파일 생성-->
             </Policies>
-            <DefaultRolloverStrategy max="500" fileIndex="min" /><!-- 롤링 파일 500개 까지 생성 -->
+            <DefaultRolloverStrategy max="200" fileIndex="min" /><!-- 롤링 파일 200개 까지 생성 -->
         </RollingFile>
     </Appenders>
 

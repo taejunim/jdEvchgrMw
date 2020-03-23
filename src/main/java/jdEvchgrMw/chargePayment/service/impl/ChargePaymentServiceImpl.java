@@ -6,6 +6,8 @@ import jdEvchgrMw.chargePayment.service.ChargePaymentService;
 import jdEvchgrMw.vo.ChargePaymentVO;
 import jdEvchgrMw.vo.PaymentInfoVO;
 import jdEvchgrMw.vo.PaymentListVO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,6 +29,8 @@ import javax.annotation.Resource;
 
 @Service("chargePaymentService")
 public class ChargePaymentServiceImpl extends EgovAbstractServiceImpl implements ChargePaymentService {
+
+    Logger logger = LogManager.getLogger(ChargePaymentServiceImpl.class);
 
     @Resource(name = "chargePaymentMapper")
     private ChargePaymentMapper chargePaymentMapper;
@@ -73,13 +77,17 @@ public class ChargePaymentServiceImpl extends EgovAbstractServiceImpl implements
     }
 
     /*신용승인 결제정보 등록*/
-    public int paymentInfoInsert(PaymentInfoVO paymentInfoVO) throws Exception {
+    public int paymentInfoInsert(PaymentInfoVO paymentInfoVO, PaymentListVO paymentListVO) throws Exception {
+
+        logger.info("<----------------------- 신용승인 결제 리스트 등록 OK -------------------------> : " + paymentListInsert(paymentListVO));
 
         return chargePaymentMapper.paymentInfoInsert(paymentInfoVO);
     }
 
     /*신용승인 결제정보 수정*/
-    public int paymentInfoUpdate(PaymentInfoVO paymentInfoVO) throws Exception {
+    public int paymentInfoUpdate(PaymentInfoVO paymentInfoVO, PaymentListVO paymentListVO) throws Exception {
+
+        logger.info("<----------------------- 신용승인 결제 리스트 등록 OK -------------------------> : " + paymentListInsert(paymentListVO));
 
         return chargePaymentMapper.paymentInfoUpdate(paymentInfoVO);
     }

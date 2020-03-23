@@ -18,10 +18,7 @@ import jdEvchgrMw.vo.ChgrStatusVO;
  **/
 public interface ChgrStateService {
 
-    /*충전기 현재 상태 수정*/
-    int chgrCurrStateUpdate(ChgrStatusVO chgrStatusVO) throws Exception;
-
-    /*충전기 상태 이력 등록*/
-    int chgrStateInsert(ChgrStatusVO chgrStatusVO) throws Exception;
+    /*충전기 상태 이력 등록 및 상태 수정*/
+    int chgrStateUpdate(ChgrStatusVO chgrStatusVO) throws Exception;
 
 }

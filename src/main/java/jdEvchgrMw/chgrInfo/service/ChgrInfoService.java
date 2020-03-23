@@ -3,6 +3,8 @@ package jdEvchgrMw.chgrInfo.service;
 import jdEvchgrMw.vo.ChgrInfoVO;
 import jdEvchgrMw.vo.DeviceConfigVO;
 
+import java.util.ArrayList;
+
 /**
  * @ interface Name  : ChgrInfoService.java
  * @ Description : 충전기 설치 정보 SERVICE
@@ -20,17 +22,14 @@ import jdEvchgrMw.vo.DeviceConfigVO;
 
 public interface ChgrInfoService {
 
-    /*충전기 유효성 체크*/
-    String chgrCheckValidation(ChgrInfoVO chgrInfoVO) throws Exception;
+    /*충전기 목록*/
+    ArrayList<String> chgrList() throws Exception;
 
     /*충전기 사운드 및 밝기 조회*/
     DeviceConfigVO deviceConfigSelect(DeviceConfigVO deviceConfigVO) throws Exception;
 
-    /*충전기 설지 정보 UPDATE*/
-    int chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception;
-
-    /*충전기 채널 정보 등록 및 수정*/
-    int chgrChInfoInsUpdate(ChgrInfoVO chgrInfoVO) throws Exception;
+    /*충전기 설치 정보 UPDATE*/
+    DeviceConfigVO chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception;
 
     /*충전기 펌웨어 버전 정보 등록 및 수정*/
     int chgrFwVerInfoInsUpdate(ChgrInfoVO chgrInfoVO) throws Exception;

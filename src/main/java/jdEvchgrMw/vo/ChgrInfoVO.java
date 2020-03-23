@@ -3,6 +3,8 @@ package jdEvchgrMw.vo;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import lombok.Data;
 
+import java.util.ArrayList;
+
 /**
  * @ Class Name  : ChgrInfoVO.java
  * @ Description : 충전기 설치 정보 VO
@@ -65,4 +67,7 @@ public class ChgrInfoVO extends FwVerInfoVO {
 	private String plugTypeCd;			//플러그 타입 코드
 	private int chId;					//채널 ID
 	//private String chargerPayYn;		//충전기 과금 여부
+
+	ArrayList<FwVerInfoVO> fwVerInfoVOList = new ArrayList<>();			//펌웨어 리스트
+	ArrayList<PlugDetlInfoVO> plugDetlInfoVOList = new ArrayList<>();	//채널 리스트
 }

@@ -65,20 +65,13 @@
 
     </select>
 
-    <select id="chgrCheckValidation" parameterType="chgrInfoVO" resultType="egovMap">
+    <select id="chgrList" resultType="java.lang.String">
 
-        SELECT PROVIDER_ID
-             , ST_ID
-             , CHGR_ID
+        SELECT CONCAT(PROVIDER_ID, ST_ID, CHGR_ID)
 
           FROM chgr
 
-         WHERE 1=1
-
-           AND PROVIDER_ID = #{providerId}
-           AND ST_ID       = #{stId}
-           AND CHGR_ID     = #{chgrId}
-
+         WHERE DEL_YN = 'N'
     </select>
 
     <update id="chgrInfoUpdate" parameterType="chgrInfoVO" >

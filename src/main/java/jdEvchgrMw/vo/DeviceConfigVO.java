@@ -71,4 +71,6 @@ public class DeviceConfigVO {
     private String soundH21;
     private String soundH22;
     private String soundH23;
+
+    private String price;
 }

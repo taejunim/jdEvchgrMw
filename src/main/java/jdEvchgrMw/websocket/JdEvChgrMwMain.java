@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 import java.util.*;
 
 @ServerEndpoint(value="/station/{stationId}/{chgrId}")
@@ -16,7 +17,7 @@ public class JdEvChgrMwMain {
     Logger logger = LogManager.getLogger(JdEvChgrMwMain.class);
 
     //세션 집합 리스트
-    static List<SessionVO> sessionList = new ArrayList();
+    public static List<SessionVO> sessionList = new ArrayList();
     static Queue<String> qList = new LinkedList<String>();
 
 	/**
@@ -65,30 +66,6 @@ public class JdEvChgrMwMain {
     	jdp.jsonDataParsingMain(commonVO);
     }
 
-    public int getByteLength(String str) {
-
-        int strLength = 0;
-
-        char tempChar[] = new char[str.length()];
-
-        for (int i = 0; i < tempChar.length; i++) {
-
-            tempChar[i] = str.charAt(i);
-
-            if (tempChar[i] < 128) {
-
-                strLength++;
-
-            } else {
-
-                strLength += 2;
-            }
-        }
-
-        return strLength;
-
-    }
-
     /**
      * WEBSOCKET DISCONNECTED CALL EVENT
      */
@@ -97,20 +74,22 @@ public class JdEvChgrMwMain {
 
         String stationChgrId = stationId + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
 
-        for (int i=0; i < sessionList.size(); i++) {
+        try {
+            for (int i=0; i < sessionList.size(); i++) {
 
-            if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
+                if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
 
-                logger.info("[ 충전기 (" + sessionList.get(i).getStationChgrId() + ") 연결이 끊어졌습니다. ]");
+                    logger.info("[ 충전기 (" + sessionList.get(i).getStationChgrId() + ") 연결이 끊어졌습니다. ]");
 
-                sessionList.remove(i);
+                    sessionList.remove(i);
+                    sessionList.get(i).getUserSession().close();
 
-                break;
+                    break;
+                }
             }
+        } catch (IOException e) {
+            logger.error("IOException : " + e);
         }
-
-        //세션 로그 출력
-        //sessionListLog();
 
         logger.info("[ 현재 session 수 : " + sessionList.size() + " ]");
     }
@@ -126,18 +105,4 @@ public class JdEvChgrMwMain {
         logger.info("---------------------------------------------------");
         t.printStackTrace();
     }
-    
-    public void sessionListLog() {
-
-        logger.info("[ MSG Start.. 현재 session 수 : " + sessionList.size() + " ]");
-        logger.info("  현재 session 목록 -> ");
-
-        for (int i=0; i<sessionList.size(); i++) {
-            logger.info("[" + (i+1) + "] : " + sessionList.get(i).getStationChgrId());
-        }
-
-        logger.info("[ 총 session 수 : " + sessionList.size() + " ]");
-        logger.info("--------------------------------------------------------------------------");
-    }
-
 }

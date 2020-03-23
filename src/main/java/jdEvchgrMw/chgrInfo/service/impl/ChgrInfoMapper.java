@@ -1,9 +1,10 @@
 package jdEvchgrMw.chgrInfo.service.impl;
 
 import egovframework.rte.psl.dataaccess.mapper.Mapper;
-import egovframework.rte.psl.dataaccess.util.EgovMap;
 import jdEvchgrMw.vo.ChgrInfoVO;
 import jdEvchgrMw.vo.DeviceConfigVO;
+
+import java.util.ArrayList;
 
 /**
  * @ interface Name  : ChgrInfoMapper.java
@@ -23,13 +24,13 @@ import jdEvchgrMw.vo.DeviceConfigVO;
 @Mapper("chgrInfoMapper")
 public interface ChgrInfoMapper {
 
-    /*충전기 유효성 체크*/
-    EgovMap chgrCheckValidation(ChgrInfoVO chgrInfoVO) throws Exception;
+    /*충전기 리스트*/
+    ArrayList<String> chgrList() throws Exception;
 
     /*충전기 사운드 및 밝기 조회*/
     DeviceConfigVO deviceConfigSelect(DeviceConfigVO deviceConfigVO) throws Exception;
 
-    /*충전기 설지 정보 수정*/
+    /*충전기 설치 정보 수정*/
     int chgrInfoUpdate(ChgrInfoVO chgrInfoVO) throws Exception;
 
     /*충전기 채널 정보 등록 및 수정*/
