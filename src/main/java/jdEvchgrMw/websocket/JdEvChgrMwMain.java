@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
 import java.util.*;
 
 @ServerEndpoint(value="/station/{stationId}/{chgrId}")
@@ -17,7 +16,7 @@ public class JdEvChgrMwMain {
     Logger logger = LogManager.getLogger(JdEvChgrMwMain.class);
 
     //세션 집합 리스트
-    public static List<SessionVO> sessionList = new ArrayList();
+    public static List<SessionVO> sessionList= Collections.synchronizedList(new ArrayList<SessionVO>());
     static Queue<String> qList = new LinkedList<String>();
 
 	/**
@@ -74,21 +73,16 @@ public class JdEvChgrMwMain {
 
         String stationChgrId = stationId + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
 
-        try {
-            for (int i=0; i < sessionList.size(); i++) {
+        for (int i=0; i < sessionList.size(); i++) {
 
-                if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
+            if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
 
-                    logger.info("[ 충전기 (" + sessionList.get(i).getStationChgrId() + ") 연결이 끊어졌습니다. ]");
+                logger.info("[ 충전기 (" + sessionList.get(i).getStationChgrId() + ") 연결이 끊어졌습니다. ]");
 
-                    sessionList.remove(i);
-                    sessionList.get(i).getUserSession().close();
+                sessionList.remove(i);
 
-                    break;
-                }
+                break;
             }
-        } catch (IOException e) {
-            logger.error("IOException : " + e);
         }
 
         logger.info("[ 현재 session 수 : " + sessionList.size() + " ]");
