@@ -795,7 +795,13 @@ public class JsonDataParsing {
             logger.info("plug_id : " + plug_id);
             logger.info("<------------------------------------------------>");
 
+            //사용자 인증 로그 ID
+            Date dt = new Date();
+            String memAuthId = logIdFormat.format(dt);
+            logger.info("------------------------ 사용자 인증 로그 ID - memAuthId : " + memAuthId);
+
             UserVO userVO = new UserVO();
+            userVO.setMemAuthId(memAuthId);
             userVO.setMemAuthInputNo(card_num);
 
             userVO.setProviderId(commonVO.getProviderId());

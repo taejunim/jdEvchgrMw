@@ -60,7 +60,7 @@ public class JdEvChgrMwMain {
 
     	//세션 로그 출력
         //sessionListLog();
-        logger.info("[ 충전기 -> M/W : "+ commonVO.getRcvMsg() +" ]");
+        logger.info("[ 충전기(" + stationId + chgrId + ") -> M/W : "+ commonVO.getRcvMsg() +" ]");
 
         JsonDataParsing jdp         = new JsonDataParsing();
     	jdp.jsonDataParsingMain(commonVO);
@@ -101,7 +101,10 @@ public class JdEvChgrMwMain {
     @OnError
     public void handleError(Throwable t) {
         logger.info("---------------------------------------------------");
-    	logger.info("---------------------error-------------------------");
+    	logger.info("----------------- handleError ---------------------");
+        logger.info(" t : " + t);
+        logger.info(" cause : " + t.getCause());
+        logger.info(" detailMessage : " + t.getMessage());
         logger.info("---------------------------------------------------");
         t.printStackTrace();
     }

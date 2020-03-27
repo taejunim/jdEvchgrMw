@@ -29,6 +29,6 @@ public interface UserMapper {
     String userPriceSelect(UserVO userVO) throws Exception;
 
     /*회원 인증 이력 등록*/
-    int userAuthListInert(UserVO userVO) throws Exception;
+    int userAuthListInsert(UserVO userVO) throws Exception;
 
 }

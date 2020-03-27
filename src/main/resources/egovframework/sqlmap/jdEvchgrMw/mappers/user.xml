@@ -6,15 +6,7 @@
 
         SELECT mci.MEMSH_CARD_NO
              , mci.CUST_ID
-             , mci.PAY_KIND_CD
-             , mci.SPOT_PAY_YN
              , mci.STOP_YN
-             , mci.STOP_RSN
-             , mci.VALID_YN
-             , mci.REG_UID
-             , mci.REG_DT
-             , mci.MOD_UID
-             , mci.MOD_DT
              , ct.PROVIDER_ID
              , ct.B_ID
 
@@ -38,7 +30,7 @@
 
     </select>
 
-    <insert id="userAuthListInert" parameterType="userVO">
+    <insert id="userAuthListInsert" parameterType="userVO">
 
         INSERT INTO mem_auth_list (
                                     MEM_AUTH_ID
@@ -57,10 +49,7 @@
                                   , CHGR_TX_DT
                                   , REG_DT
                         ) VALUES (
-                                    (SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(mal.MEM_AUTH_ID,5)), 0)+1, 8, '0')) AS MEM_AUTH_ID
-                                        FROM mem_auth_list mal
-                                        WHERE LEFT(mal.MEM_AUTH_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
-                                    )
+                                   #{memAuthId}
                                   , #{providerId}
                                   , #{stId}
                                   , #{chgrId}

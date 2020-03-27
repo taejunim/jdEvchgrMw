@@ -2,6 +2,7 @@ package jdEvchgrMw.chgrInfo.service;
 
 import jdEvchgrMw.vo.ChgrInfoVO;
 import jdEvchgrMw.vo.DeviceConfigVO;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ import java.util.ArrayList;
  * Copyright (C) by MetisInfo All right reserved.
  **/
 
+@Transactional
 public interface ChgrInfoService {
 
     /*충전기 목록*/
