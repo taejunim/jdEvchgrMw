@@ -1,7 +1,7 @@
 package jdEvchgrMw.websocket;
 
-import jdEvchgrMw.vo.CommonVO;
-import jdEvchgrMw.vo.SessionVO;
+import jdEvchgrMw.common.CollectServiceBean;
+import jdEvchgrMw.vo.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,9 +15,9 @@ public class JdEvChgrMwMain {
 
     Logger logger = LogManager.getLogger(JdEvChgrMwMain.class);
 
-    //세션 집합 리스트
-    public static List<SessionVO> sessionList= Collections.synchronizedList(new ArrayList<SessionVO>());
-    static Queue<String> qList = new LinkedList<String>();
+    public static List<SessionVO> sessionList= Collections.synchronizedList(new ArrayList<SessionVO>());    //세션 집합 리스트
+    public static Queue<String> qActionList = new LinkedList<String>();         //Action 리스트
+    public static Queue<QueueVO> qDataObjectList = new LinkedList<QueueVO>();   //데이터 Object 리스트
 
 	/**
      * WEBSOCKET CONNECTED CALL EVENT
@@ -63,6 +63,118 @@ public class JdEvChgrMwMain {
 
         JsonDataParsing jdp         = new JsonDataParsing();
     	jdp.jsonDataParsingMain(commonVO);
+
+        logger.info("[ q 데이터 처리 시작 SIZE : " + qDataObjectList.size() +" ]");
+        if (qDataObjectList.size() > 0) {
+
+            while(qDataObjectList.isEmpty()==false){
+
+                QueueVO queueVO = qDataObjectList.poll();
+
+                String rTimeYn = queueVO.getRTimeYn().equals("N") ? "덤프_" : "";
+                String qActionType = queueVO.getActionType();
+                Object object = queueVO.getObject();
+
+                logger.info(rTimeYn + "qActionType : " + qActionType);
+                logger.info("object : " + object);
+
+                try {
+
+                    CollectServiceBean csb = new CollectServiceBean();
+
+                    //충전기 상태정보(충전기 -> 충전기정보시스템) CALL
+                    if (qActionType.equals("chgrStatus")) {
+
+                        logger.info("<----------------------- 충전기 상태 수정 OK -------------------------> : " + csb.chgrStateService().chgrStateUpdate( (ChgrStatusVO) object));
+                    }
+
+                    //충전 시작정보(충전기 -> 충전기정보시스템) CALL
+                    else if (qActionType.equals("chargingStart")) {
+
+                        logger.info("<----------------------- " + rTimeYn + "충전 시작 정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgSttInsert( (ChargeVO) object));
+                    }
+
+                    //충전 진행정보(충전기 -> 충전기정보시스템) CALL
+                    else if (qActionType.equals("chargingInfo")) {
+
+                        logger.info("<----------------------- 충전 진행정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgingInsert( (ChargeVO) object));
+                    }
+
+                    //충전 완료정보(충전기 -> 충전기정보시스템) CALL
+                    else if (qActionType.equals("chargingEnd")) {
+
+                        logger.info("<----------------------- " + rTimeYn + "충전 완료정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgFnshInsert( (ChargeVO) object));
+                    }
+
+                    //충전 결제정보(충전기 -> 충전기정보시스템) CALL
+                    else if (qActionType.equals("chargePayment")) {
+
+                        ChargePaymentVO chargePaymentVO = (ChargePaymentVO) object;
+
+                        if (chargePaymentVO.getPaymentType().equals("0")) {
+
+                            logger.info("<----------------------- " + rTimeYn + "충전 결제정보 - 실충전결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoInsert(chargePaymentVO));
+
+                        } else if (chargePaymentVO.getPaymentType().equals("1")) {
+
+                            logger.info("<----------------------- " + rTimeYn + "충전 결제정보 - 취소결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoUpdate(chargePaymentVO));
+                        }
+                    }
+
+                    //문자 전송(충전기 -> 충전기정보시스템) CALL
+                    else if (qActionType.equals("sendSms")) {
+
+                        logger.info("<----------------------- 문자 전송 이력 등록 OK -------------------------> : " + csb.sendSmsService().msgSndListInsert((SendSmsVO) object));
+                    }
+
+                    //경보 이력(충전기 -> 충전기정보시스템) CALL
+                    else if (qActionType.equals("alarmHistory")) {
+
+                        logger.info("<----------------------- " + rTimeYn + "경보 이력 Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert( (AlarmHistoryVO) object));
+                    }
+
+                    //펌웨어 업데이트 결과 알림(충전기 -> 충전기정보시스템) CALL
+                    else if (qActionType.equals("reportUpdate")) {
+
+                        logger.info("<----------------------- " + rTimeYn + "펌웨어 업데이트 결과 알림 Update OK -------------------------> : " + csb.beanChgrInfoService().chgrFwVerInfoInsUpdate((ChgrInfoVO) object));
+                    }
+
+                    //신용승인 결제정보(충전기 -> 충전기정보시스템) CALL
+                    else if (qActionType.equals("paymentInfo")) {
+
+                        PaymentInfoVO paymentInfoVO = (PaymentInfoVO) object;
+
+                        String payType = paymentInfoVO.getPaymentListVO().getPayType();
+
+                        if (payType.equals("1")) {
+
+                            logger.info("<----------------------- " + rTimeYn + "신용승인 결제정보 등록 OK -------------------------> : " + csb.chargePaymentService().paymentInfoInsert(paymentInfoVO));
+
+                        } else if (payType.equals("2") || payType.equals("3")) {
+
+                            logger.info("<----------------------- " + rTimeYn + "신용승인 결제정보 수정 OK -------------------------> : " + csb.chargePaymentService().paymentInfoUpdate(paymentInfoVO));
+                        }
+                    }
+
+                    //수신 전문 이력 인서트&업데이트(충전기 <-> M/W)
+                    else if (qActionType.equals("recvMsg")) {
+
+                        logger.info("<----------------------- " + rTimeYn + "수신 전문 이력 Insert OK -------------------------> : " + csb.revMsgService().recvMsgInsert((RevMsgVO) object));
+                    }
+
+                    //전문 이력 업데이트(M/W <-> 충전기)
+                    else if (qActionType.equals("txMsg")) {
+
+                        logger.info("<----------------------- " + rTimeYn + "전문 이력 Update OK -------------------------> : " + csb.controlChgrService().txMsgListUpdate((ControlChgrVO) object));
+                    }
+
+                } catch (Exception e) {
+                    logger.error("Data Exception : " + e);
+                }
+            }
+        }
+
+        logger.info("[ q 데이터 처리 완료 SIZE : " + qDataObjectList.size() +" ]");
     }
 
     /**

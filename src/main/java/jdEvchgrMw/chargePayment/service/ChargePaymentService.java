@@ -28,10 +28,10 @@ public interface ChargePaymentService {
     int creditTrxInfoUpdate(ChargePaymentVO chargePaymentVO) throws Exception;
 
     /*신용승인 결제정보 등록*/
-    int paymentInfoInsert(PaymentInfoVO paymentInfoVO, PaymentListVO paymentListVO) throws Exception;
+    int paymentInfoInsert(PaymentInfoVO paymentInfoVO) throws Exception;
 
     /*신용승인 결제정보 수정*/
-    int paymentInfoUpdate(PaymentInfoVO paymentInfoVO, PaymentListVO paymentListVO) throws Exception;
+    int paymentInfoUpdate(PaymentInfoVO paymentInfoVO) throws Exception;
 
     /*신용승인 결제 리스트 등록*/
     int paymentListInsert(PaymentListVO paymentListVO) throws Exception;

@@ -77,17 +77,17 @@ public class ChargePaymentServiceImpl extends EgovAbstractServiceImpl implements
     }
 
     /*신용승인 결제정보 등록*/
-    public int paymentInfoInsert(PaymentInfoVO paymentInfoVO, PaymentListVO paymentListVO) throws Exception {
+    public int paymentInfoInsert(PaymentInfoVO paymentInfoVO) throws Exception {
 
-        logger.info("<----------------------- 신용승인 결제 리스트 등록 OK -------------------------> : " + paymentListInsert(paymentListVO));
+        logger.info("<----------------------- 신용승인 결제 리스트 등록 OK -------------------------> : " + paymentListInsert(paymentInfoVO.getPaymentListVO()));
 
         return chargePaymentMapper.paymentInfoInsert(paymentInfoVO);
     }
 
     /*신용승인 결제정보 수정*/
-    public int paymentInfoUpdate(PaymentInfoVO paymentInfoVO, PaymentListVO paymentListVO) throws Exception {
+    public int paymentInfoUpdate(PaymentInfoVO paymentInfoVO) throws Exception {
 
-        logger.info("<----------------------- 신용승인 결제 리스트 등록 OK -------------------------> : " + paymentListInsert(paymentListVO));
+        logger.info("<----------------------- 신용승인 결제 리스트 등록 OK -------------------------> : " + paymentListInsert(paymentInfoVO.getPaymentListVO()));
 
         return chargePaymentMapper.paymentInfoUpdate(paymentInfoVO);
     }

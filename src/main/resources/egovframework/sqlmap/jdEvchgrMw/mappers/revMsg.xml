@@ -2,16 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jdEvchgrMw.revMsg.service.impl.RevMsgMapper">
 
-    <select id="getRecvLogId" resultType="java.lang.String">
-
-        SELECT CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), LPAD(IFNULL(max(right(RECV_LOG_ID,5)), 0)+1, 8, '0')) AS RECV_LOG_ID
-
-          FROM recv_msg_list
-
-         WHERE LEFT(RECV_LOG_ID, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
-
-    </select>
-
     <insert id="recvMsgInsert" parameterType="revMsgVO">
 
         INSERT INTO recv_msg_list (
@@ -47,21 +37,6 @@
                                   )
 
     </insert>
-
-    <update id="recvMsgUpdate" parameterType="revMsgVO">
-
-        UPDATE recv_msg_list
-
-           SET RES_DT       = #{resDt}
-             , RES_CD       = #{resCd}
-             , RES_RSN_CD   = #{resRsnCd}
-             , RES_MSG      = #{resMsg}
-
-         WHERE 1=1
-
-           AND RECV_LOG_ID = #{recvLogId}
-
-    </update>
 
 </mapper>
 

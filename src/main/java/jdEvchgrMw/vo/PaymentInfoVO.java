@@ -36,4 +36,6 @@ public class PaymentInfoVO {
     private String cPayFnshYn;          //취소결제 완료 여부
     private String pPayChgrTxDt;        //선결제 충전기 전송 일시
     private String cPayChgrTxDt;        //취소결제 충전기 전송 일시
+
+    PaymentListVO paymentListVO = new PaymentListVO();  //결제 이력 정보
 }

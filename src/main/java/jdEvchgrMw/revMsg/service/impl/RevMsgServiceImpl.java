@@ -1,7 +1,6 @@
 package jdEvchgrMw.revMsg.service.impl;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import jdEvchgrMw.chgrInfo.service.impl.ChgrInfoMapper;
 import jdEvchgrMw.revMsg.service.RevMsgService;
 import jdEvchgrMw.vo.RevMsgVO;
 import org.springframework.stereotype.Service;
@@ -29,22 +28,9 @@ public class RevMsgServiceImpl extends EgovAbstractServiceImpl implements RevMsg
     @Resource(name = "revMsgMapper")
     private RevMsgMapper revMsgMapper;
 
-    /*수신 전문 이력의 수신 로그 ID GET*/
-    public String getRecvLogId() throws Exception {
-
-        return revMsgMapper.getRecvLogId();
-    }
-
     /*수신 전문 인력 등록*/
     public int recvMsgInsert(RevMsgVO revMsgVO) throws Exception {
 
         return revMsgMapper.recvMsgInsert(revMsgVO);
     }
-
-    /*수신 전문 인력 수정*/
-    public int recvMsgUpdate(RevMsgVO revMsgVO) throws Exception {
-
-        return revMsgMapper.recvMsgUpdate(revMsgVO);
-    }
-
 }

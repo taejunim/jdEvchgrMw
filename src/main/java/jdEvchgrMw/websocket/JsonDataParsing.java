@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static jdEvchgrMw.common.ServerUtils.chgrList;
-import static jdEvchgrMw.websocket.JdEvChgrMwMain.qList;
+import static jdEvchgrMw.websocket.JdEvChgrMwMain.qActionList;
+import static jdEvchgrMw.websocket.JdEvChgrMwMain.qDataObjectList;
 
 /**
  * @ Class Name  : JsonDataParsing.java
@@ -113,11 +114,11 @@ public class JsonDataParsing {
             //데이터 정상 -> 파싱 시작
             else {
 
-                qList.offer(commonVO.getActionType());
+                qActionList.offer(commonVO.getActionType());
 
-                while(qList.isEmpty()==false){
+                while(qActionList.isEmpty()==false){
 
-                    String qActionType = qList.poll();
+                    String qActionType = qActionList.poll();
                     logger.info("*******************  qActionType  ******************* : " + qActionType);
 
                     if (qActionType.equals("chgrInfo")) {
@@ -751,8 +752,17 @@ public class JsonDataParsing {
                 }
             }
 
-            CollectServiceBean csb = new CollectServiceBean();
-            logger.info("<----------------------- 충전기 상태 수정 OK -------------------------> : " + csb.chgrStateService().chgrStateUpdate(chgrStatusVO));
+            /*CollectServiceBean csb = new CollectServiceBean();
+            logger.info("<----------------------- 충전기 상태 수정 OK -------------------------> : " + csb.chgrStateService().chgrStateUpdate(chgrStatusVO));*/
+
+            QueueVO queueVO = new QueueVO();
+            queueVO.setRTimeYn(commonVO.getRTimeYn());
+            queueVO.setActionType("chgrStatus");
+            queueVO.setObject(chgrStatusVO);
+
+            qDataObjectList.offer(queueVO);
+
+            logger.info("<----------------------- qDataObjectList added ------------------------->");
 
         } catch (ParseException e) {
 
@@ -908,8 +918,15 @@ public class JsonDataParsing {
             chargeVO.setDataCreateDt(create_date);
             chargeVO.setChgrTxDt(send_date);
 
-            CollectServiceBean csb = new CollectServiceBean();
-            logger.info("<----------------------- 충전 시작 정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgSttInsert(chargeVO));
+            /*CollectServiceBean csb = new CollectServiceBean();
+            logger.info("<----------------------- 충전 시작 정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgSttInsert(chargeVO));*/
+
+            QueueVO queueVO = new QueueVO();
+            queueVO.setRTimeYn(commonVO.getRTimeYn());
+            queueVO.setActionType("chargingStart");
+            queueVO.setObject(chargeVO);
+
+            qDataObjectList.offer(queueVO);
 
         } catch (ParseException e) {
 
@@ -1006,8 +1023,15 @@ public class JsonDataParsing {
             chargeVO.setDataCreateDt(create_date);
             chargeVO.setChgrTxDt(send_date);
 
-            CollectServiceBean csb = new CollectServiceBean();
-            logger.info("<----------------------- 충전 진행정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgingInsert(chargeVO));
+            /*CollectServiceBean csb = new CollectServiceBean();
+            logger.info("<----------------------- 충전 진행정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgingInsert(chargeVO));*/
+
+            QueueVO queueVO = new QueueVO();
+            queueVO.setRTimeYn(commonVO.getRTimeYn());
+            queueVO.setActionType("chargingInfo");
+            queueVO.setObject(chargeVO);
+
+            qDataObjectList.offer(queueVO);
 
         } catch (ParseException e) {
 
@@ -1123,8 +1147,15 @@ public class JsonDataParsing {
             chargeVO.setChgrTxDt(send_date);
             chargeVO.setPayFnshYn(pay_fnsh_yn);
 
-            CollectServiceBean csb = new CollectServiceBean();
-            logger.info("<----------------------- 충전 완료정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgFnshInsert(chargeVO));
+            /*CollectServiceBean csb = new CollectServiceBean();
+            logger.info("<----------------------- 충전 완료정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgFnshInsert(chargeVO));*/
+
+            QueueVO queueVO = new QueueVO();
+            queueVO.setRTimeYn(commonVO.getRTimeYn());
+            queueVO.setActionType("chargingEnd");
+            queueVO.setObject(chargeVO);
+
+            qDataObjectList.offer(queueVO);
 
         } catch (ParseException e) {
 
@@ -1183,8 +1214,13 @@ public class JsonDataParsing {
             chargePaymentVO.setChgrId(commonVO.getChgrId());
             chargePaymentVO.setChId(plug_id);
             chargePaymentVO.setPPayTrxNo(prepayment_trx_no);
+            chargePaymentVO.setPaymentType(payment_type);
 
-            CollectServiceBean csb = new CollectServiceBean();
+            //CollectServiceBean csb = new CollectServiceBean();
+
+            QueueVO queueVO = new QueueVO();
+            queueVO.setRTimeYn(commonVO.getRTimeYn());
+            queueVO.setActionType("chargePayment");
 
             if (payment_type.equals("0")) {
 
@@ -1193,7 +1229,7 @@ public class JsonDataParsing {
                 chargePaymentVO.setRPayAmt(payment_amount);
                 chargePaymentVO.setRPayTxDt(create_date);
 
-                logger.info("<----------------------- 충전 결제정보 - 실충전결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoInsert(chargePaymentVO));
+                //logger.info("<----------------------- 충전 결제정보 - 실충전결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoInsert(chargePaymentVO));
             } else if (payment_type.equals("1")) {
 
                 chargePaymentVO.setCPayTrxNo(credit_trx_no);
@@ -1201,8 +1237,12 @@ public class JsonDataParsing {
                 chargePaymentVO.setCPayAmt(payment_amount);
                 chargePaymentVO.setCPayTxDt(create_date);
 
-                logger.info("<----------------------- 충전 결제정보 - 취소결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoUpdate(chargePaymentVO));
+                //logger.info("<----------------------- 충전 결제정보 - 취소결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoUpdate(chargePaymentVO));
             }
+
+            queueVO.setObject(chargePaymentVO);
+
+            qDataObjectList.offer(queueVO);
 
         } catch (ParseException e) {
 
@@ -1266,9 +1306,16 @@ public class JsonDataParsing {
             sendSmsVO.setDataCreateDt(create_date);
             sendSmsVO.setChgrTxDt(send_date);
 
-            CollectServiceBean csb = new CollectServiceBean();
+            /*CollectServiceBean csb = new CollectServiceBean();
 
-            logger.info("<----------------------- 문자 전송 이력 등록 OK -------------------------> : " + csb.sendSmsService().msgSndListInsert(sendSmsVO));
+            logger.info("<----------------------- 문자 전송 이력 등록 OK -------------------------> : " + csb.sendSmsService().msgSndListInsert(sendSmsVO));*/
+
+            QueueVO queueVO = new QueueVO();
+            queueVO.setRTimeYn(commonVO.getRTimeYn());
+            queueVO.setActionType("sendSms");
+            queueVO.setObject(sendSmsVO);
+
+            qDataObjectList.offer(queueVO);
 
         } catch (ParseException e) {
 
@@ -1337,10 +1384,17 @@ public class JsonDataParsing {
             alarmHistoryVO.setRTimeYn("Y");
             alarmHistoryVO.setMfAlarmCd(mf_alarm_code);
 
-            CollectServiceBean csb = new CollectServiceBean();
+            /*CollectServiceBean csb = new CollectServiceBean();
 
             // req Data DB Insert
-            logger.info("<----------------------- 경보 이력 Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));
+            logger.info("<----------------------- 경보 이력 Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));*/
+
+            QueueVO queueVO = new QueueVO();
+            queueVO.setRTimeYn(commonVO.getRTimeYn());
+            queueVO.setActionType("alarmHistory");
+            queueVO.setObject(alarmHistoryVO);
+
+            qDataObjectList.offer(queueVO);
 
         } catch (ParseException e) {
 
@@ -1404,8 +1458,15 @@ public class JsonDataParsing {
             chgrInfoVO.setChgrId(commonVO.getChgrId());
             chgrInfoVO.setFwVerInfoVOList(fwVerInfoVOList);
 
-            CollectServiceBean csb = new CollectServiceBean();
-            logger.info("<----------------------- 펌웨어 업데이트 결과 알림 Update OK -------------------------> : " + csb.beanChgrInfoService().chgrFwVerInfoInsUpdate(chgrInfoVO));
+            /*CollectServiceBean csb = new CollectServiceBean();
+            logger.info("<----------------------- 펌웨어 업데이트 결과 알림 Update OK -------------------------> : " + csb.beanChgrInfoService().chgrFwVerInfoInsUpdate(chgrInfoVO));*/
+
+            QueueVO queueVO = new QueueVO();
+            queueVO.setRTimeYn(commonVO.getRTimeYn());
+            queueVO.setActionType("reportUpdate");
+            queueVO.setObject(chgrInfoVO);
+
+            qDataObjectList.offer(queueVO);
 
         } catch (ParseException e) {
 
@@ -1489,7 +1550,9 @@ public class JsonDataParsing {
             paymentListVO.setPayFnshYn(pay_fnsh_yn);
             paymentListVO.setChgrTxDt(send_date);
 
-            CollectServiceBean csb = new CollectServiceBean();
+            paymentInfoVO.setPaymentListVO(paymentListVO);
+
+            //CollectServiceBean csb = new CollectServiceBean();
 
             //선결제
             if (payment_type.equals("1")) {
@@ -1498,7 +1561,7 @@ public class JsonDataParsing {
                 paymentInfoVO.setPPayFnshYn(pay_fnsh_yn);
                 paymentInfoVO.setPPayChgrTxDt(send_date);
 
-                logger.info("<----------------------- 신용승인 결제정보 등록 OK -------------------------> : " + csb.chargePaymentService().paymentInfoInsert(paymentInfoVO, paymentListVO));
+                //logger.info("<----------------------- 신용승인 결제정보 등록 OK -------------------------> : " + csb.chargePaymentService().paymentInfoInsert(paymentInfoVO));
             }
 
             //무충전 카드취소결제 or 부분취소결제
@@ -1510,8 +1573,15 @@ public class JsonDataParsing {
                 paymentInfoVO.setCPayChgrTxDt(send_date);
                 paymentInfoVO.setCPayTrxDt(credit_trx_date);
 
-                logger.info("<----------------------- 신용승인 결제정보 수정 OK -------------------------> : " + csb.chargePaymentService().paymentInfoUpdate(paymentInfoVO, paymentListVO));
+                //logger.info("<----------------------- 신용승인 결제정보 수정 OK -------------------------> : " + csb.chargePaymentService().paymentInfoUpdate(paymentInfoVO));
             }
+
+            QueueVO queueVO = new QueueVO();
+            queueVO.setRTimeYn(commonVO.getRTimeYn());
+            queueVO.setActionType("paymentInfo");
+            queueVO.setObject(paymentInfoVO);
+
+            qDataObjectList.offer(queueVO);
 
         } catch (ParseException e) {
 
@@ -1608,9 +1678,16 @@ public class JsonDataParsing {
                 chargeVO.setDataCreateDt(create_date);
                 chargeVO.setChgrTxDt(send_date);
 
-                CollectServiceBean csb = new CollectServiceBean();
+                /*CollectServiceBean csb = new CollectServiceBean();
 
-                logger.info("<----------------------- 덤프_충전 시작정보 이력 등록 OK [" + (i + 1) + "] -------------------------> : " + csb.chargeService().rechgSttInsert(chargeVO));
+                logger.info("<----------------------- 덤프_충전 시작정보 이력 등록 OK [" + (i + 1) + "] -------------------------> : " + csb.chargeService().rechgSttInsert(chargeVO));*/
+
+                QueueVO queueVO = new QueueVO();
+                queueVO.setRTimeYn(commonVO.getRTimeYn());
+                queueVO.setActionType("chargingStart");
+                queueVO.setObject(chargeVO);
+
+                qDataObjectList.offer(queueVO);
 
             }
 
@@ -1735,9 +1812,16 @@ public class JsonDataParsing {
                 chargeVO.setChgrTxDt(send_date);
                 chargeVO.setPayFnshYn(pay_fnsh_yn);
 
-                CollectServiceBean csb = new CollectServiceBean();
+                /*CollectServiceBean csb = new CollectServiceBean();
 
-                logger.info("<----------------------- 덤프_충전 완료정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgFnshInsert(chargeVO));
+                logger.info("<----------------------- 덤프_충전 완료정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgFnshInsert(chargeVO));*/
+
+                QueueVO queueVO = new QueueVO();
+                queueVO.setRTimeYn(commonVO.getRTimeYn());
+                queueVO.setActionType("chargingEnd");
+                queueVO.setObject(chargeVO);
+
+                qDataObjectList.offer(queueVO);
             }
 
         } catch (ParseException e) {
@@ -1804,6 +1888,7 @@ public class JsonDataParsing {
 
                 chargePaymentVO.setChId(plug_id);
                 chargePaymentVO.setPPayTrxNo(prepayment_trx_no);
+                chargePaymentVO.setPaymentType(payment_type);
 
                 CollectServiceBean csb = new CollectServiceBean();
 
@@ -1814,7 +1899,7 @@ public class JsonDataParsing {
                     chargePaymentVO.setRPayAmt(payment_amount);
                     chargePaymentVO.setRPayTxDt(create_date);
 
-                    logger.info("<----------------------- 덤프_충전 결제정보 - 실충전결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoInsert(chargePaymentVO));
+                    //logger.info("<----------------------- 덤프_충전 결제정보 - 실충전결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoInsert(chargePaymentVO));
                 } else if (payment_type.equals("1")) {
 
                     chargePaymentVO.setCPayTrxNo(credit_trx_no);
@@ -1822,8 +1907,15 @@ public class JsonDataParsing {
                     chargePaymentVO.setCPayAmt(payment_amount);
                     chargePaymentVO.setCPayTxDt(create_date);
 
-                    logger.info("<----------------------- 덤프_충전 결제정보 - 취소결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoUpdate(chargePaymentVO));
+                    //logger.info("<----------------------- 덤프_충전 결제정보 - 취소결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoUpdate(chargePaymentVO));
                 }
+
+                QueueVO queueVO = new QueueVO();
+                queueVO.setRTimeYn(commonVO.getRTimeYn());
+                queueVO.setActionType("chargePayment");
+                queueVO.setObject(chargePaymentVO);
+
+                qDataObjectList.offer(queueVO);
             }
 
         } catch (ParseException e) {
@@ -1900,10 +1992,17 @@ public class JsonDataParsing {
                 alarmHistoryVO.setChgrTxDt(send_date);
                 alarmHistoryVO.setMfAlarmCd(mf_alarm_code);
 
-                CollectServiceBean csb = new CollectServiceBean();
+                /*CollectServiceBean csb = new CollectServiceBean();
 
                 // req Data DB Insert
-                logger.info("<----------------------- 덤프_경보 이력 Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));
+                logger.info("<----------------------- 덤프_경보 이력 Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));*/
+
+                QueueVO queueVO = new QueueVO();
+                queueVO.setRTimeYn(commonVO.getRTimeYn());
+                queueVO.setActionType("alarmHistory");
+                queueVO.setObject(alarmHistoryVO);
+
+                qDataObjectList.offer(queueVO);
             }
 
         } catch (ParseException e) {
@@ -1974,8 +2073,15 @@ public class JsonDataParsing {
                 chgrInfoVO.setChgrId(commonVO.getChgrId());
                 chgrInfoVO.setFwVerInfoVOList(fwVerInfoVOList);
 
-                CollectServiceBean csb = new CollectServiceBean();
-                logger.info("<----------------------- 덤프_펌웨어 업데이트 결과 알림 Update OK -------------------------> : " + csb.beanChgrInfoService().chgrFwVerInfoInsUpdate(chgrInfoVO));
+                /*CollectServiceBean csb = new CollectServiceBean();
+                logger.info("<----------------------- 덤프_펌웨어 업데이트 결과 알림 Update OK -------------------------> : " + csb.beanChgrInfoService().chgrFwVerInfoInsUpdate(chgrInfoVO));*/
+
+                QueueVO queueVO = new QueueVO();
+                queueVO.setRTimeYn(commonVO.getRTimeYn());
+                queueVO.setActionType("reportUpdate");
+                queueVO.setObject(chgrInfoVO);
+
+                qDataObjectList.offer(queueVO);
             }
 
         } catch (ParseException e) {
@@ -2070,7 +2176,9 @@ public class JsonDataParsing {
                 paymentListVO.setPayFnshYn(pay_fnsh_yn);
                 paymentListVO.setChgrTxDt(send_date);
 
-                CollectServiceBean csb = new CollectServiceBean();
+                paymentInfoVO.setPaymentListVO(paymentListVO);
+
+                //CollectServiceBean csb = new CollectServiceBean();
 
                 //선결제
                 if (payment_type.equals("1")) {
@@ -2079,7 +2187,7 @@ public class JsonDataParsing {
                     paymentInfoVO.setPPayFnshYn(pay_fnsh_yn);
                     paymentInfoVO.setPPayChgrTxDt(send_date);
 
-                    logger.info("<----------------------- 덤프_신용승인 결제정보 등록 OK -------------------------> : " + csb.chargePaymentService().paymentInfoInsert(paymentInfoVO, paymentListVO));
+                    //logger.info("<----------------------- 덤프_신용승인 결제정보 등록 OK -------------------------> : " + csb.chargePaymentService().paymentInfoInsert(paymentInfoVO));
                 }
 
                 //무충전 카드취소결제 or 부분취소결제
@@ -2091,8 +2199,15 @@ public class JsonDataParsing {
                     paymentInfoVO.setCPayChgrTxDt(send_date);
                     paymentInfoVO.setCPayTrxDt(credit_trx_date);
 
-                    logger.info("<----------------------- 덤프_신용승인 결제정보 수정 OK -------------------------> : " + csb.chargePaymentService().paymentInfoUpdate(paymentInfoVO, paymentListVO));
+                    //logger.info("<----------------------- 덤프_신용승인 결제정보 수정 OK -------------------------> : " + csb.chargePaymentService().paymentInfoUpdate(paymentInfoVO));
                 }
+
+                QueueVO queueVO = new QueueVO();
+                queueVO.setRTimeYn(commonVO.getRTimeYn());
+                queueVO.setActionType("paymentInfo");
+                queueVO.setObject(paymentInfoVO);
+
+                qDataObjectList.offer(queueVO);
             }
 
         } catch (ParseException e) {
@@ -2241,9 +2356,16 @@ public class JsonDataParsing {
             revMsgVO.setResRsnCd(commonVO.getResponseReason());
             revMsgVO.setResMsg(commonVO.getResMsg());
 
-            CollectServiceBean csb = new CollectServiceBean();
+            /*CollectServiceBean csb = new CollectServiceBean();
 
-            logger.info("<----------------------- 수신 전문 이력 Insert OK -------------------------> : " + csb.revMsgService().recvMsgInsert(revMsgVO));
+            logger.info("<----------------------- 수신 전문 이력 Insert OK -------------------------> : " + csb.revMsgService().recvMsgInsert(revMsgVO));*/
+
+            QueueVO queueVO = new QueueVO();
+            queueVO.setRTimeYn(commonVO.getRTimeYn());
+            queueVO.setActionType("recvMsg");
+            queueVO.setObject(revMsgVO);
+
+            qDataObjectList.offer(queueVO);
 
         } catch (Exception e) {
 
@@ -2269,8 +2391,16 @@ public class JsonDataParsing {
         controlChgrVO.setResMsg(commonVO.getRcvMsg());
 
         try {
-            CollectServiceBean csb = new CollectServiceBean();
-            logger.info("<----------------------- 전문 이력 Update OK -------------------------> : " + csb.controlChgrService().txMsgListUpdate(controlChgrVO));
+            /*CollectServiceBean csb = new CollectServiceBean();
+            logger.info("<----------------------- 전문 이력 Update OK -------------------------> : " + csb.controlChgrService().txMsgListUpdate(controlChgrVO));*/
+
+            QueueVO queueVO = new QueueVO();
+            queueVO.setRTimeYn(commonVO.getRTimeYn());
+            queueVO.setActionType("txMsg");
+            queueVO.setObject(controlChgrVO);
+
+            qDataObjectList.offer(queueVO);
+
         } catch (Exception e) {
 
             logger.error("<----------------------- DB Insert 오류 ------------------------->");
@@ -2339,29 +2469,5 @@ public class JsonDataParsing {
         commonVO.setResponseReason("15");
 
         return commonVO;
-    }
-
-    public int getByteLength(String str) {
-
-        int strLength = 0;
-
-        char tempChar[] = new char[str.length()];
-
-        for (int i = 0; i < tempChar.length; i++) {
-
-            tempChar[i] = str.charAt(i);
-
-            if (tempChar[i] < 128) {
-
-                strLength++;
-
-            } else {
-
-                strLength += 2;
-            }
-        }
-
-        return strLength;
-
     }
 }

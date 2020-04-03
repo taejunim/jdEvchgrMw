@@ -28,6 +28,7 @@ public class ServerUtils implements ServletContextListener {
 
     CollectServiceBean csb = new CollectServiceBean();
 
+    //충전기 리스트
     public static ArrayList<String> chgrList = new ArrayList<>();
 
     // 웹 어플리케이션 종료 메소드
