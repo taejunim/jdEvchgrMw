@@ -38,8 +38,6 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
 
         EgovMap egovMap = userMapper.userAuthSelect(userVO);               //회원 인증 조회 CALL
 
-        logger.info("<----------------------- userMapper.userAuthSelect(userVO) -------------------------> : " + egovMap);
-
         if (egovMap != null) {
 
             userVO.setCustId(egovMap.get("custId").toString());             //고객 ID
@@ -64,14 +62,8 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
         }
 
         //카드번호 오류
-        else {
+        else if (egovMap.get("memshCardNo").toString().equals("") && egovMap.get("custId").toString().equals("")){
 
-            userVO.setAuthResult("4");
-            userVO.setAuthRsltCd("0");  //인증실패
-        }
-
-        //나중에 수정
-        if (!("JS").equals(userVO.getBId())) {
             userVO.setAuthResult("4");
             userVO.setAuthRsltCd("0");  //인증실패
         }
