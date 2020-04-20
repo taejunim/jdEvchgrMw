@@ -62,7 +62,7 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
         }
 
         //카드번호 오류
-        else if (egovMap.get("memshCardNo").toString().equals("") && egovMap.get("custId").toString().equals("")){
+        else {
 
             userVO.setAuthResult("4");
             userVO.setAuthRsltCd("0");  //인증실패
