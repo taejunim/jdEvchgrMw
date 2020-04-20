@@ -53,7 +53,7 @@ public class JsonDataParsing {
 
         try {
 
-            jObject = (JSONObject) jParser.parse(commonVO.getRcvMsg());
+            jObject = (JSONObject) jParser.parse(commonVO.getRcvMsg());//
 
             /* PARSING START */
 
@@ -203,6 +203,8 @@ public class JsonDataParsing {
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
 
+            //응답 보내기 - 응답시에는 다시 사업자ID + 충전소ID로 보내야함
+            commonVO.setStationId(commonVO.getProviderId() + commonVO.getStationId());
             protocolErrorMsgSend(commonVO);
             return;
 
@@ -212,7 +214,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
 
             commonVO = unknownErrorMsgSend(commonVO, "알 수 없는 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         //응답 보내기 - 응답시에는 다시 사업자ID + 충전소ID로 보내야함
@@ -660,7 +662,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
 
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -752,9 +754,6 @@ public class JsonDataParsing {
                 }
             }
 
-            /*CollectServiceBean csb = new CollectServiceBean();
-            logger.info("<----------------------- 충전기 상태 수정 OK -------------------------> : " + csb.chgrStateService().chgrStateUpdate(chgrStatusVO));*/
-
             QueueVO queueVO = new QueueVO();
             queueVO.setRTimeYn(commonVO.getRTimeYn());
             queueVO.setActionType("chgrStatus");
@@ -778,7 +777,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -844,7 +843,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -918,9 +917,6 @@ public class JsonDataParsing {
             chargeVO.setDataCreateDt(create_date);
             chargeVO.setChgrTxDt(send_date);
 
-            /*CollectServiceBean csb = new CollectServiceBean();
-            logger.info("<----------------------- 충전 시작 정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgSttInsert(chargeVO));*/
-
             QueueVO queueVO = new QueueVO();
             queueVO.setRTimeYn(commonVO.getRTimeYn());
             queueVO.setActionType("chargingStart");
@@ -942,7 +938,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1023,9 +1019,6 @@ public class JsonDataParsing {
             chargeVO.setDataCreateDt(create_date);
             chargeVO.setChgrTxDt(send_date);
 
-            /*CollectServiceBean csb = new CollectServiceBean();
-            logger.info("<----------------------- 충전 진행정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgingInsert(chargeVO));*/
-
             QueueVO queueVO = new QueueVO();
             queueVO.setRTimeYn(commonVO.getRTimeYn());
             queueVO.setActionType("chargingInfo");
@@ -1047,7 +1040,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1147,9 +1140,6 @@ public class JsonDataParsing {
             chargeVO.setChgrTxDt(send_date);
             chargeVO.setPayFnshYn(pay_fnsh_yn);
 
-            /*CollectServiceBean csb = new CollectServiceBean();
-            logger.info("<----------------------- 충전 완료정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgFnshInsert(chargeVO));*/
-
             QueueVO queueVO = new QueueVO();
             queueVO.setRTimeYn(commonVO.getRTimeYn());
             queueVO.setActionType("chargingEnd");
@@ -1171,7 +1161,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1216,8 +1206,6 @@ public class JsonDataParsing {
             chargePaymentVO.setPPayTrxNo(prepayment_trx_no);
             chargePaymentVO.setPaymentType(payment_type);
 
-            //CollectServiceBean csb = new CollectServiceBean();
-
             QueueVO queueVO = new QueueVO();
             queueVO.setRTimeYn(commonVO.getRTimeYn());
             queueVO.setActionType("chargePayment");
@@ -1229,15 +1217,12 @@ public class JsonDataParsing {
                 chargePaymentVO.setRPayAmt(payment_amount);
                 chargePaymentVO.setRPayTxDt(create_date);
 
-                //logger.info("<----------------------- 충전 결제정보 - 실충전결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoInsert(chargePaymentVO));
             } else if (payment_type.equals("1")) {
 
                 chargePaymentVO.setCPayTrxNo(credit_trx_no);
                 chargePaymentVO.setCPayTrxDt(credit_trx_date.equals("") ? null : credit_trx_date);
                 chargePaymentVO.setCPayAmt(payment_amount);
                 chargePaymentVO.setCPayTxDt(create_date);
-
-                //logger.info("<----------------------- 충전 결제정보 - 취소결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoUpdate(chargePaymentVO));
             }
 
             queueVO.setObject(chargePaymentVO);
@@ -1258,7 +1243,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1306,10 +1291,6 @@ public class JsonDataParsing {
             sendSmsVO.setDataCreateDt(create_date);
             sendSmsVO.setChgrTxDt(send_date);
 
-            /*CollectServiceBean csb = new CollectServiceBean();
-
-            logger.info("<----------------------- 문자 전송 이력 등록 OK -------------------------> : " + csb.sendSmsService().msgSndListInsert(sendSmsVO));*/
-
             QueueVO queueVO = new QueueVO();
             queueVO.setRTimeYn(commonVO.getRTimeYn());
             queueVO.setActionType("sendSms");
@@ -1331,7 +1312,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1384,11 +1365,6 @@ public class JsonDataParsing {
             alarmHistoryVO.setRTimeYn("Y");
             alarmHistoryVO.setMfAlarmCd(mf_alarm_code);
 
-            /*CollectServiceBean csb = new CollectServiceBean();
-
-            // req Data DB Insert
-            logger.info("<----------------------- 경보 이력 Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));*/
-
             QueueVO queueVO = new QueueVO();
             queueVO.setRTimeYn(commonVO.getRTimeYn());
             queueVO.setActionType("alarmHistory");
@@ -1410,7 +1386,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1458,9 +1434,6 @@ public class JsonDataParsing {
             chgrInfoVO.setChgrId(commonVO.getChgrId());
             chgrInfoVO.setFwVerInfoVOList(fwVerInfoVOList);
 
-            /*CollectServiceBean csb = new CollectServiceBean();
-            logger.info("<----------------------- 펌웨어 업데이트 결과 알림 Update OK -------------------------> : " + csb.beanChgrInfoService().chgrFwVerInfoInsUpdate(chgrInfoVO));*/
-
             QueueVO queueVO = new QueueVO();
             queueVO.setRTimeYn(commonVO.getRTimeYn());
             queueVO.setActionType("reportUpdate");
@@ -1482,7 +1455,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1552,16 +1525,13 @@ public class JsonDataParsing {
 
             paymentInfoVO.setPaymentListVO(paymentListVO);
 
-            //CollectServiceBean csb = new CollectServiceBean();
-
             //선결제
             if (payment_type.equals("1")) {
+
                 paymentInfoVO.setPayAmt(payment);
                 paymentInfoVO.setCreditPayDetl(payment_detl);
                 paymentInfoVO.setPPayFnshYn(pay_fnsh_yn);
                 paymentInfoVO.setPPayChgrTxDt(send_date);
-
-                //logger.info("<----------------------- 신용승인 결제정보 등록 OK -------------------------> : " + csb.chargePaymentService().paymentInfoInsert(paymentInfoVO));
             }
 
             //무충전 카드취소결제 or 부분취소결제
@@ -1572,8 +1542,6 @@ public class JsonDataParsing {
                 paymentInfoVO.setCPayFnshYn(pay_fnsh_yn);
                 paymentInfoVO.setCPayChgrTxDt(send_date);
                 paymentInfoVO.setCPayTrxDt(credit_trx_date);
-
-                //logger.info("<----------------------- 신용승인 결제정보 수정 OK -------------------------> : " + csb.chargePaymentService().paymentInfoUpdate(paymentInfoVO));
             }
 
             QueueVO queueVO = new QueueVO();
@@ -1597,7 +1565,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1611,13 +1579,6 @@ public class JsonDataParsing {
             JSONArray data = (JSONArray) jParser.parse(commonVO.getData());
 
             logger.info("data : " + data.toString());
-
-            ChargeVO chargeVO = new ChargeVO();
-            chargeVO.setProviderId(commonVO.getProviderId());
-            chargeVO.setStId(commonVO.getStationId());
-            chargeVO.setChgrId(commonVO.getChgrId());
-            chargeVO.setMwKindCd("WS");
-            chargeVO.setRTimeYn("N");
 
             for (int i = 0; i < data.size(); i++) {
                 JSONObject tmp = (JSONObject) data.get(i);
@@ -1662,6 +1623,12 @@ public class JsonDataParsing {
                 String rechgSttListId = logIdFormat.format(dt);
                 logger.info("------------------------ 덤프_충전 시작 ID - rechgSttListId : " + rechgSttListId);
 
+                ChargeVO chargeVO = new ChargeVO();
+                chargeVO.setProviderId(commonVO.getProviderId());
+                chargeVO.setStId(commonVO.getStationId());
+                chargeVO.setChgrId(commonVO.getChgrId());
+                chargeVO.setMwKindCd("WS");
+                chargeVO.setRTimeYn("N");
                 chargeVO.setChId(plug_id);
                 chargeVO.setPlugTypeCd(charge_plug_type);
                 chargeVO.setMemAuthInputNo(card_num);
@@ -1678,17 +1645,12 @@ public class JsonDataParsing {
                 chargeVO.setDataCreateDt(create_date);
                 chargeVO.setChgrTxDt(send_date);
 
-                /*CollectServiceBean csb = new CollectServiceBean();
-
-                logger.info("<----------------------- 덤프_충전 시작정보 이력 등록 OK [" + (i + 1) + "] -------------------------> : " + csb.chargeService().rechgSttInsert(chargeVO));*/
-
                 QueueVO queueVO = new QueueVO();
                 queueVO.setRTimeYn(commonVO.getRTimeYn());
                 queueVO.setActionType("chargingStart");
                 queueVO.setObject(chargeVO);
 
                 qDataObjectList.offer(queueVO);
-
             }
 
         } catch (ParseException e) {
@@ -1705,7 +1667,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1719,13 +1681,6 @@ public class JsonDataParsing {
             JSONArray data = (JSONArray) jParser.parse(commonVO.getData());
 
             logger.info("data : " + data.toString());
-
-            ChargeVO chargeVO = new ChargeVO();
-            chargeVO.setProviderId(commonVO.getProviderId());
-            chargeVO.setStId(commonVO.getStationId());
-            chargeVO.setChgrId(commonVO.getChgrId());
-            chargeVO.setMwKindCd("WS");
-            chargeVO.setRTimeYn("N");
 
             for (int i = 0; i < data.size(); i++) {
                 JSONObject tmp = (JSONObject) data.get(i);
@@ -1789,6 +1744,12 @@ public class JsonDataParsing {
                 String rechgFnshListId = logIdFormat.format(dt);
                 logger.info("------------------------ 덤프_충전 완료 ID - rechgFnshListId : " + rechgFnshListId);
 
+                ChargeVO chargeVO = new ChargeVO();
+                chargeVO.setProviderId(commonVO.getProviderId());
+                chargeVO.setStId(commonVO.getStationId());
+                chargeVO.setChgrId(commonVO.getChgrId());
+                chargeVO.setMwKindCd("WS");
+                chargeVO.setRTimeYn("N");
                 chargeVO.setChId(plug_id);
                 chargeVO.setPlugTypeCd(charge_plug_type);
                 chargeVO.setMemAuthInputNo(card_num);
@@ -1812,10 +1773,6 @@ public class JsonDataParsing {
                 chargeVO.setChgrTxDt(send_date);
                 chargeVO.setPayFnshYn(pay_fnsh_yn);
 
-                /*CollectServiceBean csb = new CollectServiceBean();
-
-                logger.info("<----------------------- 덤프_충전 완료정보 이력 등록 OK -------------------------> : " + csb.chargeService().rechgFnshInsert(chargeVO));*/
-
                 QueueVO queueVO = new QueueVO();
                 queueVO.setRTimeYn(commonVO.getRTimeYn());
                 queueVO.setActionType("chargingEnd");
@@ -1838,7 +1795,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1852,11 +1809,6 @@ public class JsonDataParsing {
             JSONArray data = (JSONArray) jParser.parse(commonVO.getData());
 
             logger.info("data : " + data.toString());
-
-            ChargePaymentVO chargePaymentVO = new ChargePaymentVO();
-            chargePaymentVO.setProviderId(commonVO.getProviderId());
-            chargePaymentVO.setStId(commonVO.getStationId());
-            chargePaymentVO.setChgrId(commonVO.getChgrId());
 
             for (int i = 0; i < data.size(); i++) {
                 JSONObject tmp = (JSONObject) data.get(i);
@@ -1886,11 +1838,13 @@ public class JsonDataParsing {
                 commonVO.setSendDate(send_date);
                 commonVO.setCreateDate(create_date);
 
+                ChargePaymentVO chargePaymentVO = new ChargePaymentVO();
+                chargePaymentVO.setProviderId(commonVO.getProviderId());
+                chargePaymentVO.setStId(commonVO.getStationId());
+                chargePaymentVO.setChgrId(commonVO.getChgrId());
                 chargePaymentVO.setChId(plug_id);
                 chargePaymentVO.setPPayTrxNo(prepayment_trx_no);
                 chargePaymentVO.setPaymentType(payment_type);
-
-                CollectServiceBean csb = new CollectServiceBean();
 
                 if (payment_type.equals("0")) {
 
@@ -1899,15 +1853,12 @@ public class JsonDataParsing {
                     chargePaymentVO.setRPayAmt(payment_amount);
                     chargePaymentVO.setRPayTxDt(create_date);
 
-                    //logger.info("<----------------------- 덤프_충전 결제정보 - 실충전결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoInsert(chargePaymentVO));
                 } else if (payment_type.equals("1")) {
 
                     chargePaymentVO.setCPayTrxNo(credit_trx_no);
                     chargePaymentVO.setCPayTrxDt(credit_trx_date.equals("") ? null : credit_trx_date);
                     chargePaymentVO.setCPayAmt(payment_amount);
                     chargePaymentVO.setCPayTxDt(create_date);
-
-                    //logger.info("<----------------------- 덤프_충전 결제정보 - 취소결제 이력 등록 OK -------------------------> : " + csb.chargePaymentService().creditTrxInfoUpdate(chargePaymentVO));
                 }
 
                 QueueVO queueVO = new QueueVO();
@@ -1932,7 +1883,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -1946,14 +1897,6 @@ public class JsonDataParsing {
             JSONArray data = (JSONArray) jParser.parse(commonVO.getData());
 
             logger.info("data : " + data.toString());
-
-            AlarmHistoryVO alarmHistoryVO = new AlarmHistoryVO();
-
-            alarmHistoryVO.setProviderId(commonVO.getProviderId());
-            alarmHistoryVO.setStId(commonVO.getStationId());
-            alarmHistoryVO.setChgrId(commonVO.getChgrId());
-            alarmHistoryVO.setMwKindCd("WS");
-            alarmHistoryVO.setRTimeYn("N");
 
             for (int i = 0; i < data.size(); i++) {
                 JSONObject tmp = (JSONObject) data.get(i);
@@ -1985,17 +1928,19 @@ public class JsonDataParsing {
                 commonVO.setSendDate(send_date);
                 commonVO.setCreateDate(create_date);
 
+                AlarmHistoryVO alarmHistoryVO = new AlarmHistoryVO();
+
+                alarmHistoryVO.setProviderId(commonVO.getProviderId());
+                alarmHistoryVO.setStId(commonVO.getStationId());
+                alarmHistoryVO.setChgrId(commonVO.getChgrId());
+                alarmHistoryVO.setMwKindCd("WS");
+                alarmHistoryVO.setRTimeYn("N");
                 alarmHistoryVO.setChId(alarm_plug);
                 alarmHistoryVO.setAlarmStateCd(alarm_type);
                 alarmHistoryVO.setOccurDt(alarm_date);
                 alarmHistoryVO.setAlarmCd(alarm_code);
                 alarmHistoryVO.setChgrTxDt(send_date);
                 alarmHistoryVO.setMfAlarmCd(mf_alarm_code);
-
-                /*CollectServiceBean csb = new CollectServiceBean();
-
-                // req Data DB Insert
-                logger.info("<----------------------- 덤프_경보 이력 Insert OK -------------------------> : " + csb.alarmHistoryService().alarmHistoryInsert(alarmHistoryVO));*/
 
                 QueueVO queueVO = new QueueVO();
                 queueVO.setRTimeYn(commonVO.getRTimeYn());
@@ -2019,7 +1964,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -2073,9 +2018,6 @@ public class JsonDataParsing {
                 chgrInfoVO.setChgrId(commonVO.getChgrId());
                 chgrInfoVO.setFwVerInfoVOList(fwVerInfoVOList);
 
-                /*CollectServiceBean csb = new CollectServiceBean();
-                logger.info("<----------------------- 덤프_펌웨어 업데이트 결과 알림 Update OK -------------------------> : " + csb.beanChgrInfoService().chgrFwVerInfoInsUpdate(chgrInfoVO));*/
-
                 QueueVO queueVO = new QueueVO();
                 queueVO.setRTimeYn(commonVO.getRTimeYn());
                 queueVO.setActionType("reportUpdate");
@@ -2098,7 +2040,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -2112,19 +2054,6 @@ public class JsonDataParsing {
             JSONArray data = (JSONArray) jParser.parse(commonVO.getData());
 
             logger.info("data : " + data.toString());
-
-            //결제정보
-            PaymentInfoVO paymentInfoVO = new PaymentInfoVO();
-            paymentInfoVO.setProviderId(commonVO.getProviderId());
-            paymentInfoVO.setStId(commonVO.getStationId());
-            paymentInfoVO.setChgrId(commonVO.getChgrId());
-
-            //결제이력
-            PaymentListVO paymentListVO = new PaymentListVO();
-            paymentListVO.setProviderId(commonVO.getProviderId());
-            paymentListVO.setStId(commonVO.getStationId());
-            paymentListVO.setChgrId(commonVO.getChgrId());
-
 
             for (int i = 0; i < data.size(); i++) {
                 JSONObject tmp = (JSONObject) data.get(i);
@@ -2159,11 +2088,21 @@ public class JsonDataParsing {
                 commonVO.setSendDate(send_date);
                 commonVO.setCreateDate(create_date);
 
+                //결제정보
+                PaymentInfoVO paymentInfoVO = new PaymentInfoVO();
+                paymentInfoVO.setProviderId(commonVO.getProviderId());
+                paymentInfoVO.setStId(commonVO.getStationId());
+                paymentInfoVO.setChgrId(commonVO.getChgrId());
                 paymentInfoVO.setChId(plug_id);
                 paymentInfoVO.setPlugTypeCd(charge_plug_type);
                 paymentInfoVO.setCreditTrxNo(credit_trx_no);
                 paymentInfoVO.setCreditTrxDt(credit_trx_date);
 
+                //결제이력
+                PaymentListVO paymentListVO = new PaymentListVO();
+                paymentListVO.setProviderId(commonVO.getProviderId());
+                paymentListVO.setStId(commonVO.getStationId());
+                paymentListVO.setChgrId(commonVO.getChgrId());
                 paymentListVO.setChId(plug_id);
                 paymentListVO.setPlugTypeCd(charge_plug_type);
                 paymentListVO.setRTimeYn(commonVO.getRTimeYn());
@@ -2178,16 +2117,12 @@ public class JsonDataParsing {
 
                 paymentInfoVO.setPaymentListVO(paymentListVO);
 
-                //CollectServiceBean csb = new CollectServiceBean();
-
                 //선결제
                 if (payment_type.equals("1")) {
                     paymentInfoVO.setPayAmt(payment);
                     paymentInfoVO.setCreditPayDetl(payment_detl);
                     paymentInfoVO.setPPayFnshYn(pay_fnsh_yn);
                     paymentInfoVO.setPPayChgrTxDt(send_date);
-
-                    //logger.info("<----------------------- 덤프_신용승인 결제정보 등록 OK -------------------------> : " + csb.chargePaymentService().paymentInfoInsert(paymentInfoVO));
                 }
 
                 //무충전 카드취소결제 or 부분취소결제
@@ -2198,8 +2133,6 @@ public class JsonDataParsing {
                     paymentInfoVO.setCPayFnshYn(pay_fnsh_yn);
                     paymentInfoVO.setCPayChgrTxDt(send_date);
                     paymentInfoVO.setCPayTrxDt(credit_trx_date);
-
-                    //logger.info("<----------------------- 덤프_신용승인 결제정보 수정 OK -------------------------> : " + csb.chargePaymentService().paymentInfoUpdate(paymentInfoVO));
                 }
 
                 QueueVO queueVO = new QueueVO();
@@ -2224,7 +2157,7 @@ public class JsonDataParsing {
             logger.error("Exception : " + e);
             logger.error("*******************************************************");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
-            recvMsg(commonVO);
+            //recvMsg(commonVO);
         }
 
         return commonVO;
@@ -2356,10 +2289,6 @@ public class JsonDataParsing {
             revMsgVO.setResRsnCd(commonVO.getResponseReason());
             revMsgVO.setResMsg(commonVO.getResMsg());
 
-            /*CollectServiceBean csb = new CollectServiceBean();
-
-            logger.info("<----------------------- 수신 전문 이력 Insert OK -------------------------> : " + csb.revMsgService().recvMsgInsert(revMsgVO));*/
-
             QueueVO queueVO = new QueueVO();
             queueVO.setRTimeYn(commonVO.getRTimeYn());
             queueVO.setActionType("recvMsg");
@@ -2391,8 +2320,6 @@ public class JsonDataParsing {
         controlChgrVO.setResMsg(commonVO.getRcvMsg());
 
         try {
-            /*CollectServiceBean csb = new CollectServiceBean();
-            logger.info("<----------------------- 전문 이력 Update OK -------------------------> : " + csb.controlChgrService().txMsgListUpdate(controlChgrVO));*/
 
             QueueVO queueVO = new QueueVO();
             queueVO.setRTimeYn(commonVO.getRTimeYn());
