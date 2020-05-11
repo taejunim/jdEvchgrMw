@@ -28,6 +28,8 @@ public class ServerUtils implements ServletContextListener {
 
     CollectServiceBean csb = new CollectServiceBean();
 
+    private SSHConnection sshConnection;
+
     //충전기 리스트
     public static ArrayList<String> chgrList = new ArrayList<>();
 
@@ -35,6 +37,8 @@ public class ServerUtils implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent arg0) {
         // 웹 어플리케이션 종료 시 처리할 로직..
         // 필자는 세션 로그인 관리 기능을 이용하여 시스템 종료 시 로그아웃 일자를 업데이트 하도록 정의 하였다.
+
+        sshConnection.closeSSH();
     }
 
     // 웹 어플리케이션 시작 메소드
@@ -48,6 +52,8 @@ public class ServerUtils implements ServletContextListener {
             for (int i=0; i<chgrList.size(); i++) {
                 logger.info("chgr : " + chgrList.get(i));
             }
+
+            sshConnection = new SSHConnection();
 
         } catch (Exception e) {
             e.printStackTrace();
