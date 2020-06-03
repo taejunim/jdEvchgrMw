@@ -2,9 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jdEvchgrMw.charge.service.impl.ChargeMapper">
 
-    <select id="getRechgSttListId" parameterType="chargeVO" resultType="java.lang.String">
+    <select id="getRechgSttListInfo" parameterType="chargeVO" resultType="chargeVO">
 
         SELECT rsl.RECHG_STT_LIST_ID AS RECHG_STT_LIST_ID
+             , rsl.MEM_AUTH_ID AS MEM_AUTH_ID
           FROM rechg_stt_list rsl
          WHERE 1=1
            AND rsl.PROVIDER_ID = #{providerId}
@@ -66,18 +67,23 @@
                                           AND chgr.CHGR_ID     = #{chgrId}
                                       )
                                     , #{payTypeCd}
-                                    , (
-                                        SELECT mal.MEM_AUTH_ID MEM_AUTH_ID
-                                          FROM mem_auth_list mal
-                                         WHERE 1=1
-                                           AND mal.PROVIDER_ID = #{providerId}
-                                           AND mal.ST_ID       = #{stId}
-                                           AND mal.CHGR_ID     = #{chgrId}
-                                           AND mal.CH_ID       = #{chId}
-                                           AND mal.MEM_AUTH_INPUT_NO = #{memAuthInputNo}
-                                      ORDER BY mal.REG_DT
-                                          DESC LIMIT 1
-                                      )
+                                    <choose>
+                                        <when test = "creditPPayTrxNo != '' and creditPPayTrxNo != null">
+                                            , ''
+                                        </when>
+                                        <otherwise>
+                                        , (SELECT mal.MEM_AUTH_ID MEM_AUTH_ID
+                                             FROM mem_auth_list mal
+                                            WHERE 1=1
+                                              AND mal.PROVIDER_ID = #{providerId}
+                                              AND mal.ST_ID       = #{stId}
+                                              AND mal.CHGR_ID     = #{chgrId}
+                                              AND mal.CH_ID       = #{chId}
+                                              AND mal.MEM_AUTH_INPUT_NO = #{memAuthInputNo}
+                                            ORDER BY mal.REG_DT
+                                             DESC LIMIT 1)
+                                        </otherwise>
+                                    </choose>
                                     , #{creditPPayTrxNo}
                                     <if test = "creditPPayTrxDt != '' and creditPPayTrxDt != null">
                                     , #{creditPPayTrxDt}
@@ -147,18 +153,7 @@
                                           AND chgr.CHGR_ID     = #{chgrId}
                                       )
                                     , #{payTypeCd}
-                                    , (
-                                        SELECT mal.MEM_AUTH_ID MEM_AUTH_ID
-                                          FROM mem_auth_list mal
-                                         WHERE 1=1
-                                           AND mal.PROVIDER_ID = #{providerId}
-                                           AND mal.ST_ID       = #{stId}
-                                           AND mal.CHGR_ID     = #{chgrId}
-                                           AND mal.CH_ID       = #{chId}
-                                           AND mal.MEM_AUTH_INPUT_NO = #{memAuthInputNo}
-                                      ORDER BY mal.REG_DT
-                                          DESC LIMIT 1
-                                      )
+                                    , #{memAuthId}
                                     , #{creditPPayTrxNo}
                                     <if test = "creditPPayTrxDt != '' and creditPPayTrxDt != null">
                                     , #{creditPPayTrxDt}
@@ -235,18 +230,7 @@
                                               AND chgr.CHGR_ID     = #{chgrId}
                                       )
                                         , #{payTypeCd}
-                                        , (
-                                            SELECT mal.MEM_AUTH_ID MEM_AUTH_ID
-                                              FROM mem_auth_list mal
-                                             WHERE 1=1
-                                               AND mal.PROVIDER_ID = #{providerId}
-                                               AND mal.ST_ID       = #{stId}
-                                               AND mal.CHGR_ID     = #{chgrId}
-                                               AND mal.CH_ID       = #{chId}
-                                               AND mal.MEM_AUTH_INPUT_NO = #{memAuthInputNo}
-                                          ORDER BY mal.REG_DT
-                                              DESC LIMIT 1
-                                          )
+                                        , #{memAuthId}
                                         , #{creditPPayTrxNo}
                                         <if test = "creditPPayTrxDt != '' and creditPPayTrxDt != null">
                                         , #{creditPPayTrxDt}

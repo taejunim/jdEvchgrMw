@@ -32,10 +32,10 @@ public class ChargeServiceImpl extends EgovAbstractServiceImpl implements Charge
     @Resource(name = "chargeMapper")
     private ChargeMapper chargeMapper;
 
-    /*충전 시작 이력의 ID GET*/
-    public String getRechgSttListId(ChargeVO chargeVO) throws Exception {
+    /*충전 시작 이력 정보*/
+    public ChargeVO getRechgSttListInfo(ChargeVO chargeVO) throws Exception {
 
-        return chargeMapper.getRechgSttListId(chargeVO);
+        return chargeMapper.getRechgSttListInfo(chargeVO);
     }
 
     /*충전 시작 이력 등록*/
@@ -47,24 +47,26 @@ public class ChargeServiceImpl extends EgovAbstractServiceImpl implements Charge
     /*충전 진행 이력 등록*/
     public int rechgingInsert(ChargeVO chargeVO) throws Exception {
 
-        String rechgSttListId = getRechgSttListId(chargeVO);
+        ChargeVO resultChargeVO  = getRechgSttListInfo(chargeVO);
 
-        logger.info("------------------------ 충전 진행 이력 등록 - rechgSttListId : " + rechgSttListId);
-        logger.info("------------------------ 충전 진행 이력 등록 - rechgingListId : " + chargeVO.getRechgingListId());
+        logger.info("------------------------ 충전 시작 이력 ID - rechgSttListId : " + resultChargeVO.getRechgSttListId());
+        logger.info("------------------------ 충전 진행 이력 ID - rechgingListId : " + chargeVO.getRechgingListId());
 
-        chargeVO.setRechgSttListId(rechgSttListId);
+        chargeVO.setRechgSttListId(resultChargeVO.getRechgSttListId());
+        chargeVO.setMemAuthId(resultChargeVO.getMemAuthId());
         return chargeMapper.rechgingInsert(chargeVO);
     }
 
     /*충전 완료 이력 등록*/
     public int rechgFnshInsert(ChargeVO chargeVO) throws Exception {
 
-        String rechgSttListId = getRechgSttListId(chargeVO);
+        ChargeVO resultChargeVO = getRechgSttListInfo(chargeVO);
 
-        logger.info("------------------------ 충전 완료 이력 등록 - rechgSttListId : " + rechgSttListId);
-        logger.info("------------------------ 충전 진행 이력 등록 - rechgFnshListId : " + chargeVO.getRechgFnshListId());
+        logger.info("------------------------ 충전 시작 이력 ID - rechgSttListId : " + resultChargeVO.getRechgSttListId());
+        logger.info("------------------------ 충전 완료 이력 ID - rechgFnshListId : " + chargeVO.getRechgFnshListId());
 
-        chargeVO.setRechgSttListId(rechgSttListId);
+        chargeVO.setRechgSttListId(resultChargeVO.getRechgSttListId());
+        chargeVO.setMemAuthId(resultChargeVO.getMemAuthId());
         return chargeMapper.rechgFnshInsert(chargeVO);
     }
 
