@@ -1,6 +1,7 @@
 package jdEvchgrMw.common;
 
 import jdEvchgrMw.alarmHistory.service.AlarmHistoryService;
+import jdEvchgrMw.busUser.BusUserService;
 import jdEvchgrMw.charge.service.ChargeService;
 import jdEvchgrMw.chargePayment.service.ChargePaymentService;
 import jdEvchgrMw.chgrInfo.service.ChgrInfoService;
@@ -110,6 +111,18 @@ public class CollectServiceBean {
 		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
 
 		return (UserService)context.getBean("userService");
+	}
+
+	/**
+	 * BusUserService Bean 생성
+	 * @return
+	 * @throws Exception
+	 */
+	public BusUserService busUserService()throws Exception{
+
+		WebApplicationContext context = ContextLoader.getCurrentWebApplicationContext();
+
+		return (BusUserService)context.getBean("busUserService");
 	}
 
 	/**

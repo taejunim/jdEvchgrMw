@@ -42,8 +42,9 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
 
             userVO.setCustId(egovMap.get("custId").toString());             //고객 ID
             userVO.setStopYn(egovMap.get("stopYn").toString());             //정지 여부
+            userVO.setAccYn(egovMap.get("accYn").toString());               //정산 여부
             userVO.setProviderId(egovMap.get("providerId").toString());     //충전사업자 ID
-            userVO.setBId(egovMap.get("bId").toString());     //충전사업자 ID
+            userVO.setBId(egovMap.get("bId").toString());                   //기관 ID
 
             //카드 정지 또는  유효여부 체크
             if (userVO.getStopYn().equals("Y")) {
@@ -69,7 +70,7 @@ public class UserServiceImpl extends EgovAbstractServiceImpl implements UserServ
         }
 
         userVO.setAuthRsltValid(userVO.getAuthResult());
-        userVO.setMemProviderId(userVO.getProviderId());
+
         userVO.setPrice(userVO.getCurrentUnitCost());
 
         logger.info("<----------------------- 회원 인증 이력 등록 OK -------------------------> : " + userMapper.userAuthListInsert(userVO));

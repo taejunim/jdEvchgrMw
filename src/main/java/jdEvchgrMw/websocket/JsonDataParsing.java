@@ -128,7 +128,10 @@ public class JsonDataParsing {
                         commonVO = chgrStatusParsingData(commonVO);                        //충전기 상태정보(충전기 -> 충전기정보시스템) CALL
 
                     } else if (qActionType.equals("user")) {
-                        commonVO = userParsingData(commonVO);                        //사용자 인증요청(충전기 -> 충전기정보시스템) CALL
+                        commonVO = userParsingData(commonVO);                           //사용자 인증요청(충전기 -> 충전기정보시스템) CALL
+
+                    } else if (qActionType.equals("busUser")) {
+                        commonVO = busUserParsingData(commonVO);                        //버스 사용자 인증요청(충전기 -> 충전기정보시스템) CALL
 
                     } else if (qActionType.equals("chargingStart")) {
                         commonVO = chargingStartParsingData(commonVO);                        //충전 시작정보(충전기 -> 충전기정보시스템) CALL
@@ -434,6 +437,16 @@ public class JsonDataParsing {
                     sendData.put("valid", commonVO.getUserVO().getAuthResult());
                     sendData.put("member_company", commonVO.getUserVO().getBId());
                     sendData.put("current_unit_cost", commonVO.getUserVO().getCurrentUnitCost());
+
+                }
+
+                //버스 사용자 인증요청(충전기 -> 충전기정보시스템) CALL
+                else if (commonVO.getActionType().equals("busUser")) {
+
+                    sendData.put("card_num", commonVO.getBusUserVO().getMemAuthInputNo());
+                    sendData.put("valid", commonVO.getBusUserVO().getAuthResult());
+                    sendData.put("bus_car_no", commonVO.getBusUserVO().getEvbusCarNo());
+                    sendData.put("current_unit_cost", commonVO.getBusUserVO().getCurrentUnitCost());
 
                 } else {
                     logger.error("[ 정의 되지 않은 PACKET 입니다. ]");
@@ -828,6 +841,76 @@ public class JsonDataParsing {
             logger.info("<----------------------- 사용자 인증 OK -------------------------> : " + resultUserVO);
 
             commonVO.setUserVO(resultUserVO);
+
+        } catch (ParseException e) {
+
+            logger.info("<----------------------- 파싱 오류 ------------------------->");
+            logger.error("*******************************************************");
+            logger.error("ParseException : " + e);
+            logger.error("*******************************************************");
+            commonVO = parameterErrorMsgSend(commonVO);
+        } catch (Exception e) {
+
+            logger.info("<----------------------- DB Insert 오류 ------------------------->");
+            logger.error("*******************************************************");
+            logger.error("Exception : " + e);
+            logger.error("*******************************************************");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+            //recvMsg(commonVO);
+        }
+
+        return commonVO;
+    }
+
+    /**
+     * 2020-07-07 추가
+     * 버스사용자 인증
+     * */
+    //버스 사용자 인증요청(충전기 -> 충전기정보시스템) CALL
+    private CommonVO busUserParsingData(CommonVO commonVO) {
+
+        try {
+            JSONParser jParser = new JSONParser();
+            JSONObject data = (JSONObject) jParser.parse(commonVO.getData());
+
+            logger.info("data : " + data.toString());
+
+            String send_date = (String) data.get("send_date");
+            String create_date = (String) data.get("create_date");
+            String card_num = (String) data.get("card_num");
+            int plug_id = Integer.parseInt((String) data.get("plug_id"));
+
+            logger.info("<----------- 버스 사용자 인증요청 Parsing Data ----------->");
+            logger.info("send_date : " + send_date);
+            logger.info("create_date : " + create_date);
+            logger.info("card_num : " + card_num);
+            logger.info("plug_id : " + plug_id);
+            logger.info("<------------------------------------------------>");
+
+            //사용자 인증 로그 ID
+            Date dt = new Date();
+            String memAuthId = logIdFormat.format(dt);
+            logger.info("------------------------ 버스 사용자 인증 로그 ID - memAuthId : " + memAuthId);
+
+            BusUserVO busUserVO = new BusUserVO();
+            busUserVO.setMemAuthId(memAuthId);
+            busUserVO.setMemAuthInputNo(card_num);
+
+            busUserVO.setProviderId(commonVO.getProviderId());
+            busUserVO.setStId(commonVO.getStationId());
+            busUserVO.setChgrId(commonVO.getChgrId());
+            busUserVO.setMwKindCd("WS");
+            busUserVO.setMemAuthReqDt(create_date);
+            busUserVO.setResDt(commonVO.getResponseDate());
+            busUserVO.setChgrTxDt(send_date);
+            busUserVO.setChId(plug_id);
+
+            CollectServiceBean csb = new CollectServiceBean();
+            BusUserVO resultBusUserVO = csb.busUserService().busUserAuthSelect(busUserVO);
+
+            logger.info("<----------------------- 버스 사용자 인증 OK -------------------------> : " + resultBusUserVO);
+
+            commonVO.setBusUserVO(resultBusUserVO);
 
         } catch (ParseException e) {
 

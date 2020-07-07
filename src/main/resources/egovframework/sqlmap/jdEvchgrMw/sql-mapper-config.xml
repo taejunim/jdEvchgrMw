@@ -10,6 +10,7 @@
     <typeAliases>
 		<typeAlias alias="egovMap" 		    type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
         <typeAlias alias="alarmHistoryVO"   type="jdEvchgrMw.vo.AlarmHistoryVO"/>
+        <typeAlias alias="busUserVO"           type="jdEvchgrMw.vo.BusUserVO"/>
         <typeAlias alias="changeModeVO"	    type="jdEvchgrMw.vo.ChangeModeVO"/>
         <typeAlias alias="chargerPlugVO"	type="jdEvchgrMw.vo.ChargerPlugVO"/>
         <typeAlias alias="chgrInfoVO"	    type="jdEvchgrMw.vo.ChgrInfoVO"/>

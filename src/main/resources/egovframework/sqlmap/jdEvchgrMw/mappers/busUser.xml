@@ -2,20 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jdEvchgrMw.user.service.impl.UserMapper">
 
-    <select id="userAuthSelect" parameterType="userVO" resultType="egovMap">
+    <select id="busUserAuthSelect" parameterType="busUserVO" resultType="egovMap">
 
-        SELECT mci.MEMSH_CARD_NO
-             , mci.CUST_ID
-             , mci.STOP_YN
-             , mci.ACC_YN
+        SELECT eci.EVBUS_CAR_NO
+             , eci.CUST_ID
+             , eci.STOP_YN
+             , eci.ACC_YN
              , ct.PROVIDER_ID
              , ct.B_ID
 
-          FROM memsh_card_info mci INNER JOIN cust ct ON mci.CUST_ID = ct.CUST_ID AND mci.MEMSH_CARD_NO = #{memAuthInputNo}
+          FROM evbus_card_info eci INNER JOIN cust ct ON eci.CUST_ID = ct.CUST_ID AND eci.EVBUS_MEMSH_CARD_NO = #{memAuthInputNo}
+         WHERE eci.DEL_YN ='N'
 
     </select>
 
-    <select id="userPriceSelect" parameterType="userVO" resultType="java.lang.String">
+    <select id="busUserPriceSelect" parameterType="busUserVO" resultType="java.lang.String">
 
         SELECT PRICE
 
@@ -31,7 +32,7 @@
 
     </select>
 
-    <insert id="userAuthListInsert" parameterType="userVO">
+    <insert id="busUserAuthListInsert" parameterType="busUserVO">
 
         INSERT INTO mem_auth_list (
                                     MEM_AUTH_ID

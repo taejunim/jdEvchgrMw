@@ -97,6 +97,7 @@
              , MOD_UID          = #{modUid}
              , PAYING_YN        = #{payingYn}
              , CH_QTY           = #{chQty}
+             , MW_KIND_CD       = #{mwKindCd}
              , MOD_DT           = now()
 
          WHERE 1=1
