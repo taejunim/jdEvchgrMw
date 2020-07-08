@@ -31,6 +31,7 @@ public class CommonVO {
 	private String ctrlListId;		//제어이력 ID
 	private String costSdd;			//요금적용시작일자 - YYYYMMDD
 	private String price;			//단가
+	private String ctrlLevel;		//제어 단계
 
 	private ChangeModeVO changeModeVO;		//충전기 모드 변경 VO
 	private HourVO hourVO; 					//시간 VO

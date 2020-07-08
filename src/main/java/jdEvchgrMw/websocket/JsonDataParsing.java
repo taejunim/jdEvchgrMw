@@ -185,7 +185,7 @@ public class JsonDataParsing {
 
                     //충전기 제어 응답(충전기 -> M/W) CALL
                     else if (qActionType.equals("reset") || qActionType.equals("prices") || qActionType.equals("changeMode")
-                            || qActionType.equals("displayBrightness") || qActionType.equals("sound") || qActionType.equals("askVer")) {
+                            || qActionType.equals("displayBrightness") || qActionType.equals("sound") || qActionType.equals("askVer") || qActionType.equals("dr")) {
 
                         controlResponse(commonVO);
                         return;
@@ -2292,6 +2292,8 @@ public class JsonDataParsing {
 
                 fw_type = (String) data.get("fw_type");
                 curr_ver = (String) data.get("curr_ver");
+            } else if (commonVO.getActionType().equals("dr")) {
+                logText = "충전량 제어";
             }
 
             logger.info("<----------- [제어 응답] 충전기 -> M/W " + logText + " Parsing Data ----------->");
