@@ -27,6 +27,18 @@ public class JdEvChgrMwMain {
 
         String stationChgrId = stationId + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
 
+        //충전기 연결이 끊어진 후 재연결시 기존 세션 제거하고 새로 추가
+        if (sessionList.size() > 0) {
+
+            for (int i=0; i<sessionList.size(); i++) {
+
+                if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
+
+                    sessionList.remove(i);
+                }
+            }
+        }
+
         SessionVO sessionVO = new SessionVO();
         sessionVO.setStationChgrId(stationChgrId);
         sessionVO.setUserSession(session);

@@ -67,7 +67,8 @@ public class JdEvChgrMwController {
 		logger.info("  현재 session 목록 -> ");
 
 		for (int i=0; i<sessionList.size(); i++) {
-			logger.info("[" + (i+1) + "] : " + sessionList.get(i).getStationChgrId());
+			logger.info("[" + (i+1) + "] : " + sessionList.get(i).getStationChgrId() + " / 세션 : " + sessionList.get(i).getUserSession()
+					+ " / sessionId : " + sessionList.get(i).getUserSession().getId());
 		}
 
 		logger.info("------------------------------------------------------------");
