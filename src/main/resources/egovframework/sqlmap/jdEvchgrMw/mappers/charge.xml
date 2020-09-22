@@ -41,6 +41,8 @@
                                     , CREDIT_P_PAY_TRX_DT
                                     </if>
                                     , INTEGRATED_WH
+                                    , DC_POWER_WH
+                                    , AC_POWER_WH
                                     , CURR_VOLT
                                     , CURR_C
                                     , DATA_CREATE_DT
@@ -80,6 +82,10 @@
                                               AND mal.CHGR_ID     = #{chgrId}
                                               AND mal.CH_ID       = #{chId}
                                               AND mal.MEM_AUTH_INPUT_NO = #{memAuthInputNo}
+                                              <![CDATA[
+                                              AND mal.MEM_AUTH_REQ_DT >= DATE_ADD(#{rechgSdt}, INTERVAL -5 MINUTE)
+                                              ]]>
+                                              AND mal.AUTH_RSLT_CD = '1'
                                             ORDER BY mal.REG_DT
                                              DESC LIMIT 1)
                                         </otherwise>
@@ -89,6 +95,8 @@
                                     , #{creditPPayTrxDt}
                                     </if>
                                     , #{integratedWh}
+                                    , #{dcPower}
+                                    , #{acPower}
                                     , #{currVolt}
                                     , #{currC}
                                     , #{dataCreateDt}
@@ -124,6 +132,8 @@
                                     , CREDIT_P_PAY_TRX_DT
                                     </if>
                                     , INTEGRATED_WH
+                                    , DC_POWER_WH
+                                    , AC_POWER_WH
                                     , CURR_VOLT
                                     , CURR_C
                                     , DATA_CREATE_DT
@@ -159,6 +169,8 @@
                                     , #{creditPPayTrxDt}
                                     </if>
                                     , #{integratedWh}
+                                    , #{dcPower}
+                                    , #{acPower}
                                     , #{currVolt}
                                     , #{currC}
                                     , #{dataCreateDt}
@@ -198,6 +210,8 @@
                                         , CANCEL_AMT
                                         , CANCEL_DETL
                                         , INTEGRATED_WH
+                                        , DC_POWER_WH
+                                        , AC_POWER_WH
                                         , CURR_VOLT
                                         , CURR_C
                                         , DATA_CREATE_DT
@@ -238,6 +252,8 @@
                                         , #{cancelAmt}
                                         , #{cancelDetl}
                                         , #{integratedWh}
+                                        , #{dcPower}
+                                        , #{acPower}
                                         , #{currVolt}
                                         , #{currC}
                                         , #{dataCreateDt}

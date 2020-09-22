@@ -950,7 +950,27 @@ public class JsonDataParsing {
             String pay_type = (String) data.get("pay_type");
             String charge_plug_type = (String) data.get("charge_plug_type");
             int plug_id = Integer.parseInt((String) data.get("plug_id"));
-            int integrated_power = Integer.parseInt((String) data.get("integrated_power"));
+
+            /** 2020-09-22 수정
+             *  1) integrated_power 만 올 경우 String 으로 파싱
+             *  2) 배열로 올경우 dc_power, ac_power 로 파싱
+             * */
+            //int integrated_power = Integer.parseInt((String) data.get("integrated_power"));
+            int integrated_power = 0;
+            int dc_power = 0;
+            int ac_power = 0;
+
+            if (data.get("integrated_power") instanceof String) {
+                integrated_power = Integer.parseInt((String) data.get("integrated_power"));
+            } else {
+
+                JSONArray powerArray = (JSONArray) data.get("integrated_power");
+                JSONObject jsonObject = (JSONObject) powerArray.get(0);
+
+                dc_power = Integer.parseInt((String) jsonObject.get("dc_power"));
+                ac_power = Integer.parseInt((String) jsonObject.get("ac_power"));
+            }
+
             int prepayment = Integer.parseInt((String) data.get("prepayment"));
             String current_V = (String) data.get("current_V");
             String current_A = (String) data.get("current_A");
@@ -967,6 +987,8 @@ public class JsonDataParsing {
             logger.info("charge_plug_type : " + charge_plug_type);
             logger.info("plug_id : " + plug_id);
             logger.info("integrated_power : " + integrated_power);
+            logger.info("dc_power : " + dc_power);
+            logger.info("ac_power : " + ac_power);
             logger.info("prepayment : " + prepayment);
             logger.info("current_V : " + current_V);
             logger.info("current_A : " + current_A);
@@ -995,6 +1017,8 @@ public class JsonDataParsing {
             chargeVO.setCreditPPayTrxNo(credit_trx_no);
             chargeVO.setCreditPPayTrxDt(credit_trx_date);
             chargeVO.setIntegratedWh(integrated_power);
+            chargeVO.setDcPower(dc_power);
+            chargeVO.setAcPower(ac_power);
             chargeVO.setCurrVolt(current_V);
             chargeVO.setCurrC(current_A);
             chargeVO.setDataCreateDt(create_date);
@@ -1046,7 +1070,27 @@ public class JsonDataParsing {
 
             String charge_plug_type = (String) data.get("charge_plug_type");
             int plug_id = Integer.parseInt((String) data.get("plug_id"));
-            int integrated_power = Integer.parseInt((String) data.get("integrated_power"));
+
+            /** 2020-09-22 수정
+             *  1) integrated_power 만 올 경우 String 으로 파싱
+             *  2) 배열로 올경우 dc_power, ac_power 로 파싱
+             * */
+            //int integrated_power = Integer.parseInt((String) data.get("integrated_power"));
+            int integrated_power = 0;
+            int dc_power = 0;
+            int ac_power = 0;
+
+            if (data.get("integrated_power") instanceof String) {
+                integrated_power = Integer.parseInt((String) data.get("integrated_power"));
+            } else {
+
+                JSONArray powerArray = (JSONArray) data.get("integrated_power");
+                JSONObject jsonObject = (JSONObject) powerArray.get(0);
+
+                dc_power = Integer.parseInt((String) jsonObject.get("dc_power"));
+                ac_power = Integer.parseInt((String) jsonObject.get("ac_power"));
+            }
+
             int prepayment = Integer.parseInt((String) data.get("prepayment"));
             String current_V = (String) data.get("current_V");
             String current_A = (String) data.get("current_A");
@@ -1065,6 +1109,8 @@ public class JsonDataParsing {
             logger.info("charge_plug_type : " + charge_plug_type);
             logger.info("plug_id : " + plug_id);
             logger.info("integrated_power : " + integrated_power);
+            logger.info("dc_power : " + dc_power);
+            logger.info("ac_power : " + ac_power);
             logger.info("prepayment : " + prepayment);
             logger.info("current_V : " + current_V);
             logger.info("current_A : " + current_A);
@@ -1097,6 +1143,8 @@ public class JsonDataParsing {
             chargeVO.setCreditPPayTrxNo(credit_trx_no);
             chargeVO.setCreditPPayTrxDt(credit_trx_date);
             chargeVO.setIntegratedWh(integrated_power);
+            chargeVO.setDcPower(dc_power);
+            chargeVO.setAcPower(ac_power);
             chargeVO.setCurrVolt(current_V);
             chargeVO.setCurrC(current_A);
             chargeVO.setDataCreateDt(create_date);
@@ -1147,7 +1195,27 @@ public class JsonDataParsing {
             String pay_type = (String) data.get("pay_type");
             String charge_plug_type = (String) data.get("charge_plug_type");
             int plug_id = Integer.parseInt((String) data.get("plug_id"));
-            int integrated_power = Integer.parseInt((String) data.get("integrated_power"));
+
+            /** 2020-09-22 수정
+             *  1) integrated_power 만 올 경우 String 으로 파싱
+             *  2) 배열로 올경우 dc_power, ac_power 로 파싱
+             * */
+            //int integrated_power = Integer.parseInt((String) data.get("integrated_power"));
+            int integrated_power = 0;
+            int dc_power = 0;
+            int ac_power = 0;
+
+            if (data.get("integrated_power") instanceof String) {
+                integrated_power = Integer.parseInt((String) data.get("integrated_power"));
+            } else {
+
+                JSONArray powerArray = (JSONArray) data.get("integrated_power");
+                JSONObject jsonObject = (JSONObject) powerArray.get(0);
+
+                dc_power = Integer.parseInt((String) jsonObject.get("dc_power"));
+                ac_power = Integer.parseInt((String) jsonObject.get("ac_power"));
+            }
+
             int prepayment = Integer.parseInt((String) data.get("prepayment"));
             String current_V = (String) data.get("current_V");
             String current_A = (String) data.get("current_A");
@@ -1173,10 +1241,11 @@ public class JsonDataParsing {
             logger.info("credit_trx_no : " + credit_trx_no);
             logger.info("credit_trx_date : " + credit_trx_date);
             logger.info("pay_type : " + pay_type);
-
             logger.info("charge_plug_type : " + charge_plug_type);
             logger.info("plug_id : " + plug_id);
             logger.info("integrated_power : " + integrated_power);
+            logger.info("dc_power : " + dc_power);
+            logger.info("ac_power : " + ac_power);
             logger.info("prepayment : " + prepayment);
             logger.info("current_V : " + current_V);
             logger.info("current_A : " + current_A);
@@ -1217,6 +1286,8 @@ public class JsonDataParsing {
             chargeVO.setCancelAmt(cancel_cost);
             chargeVO.setCancelDetl(cancel_detl);
             chargeVO.setIntegratedWh(integrated_power);
+            chargeVO.setDcPower(dc_power);
+            chargeVO.setAcPower(ac_power);
             chargeVO.setCurrVolt(current_V);
             chargeVO.setCurrC(current_A);
             chargeVO.setDataCreateDt(create_date);
@@ -1675,7 +1746,27 @@ public class JsonDataParsing {
                 String pay_type = (String) tmp.get("pay_type");
                 String charge_plug_type = (String) tmp.get("charge_plug_type");
                 int plug_id = Integer.parseInt((String) tmp.get("plug_id"));
-                int integrated_power = Integer.parseInt((String) tmp.get("integrated_power"));
+
+                /** 2020-09-22 수정
+                 *  1) integrated_power 만 올 경우 String 으로 파싱
+                 *  2) 배열로 올경우 dc_power, ac_power 로 파싱
+                 * */
+                //int integrated_power = Integer.parseInt((String) tmp.get("integrated_power"));
+                int integrated_power = 0;
+                int dc_power = 0;
+                int ac_power = 0;
+
+                if (tmp.get("integrated_power") instanceof String) {
+                    integrated_power = Integer.parseInt((String) tmp.get("integrated_power"));
+                } else {
+
+                    JSONArray powerArray = (JSONArray) tmp.get("integrated_power");
+                    JSONObject jsonObject = (JSONObject) powerArray.get(0);
+
+                    dc_power = Integer.parseInt((String) jsonObject.get("dc_power"));
+                    ac_power = Integer.parseInt((String) jsonObject.get("ac_power"));
+                }
+
                 int prepayment = Integer.parseInt((String) tmp.get("prepayment"));
                 String current_V = (String) tmp.get("current_V");
                 String current_A = (String) tmp.get("current_A");
@@ -1692,6 +1783,8 @@ public class JsonDataParsing {
                 logger.info("charge_plug_type : " + charge_plug_type);
                 logger.info("plug_id : " + plug_id);
                 logger.info("integrated_power : " + integrated_power);
+                logger.info("dc_power : " + dc_power);
+                logger.info("ac_power : " + ac_power);
                 logger.info("prepayment : " + prepayment);
                 logger.info("current_V : " + current_V);
                 logger.info("current_A : " + current_A);
@@ -1723,6 +1816,8 @@ public class JsonDataParsing {
                 chargeVO.setCreditPPayTrxNo(credit_trx_no);
                 chargeVO.setCreditPPayTrxDt(credit_trx_date);
                 chargeVO.setIntegratedWh(integrated_power);
+                chargeVO.setDcPower(dc_power);
+                chargeVO.setAcPower(ac_power);
                 chargeVO.setCurrVolt(current_V);
                 chargeVO.setCurrC(current_A);
                 chargeVO.setDataCreateDt(create_date);
@@ -1777,7 +1872,27 @@ public class JsonDataParsing {
                 String pay_type = (String) tmp.get("pay_type");
                 String charge_plug_type = (String) tmp.get("charge_plug_type");
                 int plug_id = Integer.parseInt((String) tmp.get("plug_id"));
-                int integrated_power = Integer.parseInt((String) tmp.get("integrated_power"));
+
+                /** 2020-09-22 수정
+                 *  1) integrated_power 만 올 경우 String 으로 파싱
+                 *  2) 배열로 올경우 dc_power, ac_power 로 파싱
+                 * */
+                //int integrated_power = Integer.parseInt((String) data.get("integrated_power"));
+                int integrated_power = 0;
+                int dc_power = 0;
+                int ac_power = 0;
+
+                if (tmp.get("integrated_power") instanceof String) {
+                    integrated_power = Integer.parseInt((String) tmp.get("integrated_power"));
+                } else {
+
+                    JSONArray powerArray = (JSONArray) tmp.get("integrated_power");
+                    JSONObject jsonObject = (JSONObject) powerArray.get(0);
+
+                    dc_power = Integer.parseInt((String) jsonObject.get("dc_power"));
+                    ac_power = Integer.parseInt((String) jsonObject.get("ac_power"));
+                }
+
                 int prepayment = Integer.parseInt((String) tmp.get("prepayment"));
                 String current_V = (String) tmp.get("current_V");
                 String current_A = (String) tmp.get("current_A");
@@ -1806,6 +1921,8 @@ public class JsonDataParsing {
                 logger.info("charge_plug_type : " + charge_plug_type);
                 logger.info("plug_id : " + plug_id);
                 logger.info("integrated_power : " + integrated_power);
+                logger.info("dc_power : " + dc_power);
+                logger.info("ac_power : " + ac_power);
                 logger.info("prepayment : " + prepayment);
                 logger.info("current_V : " + current_V);
                 logger.info("current_A : " + current_A);
@@ -1850,6 +1967,8 @@ public class JsonDataParsing {
                 chargeVO.setCancelAmt(cancel_cost);
                 chargeVO.setCancelDetl(cancel_detl);
                 chargeVO.setIntegratedWh(integrated_power);
+                chargeVO.setDcPower(dc_power);
+                chargeVO.setAcPower(ac_power);
                 chargeVO.setCurrVolt(current_V);
                 chargeVO.setCurrC(current_A);
                 chargeVO.setDataCreateDt(create_date);
