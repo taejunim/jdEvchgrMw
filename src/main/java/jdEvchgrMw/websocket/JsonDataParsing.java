@@ -185,7 +185,7 @@ public class JsonDataParsing {
 
                     //충전기 제어 응답(충전기 -> M/W) CALL
                     else if (qActionType.equals("reset") || qActionType.equals("prices") || qActionType.equals("changeMode")
-                            || qActionType.equals("displayBrightness") || qActionType.equals("sound") || qActionType.equals("askVer") || qActionType.equals("dr")) {
+                            || qActionType.equals("displayBrightness") || qActionType.equals("sound") || qActionType.equals("askVer") || qActionType.equals("dr") || qActionType.equals("announce")) {
 
                         controlResponse(commonVO);
                         return;
@@ -554,8 +554,8 @@ public class JsonDataParsing {
 
             //좌표 체크 -> 좌표 정보가 없을 경우 xml 단에서 좌표 업데이트 안 함
             try {
-                if (gps_xpos.equals("") || gps_xpos.equals("0.0") || gps_xpos.substring(0,3).indexOf("0.0") != -1 || gps_xpos.equals("0")
-                || (int) Double.parseDouble(gps_xpos) == 0 || Double.parseDouble(gps_xpos) == 0.0 || gps_xpos == null || gps_xpos.indexOf(" ") != -1) {
+                if (gps_xpos.equals("") || gps_xpos.equals("0.0") || gps_xpos.equals("0") || (int) Double.parseDouble(gps_xpos) == 0
+                                        || Double.parseDouble(gps_xpos) == 0.0 || gps_xpos == null || gps_xpos.indexOf(" ") != -1) {
 
                     chgrInfoVO.setGpsXpos("0.0");
 
@@ -564,8 +564,8 @@ public class JsonDataParsing {
                     chgrInfoVO.setGpsXpos(gps_xpos);
                 }
 
-                if (gps_ypos.equals("") || gps_ypos.equals("0.0") || gps_ypos.substring(0,3).indexOf("0.0") != -1 || gps_ypos.equals("0")
-                || (int) Double.parseDouble(gps_ypos) == 0 || Double.parseDouble(gps_ypos) == 0.0 || gps_ypos == null || gps_ypos.indexOf(" ") != -1) {
+                if (gps_ypos.equals("") || gps_ypos.equals("0.0") || gps_ypos.equals("0") || (int) Double.parseDouble(gps_ypos) == 0
+                                        || Double.parseDouble(gps_ypos) == 0.0 || gps_ypos == null || gps_ypos.indexOf(" ") != -1) {
 
                     chgrInfoVO.setGpsYpos("0.0");
 
@@ -576,6 +576,10 @@ public class JsonDataParsing {
 
             } catch (NumberFormatException e) {
                 logger.error("NumberFormatException : " + e);
+                chgrInfoVO.setGpsXpos("0.0");
+                chgrInfoVO.setGpsYpos("0.0");
+            } catch (StringIndexOutOfBoundsException stringIndexOutOfBoundsException) {
+                logger.error("StringIndexOutOfBoundsException : " + stringIndexOutOfBoundsException);
                 chgrInfoVO.setGpsXpos("0.0");
                 chgrInfoVO.setGpsYpos("0.0");
             }
@@ -2431,6 +2435,8 @@ public class JsonDataParsing {
                 curr_ver = (String) data.get("curr_ver");
             } else if (commonVO.getActionType().equals("dr")) {
                 logText = "충전량 제어";
+            } else if (commonVO.getActionType().equals("announce")) {
+                logText = "공지사항";
             }
 
             logger.info("<----------- [제어 응답] 충전기 -> M/W " + logText + " Parsing Data ----------->");

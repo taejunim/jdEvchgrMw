@@ -104,6 +104,9 @@ public class JsonDataParsingForControl {
                 } else if (commonVO.getActionType().equals("dr")) {                 //충전량 제어(관제 -> 충전기) CALL
                     commonVO = drParsingData(commonVO);
 
+                } else if (commonVO.getActionType().equals("announce")) {           //공지사항(관제 -> 충전기) CALL
+                    commonVO = announceParsingData(commonVO);
+
                 } else {
                     logger.info("[ 정의 되지 않은 PACKET 입니다. ]");
 
@@ -162,23 +165,22 @@ public class JsonDataParsingForControl {
             sendData.put("response_receive", commonVO.getResponseReceive());
             sendData.put("response_reason", commonVO.getResponseReason());
 
-            //단가 제어
-            if (commonVO.getActionType().equals("prices")) {
+            //단가, 공지사항 제어
+            if (commonVO.getActionType().equals("prices") || commonVO.getActionType().equals("announce")) {
 
-                JSONArray pricesArray = new JSONArray();
+                JSONArray jsonArray = new JSONArray();
 
                 for (int i = 0; i < commonVO.getControlChgrVOArrayList().size(); i++) {
 
-                    JSONObject pricesData = new JSONObject();
-                    pricesData.put("ctrl_list_id", commonVO.getControlChgrVOArrayList().get(i).getCtrlListId());
-                    pricesData.put("station_id", commonVO.getControlChgrVOArrayList().get(i).getStationId());
-                    pricesData.put("chgr_id", commonVO.getControlChgrVOArrayList().get(i).getChgrId());
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("ctrl_list_id", commonVO.getControlChgrVOArrayList().get(i).getCtrlListId());
+                    jsonObject.put("station_id", commonVO.getControlChgrVOArrayList().get(i).getStationId());
+                    jsonObject.put("chgr_id", commonVO.getControlChgrVOArrayList().get(i).getChgrId());
 
-                    pricesArray.add(pricesData);
+                    jsonArray.add(jsonObject);
                 }
 
-                sendData.put("req_chgr", pricesArray);
-
+                sendData.put("req_chgr", jsonArray);
             }
 
             //그 외
@@ -290,8 +292,39 @@ public class JsonDataParsingForControl {
 
             }
 
+            //공지사항
+            else if (commonVO.getActionType().equals("announce")) {
+
+                for (int i=0; i<sessionList.size(); i++) {
+
+                    for (int j=0; j<commonVO.getControlChgrVOArrayList().size(); j++) {
+
+                        if (sessionList.get(i).getStationChgrId().equals(commonVO.getControlChgrVOArrayList().get(j).getStationId() + commonVO.getControlChgrVOArrayList().get(j).getChgrId())) {
+
+                            JSONObject jsonObject = new JSONObject();
+
+                            jsonObject.put("send_date", commonVO.getResponseDate());
+                            jsonObject.put("station_id", commonVO.getControlChgrVOArrayList().get(j).getStationId());
+                            jsonObject.put("chgr_id", commonVO.getControlChgrVOArrayList().get(j).getChgrId());
+                            jsonObject.put("cont_detl", commonVO.getContDetl());
+
+                            sendJsonObject.put("data", jsonObject);
+
+                            logger.info("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getStationId() + commonVO.getChgrId());
+                            logger.info("충전기로 보낼 공지사항 JSON : " + sendJsonObject);
+                            sessionList.get(i).getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
+
+                            //전문 이력 인서트
+                            commonVO.setRcvMsg(sendJsonObject.toString());
+                            commonVO.setCtrlListId(commonVO.getControlChgrVOArrayList().get(j).getCtrlListId());
+                            commonVO = txMsgListInsert(commonVO);
+                        }
+                    }
+                }
+            }
+
             //단가 제어
-            else {
+            else if (commonVO.getActionType().equals("prices")) {
 
                 for (int i=0; i<sessionList.size(); i++) {
 
@@ -335,7 +368,7 @@ public class JsonDataParsingForControl {
                             sendJsonObject.put("data", pricesData);
 
                             logger.info("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getStationId() + commonVO.getChgrId());
-                            logger.info("충전기로 보낼 JSON : " + sendJsonObject);
+                            logger.info("충전기로 보낼 단가 JSON : " + sendJsonObject);
                             sessionList.get(i).getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
 
                             //전문 이력 인서트
@@ -961,6 +994,102 @@ public class JsonDataParsingForControl {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
             commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+        }
+
+        return commonVO;
+    }
+
+    //제어 - 공지사항
+    private CommonVO announceParsingData(CommonVO commonVO) {
+
+        try {
+            JSONParser jParser = new JSONParser();
+            JSONObject data = (JSONObject) jParser.parse(commonVO.getData());
+
+            logger.info("data : " + data.toString());
+
+            ArrayList<ControlChgrVO> controlChgrVOArrayList = new ArrayList<>();
+
+            JSONArray reqChgrArr = (JSONArray) data.get("req_chgr");
+
+            for (int i = 0; i < reqChgrArr.size(); i++) {
+                JSONObject tmp = (JSONObject) reqChgrArr.get(i);
+
+                String ctrl_list_id = (String) tmp.get("ctrl_list_id");
+                String station_id = (String) tmp.get("station_id");
+                String chgr_id = (String) tmp.get("chgr_id");
+
+                commonVO.setCtrlListId(ctrl_list_id);
+
+                if (ctrl_list_id.equals("") || ctrl_list_id == null || station_id.equals("") || station_id == null || chgr_id.equals("") || chgr_id == null) {
+                    commonVO.setResponseReceive("0");   //실패
+                    commonVO.setResponseReason("12");   //파라미터 오류
+                    commonVO = ctrlListUpdate(commonVO);
+                    return commonVO;
+                }
+
+                logger.info("<----------- 공지사항 Parsing Data [" + (i+1) + "]----------->");
+                logger.info("ctrl_list_id : " + ctrl_list_id);
+                logger.info("station_id : " + station_id);
+                logger.info("chgr_id : " + chgr_id);
+
+
+                ControlChgrVO controlChgrVO = new ControlChgrVO();
+                controlChgrVO.setCtrlListId(ctrl_list_id);
+                controlChgrVO.setStationId(station_id);
+                controlChgrVO.setChgrId(chgr_id);
+                controlChgrVOArrayList.add(controlChgrVO);
+
+                //제어 이력 업데이트
+                commonVO = ctrlListUpdate(commonVO);
+            }
+
+//            ArrayList<AnnounceVO> announceVOArrayList = new ArrayList<>();
+//
+//            JSONArray contDetlArray = (JSONArray) data.get("cont_detl");
+//
+//            for (int i = 0; i < contDetlArray.size(); i++) {
+//                JSONObject tmp = (JSONObject) contDetlArray.get(i);
+//
+//                String lang = (String) tmp.get("lang");
+//                String cont= (String) tmp.get("cont");
+//
+//
+//                logger.info("<----------- 공지사항 cont_detl Parsing Data [" + (i+1) + "]----------->");
+//                logger.info("lang : " + lang);
+//                logger.info("cont : " + cont);
+//
+//                AnnounceVO announceVO = new AnnounceVO();
+//                announceVO.setLang(lang);
+//                announceVO.setCont(cont);
+//
+//                announceVOArrayList.add(announceVO);
+//            }
+
+            String contDetl = (String) data.get("cont_detl");
+            String send_date = (String) data.get("send_date");
+
+            if (send_date.equals("") || send_date == null) {
+
+                commonVO.setResponseReceive("0");   //실패
+                commonVO.setResponseReason("12");   //파라미터 오류
+                commonVO = ctrlListUpdate(commonVO);
+                return commonVO;
+            }
+            logger.info("controlChgrVOArrayList : " + controlChgrVOArrayList);
+            logger.info("contDetl : " + contDetl);
+            logger.info("send_date : " + send_date);
+            logger.info("<------------------------------------------------>");
+
+            commonVO.setControlChgrVOArrayList(controlChgrVOArrayList);
+            commonVO.setContDetl(contDetl);
+            //commonVO.setAnnounceVOArrayList(announceVOArrayList);
+            commonVO.setSendDate(send_date);
+
+        } catch (ParseException e) {
+
+            e.printStackTrace();
+            parameterErrorMsgSend(commonVO);
         }
 
         return commonVO;
