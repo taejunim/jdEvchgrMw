@@ -555,7 +555,7 @@ public class JsonDataParsing {
             //좌표 체크 -> 좌표 정보가 없을 경우 xml 단에서 좌표 업데이트 안 함
             try {
                 if (gps_xpos.equals("") || gps_xpos.equals("0.0") || gps_xpos.substring(0,3).indexOf("0.0") != -1 || gps_xpos.equals("0")
-                || (int) Double.parseDouble(gps_xpos) == 0 || Double.parseDouble(gps_xpos) == 0.0 || gps_xpos == null) {
+                || (int) Double.parseDouble(gps_xpos) == 0 || Double.parseDouble(gps_xpos) == 0.0 || gps_xpos == null || gps_xpos.indexOf(" ") != -1) {
 
                     chgrInfoVO.setGpsXpos("0.0");
 
@@ -565,7 +565,7 @@ public class JsonDataParsing {
                 }
 
                 if (gps_ypos.equals("") || gps_ypos.equals("0.0") || gps_ypos.substring(0,3).indexOf("0.0") != -1 || gps_ypos.equals("0")
-                || (int) Double.parseDouble(gps_ypos) == 0 || Double.parseDouble(gps_ypos) == 0.0 || gps_ypos == null) {
+                || (int) Double.parseDouble(gps_ypos) == 0 || Double.parseDouble(gps_ypos) == 0.0 || gps_ypos == null || gps_ypos.indexOf(" ") != -1) {
 
                     chgrInfoVO.setGpsYpos("0.0");
 
