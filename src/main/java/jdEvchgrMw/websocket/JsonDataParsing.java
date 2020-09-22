@@ -597,13 +597,31 @@ public class JsonDataParsing {
             String plugTypeCd = "";
 
             CollectServiceBean csb = new CollectServiceBean();
+            logger.info("<----------------------- 채널 타입 변환 ------------------------->");
 
-            for (int i = 0; i < plugDetlInfoVOList.size(); i++) {
+            // 플러그 1개
+            if (plugDetlInfoVOList.size() == 1) {
+                plugTypeCd = plugDetlInfoVOList.get(0).getPlug_type();
+            }
 
-                if (plugTypeCd.indexOf(plugDetlInfoVOList.get(i).getPlug_type()) == -1) {
-                    plugTypeCd += plugDetlInfoVOList.get(i).getPlug_type();
+            // 플러그 2개 이상
+            else if (plugDetlInfoVOList.size() > 1) {
+
+                for (int i = 0; i < plugDetlInfoVOList.size(); i++) {
+
+                    if (plugTypeCd.indexOf(plugDetlInfoVOList.get(i).getPlug_type()) == -1) {
+                        plugTypeCd += plugDetlInfoVOList.get(i).getPlug_type();
+                    }
                 }
             }
+
+            //Parameter Error
+            else {
+                logger.info("<----------------------- plugDetlInfoVOList Size : " + plugDetlInfoVOList.size() + " ------------------------->");
+                commonVO = parameterErrorMsgSend(commonVO);
+                return commonVO;
+            }
+
             logger.info("<----------------------- 충전기 plugTypeCd -------------------------> : " + plugTypeCd);
 
             /** 채널 타입
