@@ -215,85 +215,8 @@ public class JsonDataParsingForControl {
             sendJsonObject.put("send_type", "req");
             sendJsonObject.put("action_type", commonVO.getActionType());
 
-
-            //단가 제외한 제어 명령
-            if (!commonVO.getActionType().equals("prices")) {
-
-                JSONObject sendData = new JSONObject();
-
-                sendData.put("station_id", commonVO.getStationId());
-                sendData.put("chgr_id", commonVO.getChgrId());
-                sendData.put("send_date", commonVO.getResponseDate());
-
-                if (commonVO.getActionType().equals("changeMode")) {
-                    sendData.put("change_mode", commonVO.getChangeModeVO().getChangeMode()); //충전기모드변경(충전기정보시스템 -> 충전기) CALL or 충전기 소리정보(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("displayBrightness") || commonVO.getActionType().equals("sound")) {
-
-                    sendData.put("h00", commonVO.getHourVO().getH00());
-                    sendData.put("h01", commonVO.getHourVO().getH01());
-                    sendData.put("h02", commonVO.getHourVO().getH02());
-                    sendData.put("h03", commonVO.getHourVO().getH03());
-                    sendData.put("h04", commonVO.getHourVO().getH04());
-                    sendData.put("h05", commonVO.getHourVO().getH05());
-                    sendData.put("h06", commonVO.getHourVO().getH06());
-                    sendData.put("h07", commonVO.getHourVO().getH07());
-                    sendData.put("h08", commonVO.getHourVO().getH08());
-                    sendData.put("h09", commonVO.getHourVO().getH09());
-                    sendData.put("h10", commonVO.getHourVO().getH10());
-                    sendData.put("h11", commonVO.getHourVO().getH11());
-                    sendData.put("h12", commonVO.getHourVO().getH12());
-                    sendData.put("h13", commonVO.getHourVO().getH13());
-                    sendData.put("h14", commonVO.getHourVO().getH14());
-                    sendData.put("h15", commonVO.getHourVO().getH15());
-                    sendData.put("h16", commonVO.getHourVO().getH16());
-                    sendData.put("h17", commonVO.getHourVO().getH17());
-                    sendData.put("h18", commonVO.getHourVO().getH18());
-                    sendData.put("h19", commonVO.getHourVO().getH19());
-                    sendData.put("h20", commonVO.getHourVO().getH20());
-                    sendData.put("h21", commonVO.getHourVO().getH21());
-                    sendData.put("h22", commonVO.getHourVO().getH22());
-                    sendData.put("h23", commonVO.getHourVO().getH23());
-
-                } else if (commonVO.getActionType().equals("askVer")) {
-                    sendData.put("fw_type", commonVO.getFwVerInfoVO().getFwType()); //펌웨어 버전 정보 확인(충전기정보시스템 -> 충전기) CALL
-
-                } else if (commonVO.getActionType().equals("reset")) {
-
-                    logger.info("reset data : " + sendData.toString());
-
-                } else if (commonVO.getActionType().equals("dr")) {
-                    sendData.put("ctrl_level", commonVO.getCtrlLevel()); //충전량 제어(충전기정보시스템 -> 충전기) CALL
-
-                } else {
-                    logger.info("[ 정의 되지 않은 PACKET 입니다. ]");
-                    //undefinedActionErrorMsgSend(commonVO);
-                    protocolErrorMsgSend(commonVO);
-                    return;
-                }
-
-                sendJsonObject.put("data", sendData);
-
-                logger.info("충전기로 보낼 JSON : " + sendJsonObject);
-                logger.info("commonVO.getStationId() + commonVO.getChgrId() : " + commonVO.getStationId() + commonVO.getChgrId());
-
-                for (int i=0; i<sessionList.size(); i++) {
-
-                    if (sessionList.get(i).getStationChgrId().equals(commonVO.getStationId() + commonVO.getChgrId())) {
-                        logger.info("세션 목록의 충전기 : " + sessionList.get(i).getStationChgrId() + " / 제어할 충전기 : " + commonVO.getStationId() + commonVO.getChgrId());
-                        sessionList.get(i).getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
-                        break;
-                    }
-                }
-
-                //전문 이력 인서트
-                commonVO.setRcvMsg(sendJsonObject.toString());
-                commonVO = txMsgListInsert(commonVO);
-
-            }
-
             //공지사항
-            else if (commonVO.getActionType().equals("announce")) {
+            if (commonVO.getActionType().equals("announce")) {
 
                 for (int i=0; i<sessionList.size(); i++) {
 
@@ -378,6 +301,82 @@ public class JsonDataParsingForControl {
                         }
                     }
                 }
+            }
+
+            //단가 제외한 제어 명령
+            else {
+
+                JSONObject sendData = new JSONObject();
+
+                sendData.put("station_id", commonVO.getStationId());
+                sendData.put("chgr_id", commonVO.getChgrId());
+                sendData.put("send_date", commonVO.getResponseDate());
+
+                if (commonVO.getActionType().equals("changeMode")) {
+                    sendData.put("change_mode", commonVO.getChangeModeVO().getChangeMode()); //충전기모드변경(충전기정보시스템 -> 충전기) CALL or 충전기 소리정보(충전기정보시스템 -> 충전기) CALL
+
+                } else if (commonVO.getActionType().equals("displayBrightness") || commonVO.getActionType().equals("sound")) {
+
+                    sendData.put("h00", commonVO.getHourVO().getH00());
+                    sendData.put("h01", commonVO.getHourVO().getH01());
+                    sendData.put("h02", commonVO.getHourVO().getH02());
+                    sendData.put("h03", commonVO.getHourVO().getH03());
+                    sendData.put("h04", commonVO.getHourVO().getH04());
+                    sendData.put("h05", commonVO.getHourVO().getH05());
+                    sendData.put("h06", commonVO.getHourVO().getH06());
+                    sendData.put("h07", commonVO.getHourVO().getH07());
+                    sendData.put("h08", commonVO.getHourVO().getH08());
+                    sendData.put("h09", commonVO.getHourVO().getH09());
+                    sendData.put("h10", commonVO.getHourVO().getH10());
+                    sendData.put("h11", commonVO.getHourVO().getH11());
+                    sendData.put("h12", commonVO.getHourVO().getH12());
+                    sendData.put("h13", commonVO.getHourVO().getH13());
+                    sendData.put("h14", commonVO.getHourVO().getH14());
+                    sendData.put("h15", commonVO.getHourVO().getH15());
+                    sendData.put("h16", commonVO.getHourVO().getH16());
+                    sendData.put("h17", commonVO.getHourVO().getH17());
+                    sendData.put("h18", commonVO.getHourVO().getH18());
+                    sendData.put("h19", commonVO.getHourVO().getH19());
+                    sendData.put("h20", commonVO.getHourVO().getH20());
+                    sendData.put("h21", commonVO.getHourVO().getH21());
+                    sendData.put("h22", commonVO.getHourVO().getH22());
+                    sendData.put("h23", commonVO.getHourVO().getH23());
+
+                } else if (commonVO.getActionType().equals("askVer")) {
+                    sendData.put("fw_type", commonVO.getFwVerInfoVO().getFwType()); //펌웨어 버전 정보 확인(충전기정보시스템 -> 충전기) CALL
+
+                } else if (commonVO.getActionType().equals("reset")) {
+
+                    logger.info("reset data : " + sendData.toString());
+
+                } else if (commonVO.getActionType().equals("dr")) {
+                    sendData.put("ctrl_level", commonVO.getCtrlLevel()); //충전량 제어(충전기정보시스템 -> 충전기) CALL
+
+                } else {
+                    logger.info("[ 정의 되지 않은 PACKET 입니다. ]");
+                    //undefinedActionErrorMsgSend(commonVO);
+                    protocolErrorMsgSend(commonVO);
+                    return;
+                }
+
+                sendJsonObject.put("data", sendData);
+
+                logger.info("충전기로 보낼 JSON : " + sendJsonObject);
+                logger.info("commonVO.getStationId() + commonVO.getChgrId() : " + commonVO.getStationId() + commonVO.getChgrId());
+
+                for (int i=0; i<sessionList.size(); i++) {
+
+                    if (sessionList.get(i).getStationChgrId().equals(commonVO.getStationId() + commonVO.getChgrId())) {
+                        logger.info("세션 목록의 충전기 : " + sessionList.get(i).getStationChgrId() + " / 제어할 충전기 : " + commonVO.getStationId() + commonVO.getChgrId());
+                        sessionList.get(i).getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
+                        break;
+                    }
+                }
+
+                //전문 이력 인서트
+                commonVO.setRcvMsg(sendJsonObject.toString());
+                commonVO = txMsgListInsert(commonVO);
+
             }
 
         } catch (Exception e) {
@@ -1066,7 +1065,9 @@ public class JsonDataParsingForControl {
 //                announceVOArrayList.add(announceVO);
 //            }
 
-            String contDetl = (String) data.get("cont_detl");
+            //--> cont_detl 파싱 오류 수정
+            //String contDetl = (String) data.get("cont_detl");
+            String contDetl = data.get("cont_detl").toString();
             String send_date = (String) data.get("send_date");
 
             if (send_date.equals("") || send_date == null) {
