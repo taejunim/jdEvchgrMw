@@ -55,6 +55,8 @@
                                     ,   POWERBOX_STATE
                                     </if>
                                     ,   INTEGRATED_KWH
+                                    ,   DC_POWER_WH
+                                    ,   AC_POWER_WH
                                     ,   CHGR_TX_DT
                                     ,   REG_DT
 
@@ -80,6 +82,8 @@
                                     ,   #{powerboxState}
                                     </if>
                                     ,   #{integratedKwh}
+                                    ,   #{dcPower}
+                                    ,   #{acPower}
                                     ,   #{chgrTxDt}
                                     ,   now()
                                     )

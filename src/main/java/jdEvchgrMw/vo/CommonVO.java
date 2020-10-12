@@ -1,6 +1,7 @@
 package jdEvchgrMw.vo;
 
 import lombok.Data;
+import org.json.simple.JSONArray;
 
 import javax.websocket.Session;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class CommonVO {
 	private String price;			//단가
 	private String ctrlLevel;		//제어 단계
 	private String contDetl;		//공지사항
+	private JSONArray contDetlArray;		//공지사항
 
 	private ChangeModeVO changeModeVO;		//충전기 모드 변경 VO
 	private HourVO hourVO; 					//시간 VO

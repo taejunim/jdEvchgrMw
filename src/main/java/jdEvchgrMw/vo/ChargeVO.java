@@ -50,8 +50,8 @@ public class ChargeVO {
     private int    cancelAmt;               //부분취소 금액
     private String cancelDetl;              //부분취소_상세정보
     private int    integratedWh;            //적산 WH
-    private int    dcPower;                 //DC 적산유효전력량
-    private int    acPower;                 //AC 적산유효전력량
+    private double dcPower;                 //DC 적산유효전력량
+    private double acPower;                 //AC 적산유효전력량
     private String currVolt;                //현재 전압
     private String currC;                   //현재 전류
     private String dataCreateDt;            //데이터 생성 일시

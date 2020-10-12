@@ -715,8 +715,29 @@ public class JsonDataParsing {
             String send_date = (String) data.get("send_date");
             String create_date = (String) data.get("create_date");
             String mode = (String) data.get("mode");
-            String integrated_power = (String) data.get("integrated_power");
+            //String integrated_power = (String) data.get("integrated_power");
             String powerbox = (String) data.get("powerbox");
+
+            /** 2020-09-22 수정
+             *  1) integrated_power 만 올 경우 String 으로 파싱
+             *  2) 배열로 올경우 dc_power, ac_power 로 파싱
+             * */
+            //int integrated_power = Integer.parseInt((String) data.get("integrated_power"));
+            int integrated_power = 0;
+            double dc_power = 0.0;
+            double ac_power = 0.0;
+
+            if (data.get("integrated_power") instanceof String) {
+                integrated_power = Integer.parseInt((String) data.get("integrated_power"));
+            } else {
+
+                JSONArray powerArray = (JSONArray) data.get("integrated_power");
+                JSONObject jsonObject = (JSONObject) powerArray.get(0);
+
+                dc_power = Double.parseDouble((String) jsonObject.get("dc_power"));
+                ac_power = Double.parseDouble((String) jsonObject.get("ac_power"));
+            }
+
 
             ArrayList<ChargerPlugVO> chargerPlugList = new ArrayList<>();
 
@@ -743,6 +764,8 @@ public class JsonDataParsing {
             logger.info("create_date : " + create_date);
             logger.info("mode : " + mode);
             logger.info("integrated_power : " + integrated_power);
+            logger.info("dc_power : " + dc_power);
+            logger.info("ac_power : " + ac_power);
             logger.info("powerbox : " + powerbox);
             logger.info("chargerPlugList : " + chargerPlugList);
             logger.info("<------------------------------------------------>");
@@ -763,7 +786,10 @@ public class JsonDataParsing {
             chgrStatusVO.setRTimeYn("Y");
             chgrStatusVO.setOpModeCd(mode);
             chgrStatusVO.setPowerboxState(powerbox);
+
             chgrStatusVO.setIntegratedKwh(integrated_power);
+            chgrStatusVO.setDcPower(dc_power);
+            chgrStatusVO.setAcPower(ac_power);
             chgrStatusVO.setChgrTxDt(send_date);
 
             for (int i = 0; i < chargerPlugList.size(); i++) {
@@ -979,8 +1005,8 @@ public class JsonDataParsing {
              * */
             //int integrated_power = Integer.parseInt((String) data.get("integrated_power"));
             int integrated_power = 0;
-            int dc_power = 0;
-            int ac_power = 0;
+            double dc_power = 0;
+            double ac_power = 0;
 
             if (data.get("integrated_power") instanceof String) {
                 integrated_power = Integer.parseInt((String) data.get("integrated_power"));
@@ -989,8 +1015,8 @@ public class JsonDataParsing {
                 JSONArray powerArray = (JSONArray) data.get("integrated_power");
                 JSONObject jsonObject = (JSONObject) powerArray.get(0);
 
-                dc_power = Integer.parseInt((String) jsonObject.get("dc_power"));
-                ac_power = Integer.parseInt((String) jsonObject.get("ac_power"));
+                dc_power = Double.parseDouble((String) jsonObject.get("dc_power"));
+                ac_power = Double.parseDouble((String) jsonObject.get("ac_power"));
             }
 
             int prepayment = Integer.parseInt((String) data.get("prepayment"));
@@ -1099,8 +1125,8 @@ public class JsonDataParsing {
              * */
             //int integrated_power = Integer.parseInt((String) data.get("integrated_power"));
             int integrated_power = 0;
-            int dc_power = 0;
-            int ac_power = 0;
+            double dc_power = 0;
+            double ac_power = 0;
 
             if (data.get("integrated_power") instanceof String) {
                 integrated_power = Integer.parseInt((String) data.get("integrated_power"));
@@ -1109,8 +1135,8 @@ public class JsonDataParsing {
                 JSONArray powerArray = (JSONArray) data.get("integrated_power");
                 JSONObject jsonObject = (JSONObject) powerArray.get(0);
 
-                dc_power = Integer.parseInt((String) jsonObject.get("dc_power"));
-                ac_power = Integer.parseInt((String) jsonObject.get("ac_power"));
+                dc_power = Double.parseDouble((String) jsonObject.get("dc_power"));
+                ac_power = Double.parseDouble((String) jsonObject.get("ac_power"));
             }
 
             int prepayment = Integer.parseInt((String) data.get("prepayment"));
@@ -1224,8 +1250,8 @@ public class JsonDataParsing {
              * */
             //int integrated_power = Integer.parseInt((String) data.get("integrated_power"));
             int integrated_power = 0;
-            int dc_power = 0;
-            int ac_power = 0;
+            double dc_power = 0;
+            double ac_power = 0;
 
             if (data.get("integrated_power") instanceof String) {
                 integrated_power = Integer.parseInt((String) data.get("integrated_power"));
@@ -1234,8 +1260,8 @@ public class JsonDataParsing {
                 JSONArray powerArray = (JSONArray) data.get("integrated_power");
                 JSONObject jsonObject = (JSONObject) powerArray.get(0);
 
-                dc_power = Integer.parseInt((String) jsonObject.get("dc_power"));
-                ac_power = Integer.parseInt((String) jsonObject.get("ac_power"));
+                dc_power = Double.parseDouble((String) jsonObject.get("dc_power"));
+                ac_power = Double.parseDouble((String) jsonObject.get("ac_power"));
             }
 
             int prepayment = Integer.parseInt((String) data.get("prepayment"));
@@ -1775,8 +1801,8 @@ public class JsonDataParsing {
                  * */
                 //int integrated_power = Integer.parseInt((String) tmp.get("integrated_power"));
                 int integrated_power = 0;
-                int dc_power = 0;
-                int ac_power = 0;
+                double dc_power = 0;
+                double ac_power = 0;
 
                 if (tmp.get("integrated_power") instanceof String) {
                     integrated_power = Integer.parseInt((String) tmp.get("integrated_power"));
@@ -1785,8 +1811,8 @@ public class JsonDataParsing {
                     JSONArray powerArray = (JSONArray) tmp.get("integrated_power");
                     JSONObject jsonObject = (JSONObject) powerArray.get(0);
 
-                    dc_power = Integer.parseInt((String) jsonObject.get("dc_power"));
-                    ac_power = Integer.parseInt((String) jsonObject.get("ac_power"));
+                    dc_power = Double.parseDouble((String) jsonObject.get("dc_power"));
+                    ac_power = Double.parseDouble((String) jsonObject.get("ac_power"));
                 }
 
                 int prepayment = Integer.parseInt((String) tmp.get("prepayment"));
@@ -1901,8 +1927,8 @@ public class JsonDataParsing {
                  * */
                 //int integrated_power = Integer.parseInt((String) data.get("integrated_power"));
                 int integrated_power = 0;
-                int dc_power = 0;
-                int ac_power = 0;
+                double dc_power = 0;
+                double ac_power = 0;
 
                 if (tmp.get("integrated_power") instanceof String) {
                     integrated_power = Integer.parseInt((String) tmp.get("integrated_power"));
@@ -1911,8 +1937,8 @@ public class JsonDataParsing {
                     JSONArray powerArray = (JSONArray) tmp.get("integrated_power");
                     JSONObject jsonObject = (JSONObject) powerArray.get(0);
 
-                    dc_power = Integer.parseInt((String) jsonObject.get("dc_power"));
-                    ac_power = Integer.parseInt((String) jsonObject.get("ac_power"));
+                    dc_power = Double.parseDouble((String) jsonObject.get("dc_power"));
+                    ac_power = Double.parseDouble((String) jsonObject.get("ac_power"));
                 }
 
                 int prepayment = Integer.parseInt((String) tmp.get("prepayment"));

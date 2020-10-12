@@ -215,6 +215,8 @@ public class JsonDataParsingForControl {
             sendJsonObject.put("send_type", "req");
             sendJsonObject.put("action_type", commonVO.getActionType());
 
+            logger.info("보내기전 공지사항 : " + commonVO.getContDetlArray());
+
             //공지사항
             if (commonVO.getActionType().equals("announce")) {
 
@@ -229,7 +231,9 @@ public class JsonDataParsingForControl {
                             jsonObject.put("send_date", commonVO.getResponseDate());
                             jsonObject.put("station_id", commonVO.getControlChgrVOArrayList().get(j).getStationId());
                             jsonObject.put("chgr_id", commonVO.getControlChgrVOArrayList().get(j).getChgrId());
-                            jsonObject.put("cont_detl", commonVO.getContDetl());
+                            //jsonObject.put("cont_detl", commonVO.getContDetl());
+                            jsonObject.put("cont_detl", commonVO.getContDetlArray());
+                            logger.info("충전기로 보낼 공지사항 : " + commonVO.getContDetlArray());
 
                             sendJsonObject.put("data", jsonObject);
 
@@ -1003,7 +1007,11 @@ public class JsonDataParsingForControl {
 
         try {
             JSONParser jParser = new JSONParser();
-            JSONObject data = (JSONObject) jParser.parse(commonVO.getData());
+            JSONObject jObject = (JSONObject) jParser.parse(commonVO.getRcvMsg());
+
+            //--> 10/12 반영전 수정
+            //JSONObject data = (JSONObject) jParser.parse(commonVO.getData());
+            JSONObject data = (JSONObject) jObject.get("data");
 
             logger.info("data : " + data.toString());
 
@@ -1067,7 +1075,9 @@ public class JsonDataParsingForControl {
 
             //--> cont_detl 파싱 오류 수정
             //String contDetl = (String) data.get("cont_detl");
-            String contDetl = data.get("cont_detl").toString();
+            //String contDetl = data.get("cont_detl").toString();
+            JSONArray contDetlArray = (JSONArray) data.get("cont_detl");
+
             String send_date = (String) data.get("send_date");
 
             if (send_date.equals("") || send_date == null) {
@@ -1078,12 +1088,13 @@ public class JsonDataParsingForControl {
                 return commonVO;
             }
             logger.info("controlChgrVOArrayList : " + controlChgrVOArrayList);
-            logger.info("contDetl : " + contDetl);
+            logger.info("contDetlArray : " + contDetlArray);
             logger.info("send_date : " + send_date);
             logger.info("<------------------------------------------------>");
 
             commonVO.setControlChgrVOArrayList(controlChgrVOArrayList);
-            commonVO.setContDetl(contDetl);
+            //commonVO.setContDetl(contDetl);
+            commonVO.setContDetlArray(contDetlArray);
             //commonVO.setAnnounceVOArrayList(announceVOArrayList);
             commonVO.setSendDate(send_date);
 
