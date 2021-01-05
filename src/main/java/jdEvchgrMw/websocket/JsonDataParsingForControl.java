@@ -207,13 +207,11 @@ public class JsonDataParsingForControl {
     //관제에서 받은 제어 명령을 M/W가 충전기로 보냄
     private void controlMw(CommonVO commonVO) {
 
-        JSONObject sendJsonObject = new JSONObject();
+
 
         try {
 
-            sendJsonObject.put("uuid", commonVO.getUuid());
-            sendJsonObject.put("send_type", "req");
-            sendJsonObject.put("action_type", commonVO.getActionType());
+
 
             logger.info("보내기전 공지사항 : " + commonVO.getContDetlArray());
 
@@ -226,6 +224,15 @@ public class JsonDataParsingForControl {
 
                         if (sessionList.get(i).getStationChgrId().equals(commonVO.getControlChgrVOArrayList().get(j).getStationId() + commonVO.getControlChgrVOArrayList().get(j).getChgrId())) {
 
+                            String uuid = UUID.randomUUID().toString();
+                            commonVO.setUuid(uuid);
+
+                            JSONObject sendJsonObject = new JSONObject();
+
+                            sendJsonObject.put("uuid", uuid);
+                            sendJsonObject.put("send_type", "req");
+                            sendJsonObject.put("action_type", commonVO.getActionType());
+
                             JSONObject jsonObject = new JSONObject();
 
                             jsonObject.put("send_date", commonVO.getResponseDate());
@@ -233,11 +240,11 @@ public class JsonDataParsingForControl {
                             jsonObject.put("chgr_id", commonVO.getControlChgrVOArrayList().get(j).getChgrId());
                             //jsonObject.put("cont_detl", commonVO.getContDetl());
                             jsonObject.put("cont_detl", commonVO.getContDetlArray());
-                            logger.info("충전기로 보낼 공지사항 : " + commonVO.getContDetlArray());
 
                             sendJsonObject.put("data", jsonObject);
 
-                            logger.info("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getStationId() + commonVO.getChgrId());
+                            logger.info("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getControlChgrVOArrayList().get(j).getStationId() + commonVO.getControlChgrVOArrayList().get(j).getChgrId());
+                            logger.info("uuid : " + uuid);
                             logger.info("충전기로 보낼 공지사항 JSON : " + sendJsonObject);
                             sessionList.get(i).getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
 
@@ -258,6 +265,15 @@ public class JsonDataParsingForControl {
                     for (int j=0; j<commonVO.getControlChgrVOArrayList().size(); j++) {
 
                         if (sessionList.get(i).getStationChgrId().equals(commonVO.getControlChgrVOArrayList().get(j).getStationId() + commonVO.getControlChgrVOArrayList().get(j).getChgrId())) {
+
+                            String uuid = UUID.randomUUID().toString();
+                            commonVO.setUuid(uuid);
+
+                            JSONObject sendJsonObject = new JSONObject();
+
+                            sendJsonObject.put("uuid", uuid);
+                            sendJsonObject.put("send_type", "req");
+                            sendJsonObject.put("action_type", commonVO.getActionType());
 
                             JSONObject pricesData = new JSONObject();
 
@@ -294,7 +310,7 @@ public class JsonDataParsingForControl {
 
                             sendJsonObject.put("data", pricesData);
 
-                            logger.info("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getStationId() + commonVO.getChgrId());
+                            logger.info("세션 리스트의 stationChgrId  : " + sessionList.get(i).getStationChgrId() + " / commonVO 세션의 stationChgrId : " + commonVO.getControlChgrVOArrayList().get(j).getStationId() + commonVO.getControlChgrVOArrayList().get(j).getChgrId());
                             logger.info("충전기로 보낼 단가 JSON : " + sendJsonObject);
                             sessionList.get(i).getUserSession().getAsyncRemote().sendText(sendJsonObject.toString());
 
@@ -309,6 +325,15 @@ public class JsonDataParsingForControl {
 
             //단가 제외한 제어 명령
             else {
+
+                String uuid = UUID.randomUUID().toString();
+                commonVO.setUuid(uuid);
+
+                JSONObject sendJsonObject = new JSONObject();
+
+                sendJsonObject.put("uuid", uuid);
+                sendJsonObject.put("send_type", "req");
+                sendJsonObject.put("action_type", commonVO.getActionType());
 
                 JSONObject sendData = new JSONObject();
 

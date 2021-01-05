@@ -60,6 +60,27 @@ public class JdEvChgrMwMain {
     @OnMessage
     public void handleMessage(@PathParam("stationId") String stationId, @PathParam("chgrId") String chgrId, String message, Session session) {
 
+        String stationChgrId = stationId + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
+
+        boolean isExistStationChgrId = false;
+
+        for (int i=0; i<sessionList.size(); i++) {
+
+            if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
+
+                isExistStationChgrId = true;
+                break;
+            }
+        }
+
+        if(!isExistStationChgrId) {
+            SessionVO sessionVO = new SessionVO();
+            sessionVO.setStationChgrId(stationChgrId);
+            sessionVO.setUserSession(session);
+
+            sessionList.add(sessionVO);
+        }
+
         CommonVO commonVO = new CommonVO();
 
         commonVO.setProviderId(stationId.length() > 6 ? stationId.substring(0,2) : "JD");   //사업자ID -> 2자리
@@ -182,6 +203,9 @@ public class JdEvChgrMwMain {
 
                 } catch (Exception e) {
                     logger.error("Data Exception : " + e);
+                    logger.error("Data Exception - qActionType : " + qActionType);
+                    logger.error("Data Exception - commonVO : " + commonVO);
+                    logger.error("Data Exception - object : " + object);
                 }
             }
         }

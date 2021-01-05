@@ -2574,15 +2574,11 @@ public class JsonDataParsing {
         controlChgrVO.setResMsg(commonVO.getRcvMsg());
 
         try {
+            CollectServiceBean csb = new CollectServiceBean();
 
-            QueueVO queueVO = new QueueVO();
-            queueVO.setRTimeYn(commonVO.getRTimeYn());
-            queueVO.setActionType("txMsg");
-            queueVO.setObject(controlChgrVO);
-
-            qDataObjectList.offer(queueVO);
-
+            logger.info("<----------------------- 전문 이력 Update OK -------------------------> : " + csb.controlChgrService().txMsgListUpdate(controlChgrVO));
         } catch (Exception e) {
+            e.printStackTrace();
 
             logger.error("<----------------------- DB Insert 오류 ------------------------->");
             logger.error("*******************************************************");
