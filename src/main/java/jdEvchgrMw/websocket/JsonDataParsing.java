@@ -81,6 +81,13 @@ public class JsonDataParsing {
 
                 send_date = (String) jobj.get("send_date");
                 create_date = (String) jobj.get("create_date");
+            } else if(object instanceof JSONArray) {
+
+                JSONArray jsonArray = (JSONArray) jParser.parse(data);
+                JSONObject tmp = (JSONObject) jsonArray.get(0);
+
+                send_date = (String) tmp.get("send_date");
+                create_date = (String) tmp.get("create_date");
             }
 
             commonVO.setSendDate(send_date);
@@ -127,7 +134,19 @@ public class JsonDataParsing {
                     logger.info("*******************  qActionType  ******************* : " + qActionType);
 
                     JSONParser jsonParser = new JSONParser();
-                    JSONObject obj = (JSONObject) jsonParser.parse(commonVO.getData());
+                    JSONObject obj = new JSONObject();
+
+                    Object tempObject = jsonParser.parse(commonVO.getData());
+
+                    if (tempObject instanceof JSONObject) {
+
+                        obj = (JSONObject) tempObject;
+
+                    } else if(tempObject instanceof JSONArray) {
+
+                        JSONArray jsonArray = (JSONArray) jsonParser.parse(commonVO.getData());
+                        obj = (JSONObject) jsonArray.get(0);
+                    }
 
                     if (qActionType.equals("chgrInfo")) {
 
