@@ -55,6 +55,11 @@ public class JsonDataParsing {
 
             jObject = (JSONObject) jParser.parse(commonVO.getRcvMsg());//
 
+            if (!jObject.containsKey("uuid") || !jObject.containsKey("send_type") || !jObject.containsKey("action_type") ||!jObject.containsKey("data")) {
+                protocolErrorMsgSend(commonVO);
+                return;
+            }
+
             /* PARSING START */
 
             Date dt = new Date();
@@ -107,7 +112,7 @@ public class JsonDataParsing {
             //데이터 공백 체크
             if (uuid.equals("") || uuid == null || send_type.equals("") || send_type == null || action_type.equals("") || action_type == null || data.equals("") || data == null) {
 
-                protocolErrorMsgSend(commonVO);
+                parameterErrorMsgSend(commonVO);
                 return;
             }
 
@@ -121,25 +126,82 @@ public class JsonDataParsing {
                     String qActionType = qActionList.poll();
                     logger.info("*******************  qActionType  ******************* : " + qActionType);
 
+                    JSONParser jsonParser = new JSONParser();
+                    JSONObject obj = (JSONObject) jsonParser.parse(commonVO.getData());
+
                     if (qActionType.equals("chgrInfo")) {
+
+                        if (!obj.containsKey("send_date") || !obj.containsKey("create_date") || !obj.containsKey("gps_xpos") || !obj.containsKey("gps_ypos") || !obj.containsKey("charger_type")
+                        || !obj.containsKey("charger_mf") || !obj.containsKey("m2m_mf") || !obj.containsKey("rf_mf") || !obj.containsKey("m2m_tel") || !obj.containsKey("van_ip")
+                        || !obj.containsKey("van_port") || !obj.containsKey("offline_free_charge_W") || !obj.containsKey("charger_pay_yn") || !obj.containsKey("fw_ver_info") || !obj.containsKey("plug_detl_info")) {
+                            protocolErrorMsgSend(commonVO);
+                            return;
+                        }
+
                         commonVO = chgrInfoParsingData(commonVO);                        //충전기 설치정보(충전기 -> 충전기정보시스템) CALL
 
                     } else if (qActionType.equals("chgrStatus")) {
+
+                        if (!obj.containsKey("send_date") || !obj.containsKey("create_date") || !obj.containsKey("mode") || !obj.containsKey("powerbox") || !obj.containsKey("integrated_power")
+                        || !obj.containsKey("charger_plug")) {
+                            protocolErrorMsgSend(commonVO);
+                            return;
+                        }
+
                         commonVO = chgrStatusParsingData(commonVO);                        //충전기 상태정보(충전기 -> 충전기정보시스템) CALL
 
                     } else if (qActionType.equals("user")) {
+
+                        if (!obj.containsKey("send_date") || !obj.containsKey("create_date") || !obj.containsKey("card_num") || !obj.containsKey("plug_id")) {
+                            protocolErrorMsgSend(commonVO);
+                            return;
+                        }
+
                         commonVO = userParsingData(commonVO);                           //사용자 인증요청(충전기 -> 충전기정보시스템) CALL
 
                     } else if (qActionType.equals("busUser")) {
+
+                        if (!obj.containsKey("send_date") || !obj.containsKey("create_date") || !obj.containsKey("card_num") || !obj.containsKey("plug_id")) {
+                            protocolErrorMsgSend(commonVO);
+                            return;
+                        }
+
                         commonVO = busUserParsingData(commonVO);                        //버스 사용자 인증요청(충전기 -> 충전기정보시스템) CALL
 
                     } else if (qActionType.equals("chargingStart")) {
+
+                        if (!obj.containsKey("send_date") || !obj.containsKey("create_date") || !obj.containsKey("start_date") || !obj.containsKey("card_num") || !obj.containsKey("credit_trx_no")
+                        || !obj.containsKey("credit_trx_date") || !obj.containsKey("pay_type") || !obj.containsKey("charge_plug_type") || !obj.containsKey("plug_id") || !obj.containsKey("integrated_power")
+                        || !obj.containsKey("prepayment") || !obj.containsKey("current_V") || !obj.containsKey("current_A") || !obj.containsKey("estimated_charge_time")) {
+                            protocolErrorMsgSend(commonVO);
+                            return;
+                        }
+
                         commonVO = chargingStartParsingData(commonVO);                        //충전 시작정보(충전기 -> 충전기정보시스템) CALL
 
                     } else if (qActionType.equals("chargingInfo")) {
+
+                        if (!obj.containsKey("send_date") || !obj.containsKey("create_date") || !obj.containsKey("start_date") || !obj.containsKey("card_num") || !obj.containsKey("credit_trx_no")
+                        || !obj.containsKey("credit_trx_date") || !obj.containsKey("pay_type") || !obj.containsKey("charge_plug_type") || !obj.containsKey("plug_id") || !obj.containsKey("integrated_power")
+                        || !obj.containsKey("prepayment") || !obj.containsKey("current_V") || !obj.containsKey("current_A") || !obj.containsKey("estimated_charge_time") || !obj.containsKey("charge_W")
+                        || !obj.containsKey("charge_cost")) {
+                            protocolErrorMsgSend(commonVO);
+                            return;
+                        }
+
                         commonVO = chargingInfoParsingData(commonVO);                        //충전 진행정보(충전기 -> 충전기정보시스템) CALL
 
                     } else if (qActionType.equals("chargingEnd")) {
+
+                        if (!obj.containsKey("send_date") || !obj.containsKey("create_date") || !obj.containsKey("start_date") || !obj.containsKey("card_num") || !obj.containsKey("credit_trx_no")
+                        || !obj.containsKey("credit_trx_date") || !obj.containsKey("pay_type") || !obj.containsKey("charge_plug_type") || !obj.containsKey("plug_id") || !obj.containsKey("integrated_power")
+                        || !obj.containsKey("prepayment") || !obj.containsKey("current_V") || !obj.containsKey("current_A") || !obj.containsKey("charge_time") || !obj.containsKey("charge_end_type")
+                        || !obj.containsKey("end_date") || !obj.containsKey("cancel_cost") || !obj.containsKey("cancel_detl") || !obj.containsKey("charge_W") || !obj.containsKey("charge_cost")
+                        || !obj.containsKey("pay_fnsh_yn")) {
+                            protocolErrorMsgSend(commonVO);
+                            return;
+                        }
+
                         commonVO = chargingEndParsingData(commonVO);                        //충전 완료정보(충전기 -> 충전기정보시스템) CALL
 
                     } else if (qActionType.equals("chargePayment")) {
@@ -622,8 +684,7 @@ public class JsonDataParsing {
             //Parameter Error
             else {
                 logger.info("<----------------------- plugDetlInfoVOList Size : " + plugDetlInfoVOList.size() + " ------------------------->");
-                commonVO = parameterErrorMsgSend(commonVO);
-                return commonVO;
+                parameterErrorMsgSend(commonVO);
             }
 
             logger.info("<----------------------- 충전기 plugTypeCd -------------------------> : " + plugTypeCd);
@@ -668,8 +729,7 @@ public class JsonDataParsing {
             //데이터 오류
             else {
 
-                commonVO = parameterErrorMsgSend(commonVO);
-                return commonVO;
+                parameterErrorMsgSend(commonVO);
             }
 
             logger.info("<----------------------- 충전기 chgrTypeCd -------------------------> : " + chgrInfoVO.getChgrTypeCd());
@@ -688,7 +748,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.error("<----------------------- DB Insert 오류 ------------------------->");
@@ -830,7 +890,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -896,7 +956,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -966,7 +1026,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -1085,7 +1145,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -1211,7 +1271,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -1355,7 +1415,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -1437,7 +1497,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -1506,7 +1566,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -1580,7 +1640,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -1649,7 +1709,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -1759,7 +1819,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -1885,7 +1945,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -2037,7 +2097,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -2125,7 +2185,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -2206,7 +2266,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -2282,7 +2342,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -2399,7 +2459,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
         } catch (Exception e) {
 
             logger.info("<----------------------- DB Insert 오류 ------------------------->");
@@ -2492,7 +2552,7 @@ public class JsonDataParsing {
             logger.error("*******************************************************");
             logger.error("ParseException : " + e);
             logger.error("*******************************************************");
-            commonVO = parameterErrorMsgSend(commonVO);
+            parameterErrorMsgSend(commonVO);
 
             //전문 이력 업데이트
             commonVO = txMsgListUpdate(commonVO);
@@ -2603,13 +2663,14 @@ public class JsonDataParsing {
     }
 
     //파라미터 오류
-    public CommonVO parameterErrorMsgSend(CommonVO commonVO) {
+    public void parameterErrorMsgSend(CommonVO commonVO) {
         logger.info("JSON Parsing 중 오류 입니다. 받은 Data : " + commonVO.getData());
 
         commonVO.setResponseReceive("0");   //실패
         commonVO.setResponseReason("12");   //파라미터 오류
+        sendMessage(commonVO);
 
-        return commonVO;
+        return;
     }
 
     //충전소(기)ID 오류
