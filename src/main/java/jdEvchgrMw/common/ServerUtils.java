@@ -41,8 +41,9 @@ public class ServerUtils implements ServletContextListener {
     public void contextInitialized(ServletContextEvent arg0) {
         // 웹 어플리케이션 시작 시 처리할 로직..
 
+        //톰캣 실행시 DB에 등록된 충전기 검색 => 이후 데이터 수신시 유효한 충전기인지 체크
         try {
-            chgrList.clear();
+
             chgrList = csb.beanChgrInfoService().chgrList();
 
             for (int i=0; i<chgrList.size(); i++) {

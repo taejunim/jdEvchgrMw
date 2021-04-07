@@ -55,6 +55,7 @@ public class JsonDataParsing {
 
             jObject = (JSONObject) jParser.parse(commonVO.getRcvMsg());//
 
+            //JSON 데이터중 필수 값 없을시 필수항목 누락으로 응답
             if (!jObject.containsKey("uuid") || !jObject.containsKey("send_type") || !jObject.containsKey("action_type") ||!jObject.containsKey("data")) {
                 protocolErrorMsgSend(commonVO);
                 return;
@@ -75,13 +76,18 @@ public class JsonDataParsing {
 
             Object object = jParser.parse(data);
 
+            //object 가 JSONObject 타입일 경우
             if (object instanceof JSONObject) {
 
                 JSONObject jobj = (JSONObject) object;
 
                 send_date = (String) jobj.get("send_date");
                 create_date = (String) jobj.get("create_date");
-            } else if(object instanceof JSONArray) {
+
+            }
+
+            //object 가 JSONArray 타입일 경우
+            else if(object instanceof JSONArray) {
 
                 JSONArray jsonArray = (JSONArray) jParser.parse(data);
                 JSONObject tmp = (JSONObject) jsonArray.get(0);
@@ -97,12 +103,11 @@ public class JsonDataParsing {
             commonVO.setActionType(action_type);
             commonVO.setData(data);
             commonVO.setResponseDate(responseDateFormat.format(dt));
-
             commonVO.setResponseReceive("1");
             commonVO.setResponseReason("");
             commonVO.setRTimeYn("Y");
 
-            //무효한 충전기 -> 요청실패 응답 : 13
+            //유효한 충전기인지 체크 => 무효할 시 13 으로 응답
             String stationChgrId = commonVO.getProviderId() + commonVO.getStationId() + commonVO.getChgrId();
 
             if (!chgrList.contains(stationChgrId)) {
@@ -116,7 +121,7 @@ public class JsonDataParsing {
 
             logger.info(time + " - [ 충전소 : " + commonVO.getStationId() + " - 충전기 : " + commonVO.getChgrId() + " , action_type : " + action_type + " ]");
 
-            //데이터 공백 체크
+            //필수항목 데이터 공백 체크
             if (uuid.equals("") || uuid == null || send_type.equals("") || send_type == null || action_type.equals("") || action_type == null || data.equals("") || data == null) {
 
                 parameterErrorMsgSend(commonVO);
@@ -128,7 +133,7 @@ public class JsonDataParsing {
 
                 qActionList.offer(commonVO.getActionType());
 
-                while(qActionList.isEmpty()==false){
+                while( qActionList.isEmpty() == false){
 
                     String qActionType = qActionList.poll();
                     logger.info("*******************  qActionType  ******************* : " + qActionType);
@@ -138,16 +143,21 @@ public class JsonDataParsing {
 
                     Object tempObject = jsonParser.parse(commonVO.getData());
 
+                    //object 가 JSONObject 타입일 경우
                     if (tempObject instanceof JSONObject) {
 
                         obj = (JSONObject) tempObject;
 
-                    } else if(tempObject instanceof JSONArray) {
+                    }
+
+                    //object 가 JSONArray 타입일 경우
+                    else if(tempObject instanceof JSONArray) {
 
                         JSONArray jsonArray = (JSONArray) jsonParser.parse(commonVO.getData());
                         obj = (JSONObject) jsonArray.get(0);
                     }
 
+                    //JSON 데이터중 필수 값 없을시 필수항목 누락으로 응답
                     if (qActionType.equals("chgrInfo")) {
 
                         if (!obj.containsKey("send_date") || !obj.containsKey("create_date") || !obj.containsKey("gps_xpos") || !obj.containsKey("gps_ypos") || !obj.containsKey("charger_type")
@@ -264,6 +274,10 @@ public class JsonDataParsing {
 
                     }
 
+                    /**
+                     * 충전기 제어 응답
+                     * 제어는 관제 -> 미들웨어 -> 충전기 로 명령을 내린 후 다시 충전기로 결과를 응답
+                     */
                     //충전기 제어 응답(충전기 -> M/W) CALL
                     else if (qActionType.equals("reset") || qActionType.equals("prices") || qActionType.equals("changeMode")
                             || qActionType.equals("displayBrightness") || qActionType.equals("sound") || qActionType.equals("askVer") || qActionType.equals("dr") || qActionType.equals("announce")) {

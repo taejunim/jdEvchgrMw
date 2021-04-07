@@ -42,6 +42,7 @@ public class JdEvChgrMwController {
 
 		CollectServiceBean csb = new CollectServiceBean();
 
+		//톰캣 실행시 DB에 등록된 충전기 검색 => 이후 데이터 수신시 유효한 충전기인지 체크
 		try {
 			chgrList.clear();
 			chgrList = csb.beanChgrInfoService().chgrList();
@@ -66,6 +67,7 @@ public class JdEvChgrMwController {
 		logger.info("[ 총 session 수 : " + sessionList.size() + " ]");
 		logger.info("  현재 session 목록 -> ");
 
+		//현재 미들웨어와 연결된 충전기 세션 => 제어 날릴때 사용
 		for (int i=0; i<sessionList.size(); i++) {
 			logger.info(sessionList.get(i).getStationChgrId());
 		}

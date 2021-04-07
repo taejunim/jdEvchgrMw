@@ -21,13 +21,15 @@ public class JdEvChgrMwMain {
 
 	/**
      * WEBSOCKET CONNECTED CALL EVENT
+     * 충전기가 미들웨어 접속시 호출
      */
     @OnOpen
     public void handleOpen(@PathParam("stationId") String stationId, @PathParam("chgrId") String chgrId, Session session){
 
+        //충전기ID 는 2자리로 고정인데 2자리 이상이면 3번째 이후 것들을 잘라서 버림
         String stationChgrId = stationId + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
 
-        //충전기 연결이 끊어진 후 재연결시 기존 세션 제거하고 새로 추가
+        //충전기 연결이 끊어진 후 재연결시 기존 세션 제거
         if (sessionList.size() > 0) {
 
             for (int i=0; i<sessionList.size(); i++) {
@@ -39,6 +41,7 @@ public class JdEvChgrMwMain {
             }
         }
 
+        //충전기 세션 새로 추가
         SessionVO sessionVO = new SessionVO();
         sessionVO.setStationChgrId(stationChgrId);
         sessionVO.setUserSession(session);
@@ -55,13 +58,18 @@ public class JdEvChgrMwMain {
     
     /**
      * MSG RECEIVE CALL EVENT
-     * @param message
+     * 충전기로부터 데이터 수신시 호출
      */
     @OnMessage
     public void handleMessage(@PathParam("stationId") String stationId, @PathParam("chgrId") String chgrId, String message, Session session) {
 
+        //충전기ID 는 2자리로 고정인데 2자리 이상이면 3번째 이후 것들을 잘라서 버림
         String stationChgrId = stationId + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
 
+        /**
+         * 충전기 세션이 sessionList 에 없을시 체크하여 add.
+         * 미들웨어 재시작시 sessionList 에는 충전기 세션이 없을거고 반면 충전기와의 연결이 살아있을 때 데이터가 올 경우 체크하여 세션 add
+         */
         boolean isExistStationChgrId = false;
 
         for (int i=0; i<sessionList.size(); i++) {
@@ -81,17 +89,16 @@ public class JdEvChgrMwMain {
             sessionList.add(sessionVO);
         }
 
+        //사업자ID, 충전소ID, 충전기ID, 데이터 파싱 시작
         CommonVO commonVO = new CommonVO();
 
-        commonVO.setProviderId(stationId.length() > 6 ? stationId.substring(0,2) : "JD");   //사업자ID -> 2자리
+        commonVO.setProviderId(stationId.length() > 6 ? stationId.substring(0,2) : "JD");   //사업자ID -> 2자리 => stationId 에 사업자ID 같이 들어옴
         commonVO.setStationId(stationId.length() > 6 ? stationId.substring(2) : stationId); //충전소ID -> 6자리인데 그 이상길면 2번째 자리부터
         commonVO.setChgrId(chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);           //충전기ID -> 2자리
 
     	commonVO.setUserSession(session);
     	commonVO.setRcvMsg(message);
 
-    	//세션 로그 출력
-        //sessionListLog();
         logger.info("[ 충전기(" + stationId + chgrId + ") -> M/W : "+ commonVO.getRcvMsg() +" ]");
 
         JsonDataParsing jdp         = new JsonDataParsing();
@@ -100,7 +107,7 @@ public class JdEvChgrMwMain {
         logger.info("[ q 데이터 처리 시작 SIZE : " + qDataObjectList.size() +" ]");
         if (qDataObjectList.size() > 0) {
 
-            while(qDataObjectList.isEmpty()==false){
+            while (qDataObjectList.isEmpty() == false) {
 
                 QueueVO queueVO = qDataObjectList.poll();
 
@@ -215,12 +222,15 @@ public class JdEvChgrMwMain {
 
     /**
      * WEBSOCKET DISCONNECTED CALL EVENT
+     * 충전기와의 연결이 끊어졌을 때 호출
      */
     @OnClose
     public void handleClose(@PathParam("stationId") String stationId, @PathParam("chgrId") String chgrId, Session session) {
 
+        //충전기ID 는 2자리로 고정인데 2자리 이상이면 3번째 이후 것들을 잘라서 버림
         String stationChgrId = stationId + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
 
+        //충전기와 연결끊어지면 sessionList 에서 제거
         for (int i=0; i < sessionList.size(); i++) {
 
             if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
@@ -238,6 +248,7 @@ public class JdEvChgrMwMain {
     
     /**
      * WEBSOCKET ERROR CALL EVENT
+     * 충전기와의 연결 오류시 호출
      * @param
      */
     @OnError
