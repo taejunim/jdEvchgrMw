@@ -31,7 +31,8 @@ public class AlarmHistoryServiceImpl extends EgovAbstractServiceImpl implements 
     /*알람 이력 등록*/
     public int alarmHistoryInsert(AlarmHistoryVO alarmHistoryVO) throws Exception {
 
+        String alarmId = alarmHistoryMapper.getAlarmHistoryId();
+        alarmHistoryVO.setAlarmId(alarmId);
         return alarmHistoryMapper.alarmHistoryInsert(alarmHistoryVO);
     }
-
 }

@@ -24,4 +24,6 @@ public interface AlarmHistoryMapper {
     /*알람 이력 등록*/
     int alarmHistoryInsert(AlarmHistoryVO alarmHistoryVO) throws Exception;
 
+    String getAlarmHistoryId() throws Exception;
+
 }
