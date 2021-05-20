@@ -35,6 +35,21 @@ public class ServerUtils implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent arg0) {
         // 웹 어플리케이션 종료 시 처리할 로직..
         // 필자는 세션 로그인 관리 기능을 이용하여 시스템 종료 시 로그아웃 일자를 업데이트 하도록 정의 하였다.
+        /*if (sessionList.size() > 0) {
+
+            for (int i=0; i<sessionList.size(); i++) {
+
+                try {
+                    logger.info("[ contextDestroyed -> 세션 종료 시작 ]");
+                    sessionList.get(i).getUserSession().close();
+                    logger.info("[ contextDestroyed -> 세션 종료 완료 ]");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    logger.info("[ contextDestroyed -> session.close() Error : " + e.getMessage() + " ]");
+                }
+
+            }
+        }*/
     }
 
     // 웹 어플리케이션 시작 메소드

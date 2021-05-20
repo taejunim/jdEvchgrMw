@@ -44,6 +44,9 @@ public class JdEvChgrMwMain {
         //충전기 세션 새로 추가
         SessionVO sessionVO = new SessionVO();
         sessionVO.setStationChgrId(stationChgrId);
+
+        //Session Timeout 10분
+        session.setMaxIdleTimeout(600000);
         sessionVO.setUserSession(session);
 
         sessionList.add(sessionVO);
@@ -84,6 +87,9 @@ public class JdEvChgrMwMain {
         if(!isExistStationChgrId) {
             SessionVO sessionVO = new SessionVO();
             sessionVO.setStationChgrId(stationChgrId);
+
+            //Session Timeout 10분
+            session.setMaxIdleTimeout(600000);
             sessionVO.setUserSession(session);
 
             sessionList.add(sessionVO);
@@ -258,6 +264,7 @@ public class JdEvChgrMwMain {
         logger.info(" t : " + t);
         logger.info(" cause : " + t.getCause());
         logger.info(" detailMessage : " + t.getMessage());
+        logger.info(" stackTrace : " + t.getStackTrace());
         logger.info("---------------------------------------------------");
         t.printStackTrace();
     }
