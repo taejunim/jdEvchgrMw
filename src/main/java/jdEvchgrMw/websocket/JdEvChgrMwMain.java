@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 import java.util.*;
 
 @ServerEndpoint(value="/station/{stationId}/{chgrId}")
@@ -37,6 +38,15 @@ public class JdEvChgrMwMain {
                 if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
 
                     sessionList.remove(i);
+
+                    try {
+                        logger.info("[ 재연결 세션 종료 시작 ]");
+                        sessionList.get(i).getUserSession().close();
+                        logger.info("[ 재연결 세션 종료 완료 ]");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        logger.info("[ 재연결 세션 종료 오류 : " + e.getMessage() + " ]");
+                    }
                 }
             }
         }
@@ -46,7 +56,7 @@ public class JdEvChgrMwMain {
         sessionVO.setStationChgrId(stationChgrId);
 
         //Session Timeout 10분
-        session.setMaxIdleTimeout(600000);
+        session.setMaxIdleTimeout(3600000);
         sessionVO.setUserSession(session);
 
         sessionList.add(sessionVO);
@@ -89,7 +99,7 @@ public class JdEvChgrMwMain {
             sessionVO.setStationChgrId(stationChgrId);
 
             //Session Timeout 10분
-            session.setMaxIdleTimeout(600000);
+            session.setMaxIdleTimeout(3600000);
             sessionVO.setUserSession(session);
 
             sessionList.add(sessionVO);
@@ -237,15 +247,27 @@ public class JdEvChgrMwMain {
         String stationChgrId = stationId + (chgrId.length() > 2 ? chgrId.substring(0,2) : chgrId);
 
         //충전기와 연결끊어지면 sessionList 에서 제거
-        for (int i=0; i < sessionList.size(); i++) {
+        if (sessionList.size() > 0) {
 
-            if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
+            for (int i=0; i < sessionList.size(); i++) {
 
-                logger.info("[ 충전기 (" + sessionList.get(i).getStationChgrId() + ") 연결이 끊어졌습니다. ]");
+                if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
 
-                sessionList.remove(i);
+                    logger.info("[ 충전기 (" + sessionList.get(i).getStationChgrId() + ") 연결이 끊어졌습니다. ]");
 
-                break;
+                    sessionList.remove(i);
+
+                    try {
+                        logger.info("[ OnClose 세션 종료 시작 ]");
+                        session.close();
+                        logger.info("[ OnClose 세션 종료 완료 ]");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        logger.info("[ OnClose 세션 종료 오류 : " + e.getMessage() + " ]");
+                    }
+
+                    break;
+                }
             }
         }
 
