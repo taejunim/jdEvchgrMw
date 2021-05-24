@@ -8,9 +8,19 @@
         <Console name="console" target="SYSTEM_OUT">
             <PatternLayout pattern="${layoutPattern}" />
         </Console>
-        //
-        <RollingFile name="file" fileName="C:/apache-tomcat-8.5.50-windows-x64/apache-tomcat-8.5.50/logs/${logNm}.log"
+        <!--<RollingFile name="file" fileName="C:/apache-tomcat-8.5.50-windows-x64/apache-tomcat-8.5.50/logs/${logNm}.log"
                      filePattern="C:/apache-tomcat-8.5.50-windows-x64/apache-tomcat-8.5.50/logs/${logNm}_%d{yyyy-MM-dd}_%i.log.zip">
+            <PatternLayout pattern="${layoutPattern}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="600MB" /> &lt;!&ndash; 600MB 용량이 초과시 DefaultRolloverStrategy 정책만큼 넘버링 &ndash;&gt;
+                <TimeBasedTriggeringPolicy module="true" interval="1" />&lt;!&ndash; 일별 로그 파일 생성&ndash;&gt;
+            </Policies>
+            <DefaultRolloverStrategy max="200" fileIndex="min" />&lt;!&ndash; 롤링 파일 200개 까지 생성 &ndash;&gt;
+        </RollingFile>-->
+
+        <!-- Bus 용 logger -->
+        <RollingFile name="file" fileName="C:/apache-tomcat-9.0.45/logs/${logNm}.log"
+                     filePattern="C:/apache-tomcat-9.0.45/logs/${logNm}_%d{yyyy-MM-dd}_%i.log.zip">
             <PatternLayout pattern="${layoutPattern}" />
             <Policies>
                 <SizeBasedTriggeringPolicy size="600MB" /> <!-- 600MB 용량이 초과시 DefaultRolloverStrategy 정책만큼 넘버링 -->
