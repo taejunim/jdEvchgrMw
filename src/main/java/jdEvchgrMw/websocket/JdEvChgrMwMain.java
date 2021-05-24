@@ -9,6 +9,7 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.*;
 
 @ServerEndpoint(value="/station/{stationId}/{chgrId}")
@@ -37,8 +38,6 @@ public class JdEvChgrMwMain {
 
                 if (sessionList.get(i).getStationChgrId().equals(stationChgrId)) {
 
-                    sessionList.remove(i);
-
                     try {
                         logger.info("[ 재연결 세션 종료 시작 ]");
                         sessionList.get(i).getUserSession().close();
@@ -47,6 +46,10 @@ public class JdEvChgrMwMain {
                         e.printStackTrace();
                         logger.info("[ 재연결 세션 종료 오류 : " + e.getMessage() + " ]");
                     }
+
+                    sessionList.remove(i);
+
+                    break;
                 }
             }
         }
@@ -255,16 +258,17 @@ public class JdEvChgrMwMain {
 
                     logger.info("[ 충전기 (" + sessionList.get(i).getStationChgrId() + ") 연결이 끊어졌습니다. ]");
 
-                    sessionList.remove(i);
-
                     try {
                         logger.info("[ OnClose 세션 종료 시작 ]");
-                        session.close();
+                        //session.close();
+                        sessionList.get(i).getUserSession().close();
                         logger.info("[ OnClose 세션 종료 완료 ]");
                     } catch (IOException e) {
                         e.printStackTrace();
                         logger.info("[ OnClose 세션 종료 오류 : " + e.getMessage() + " ]");
                     }
+
+                    sessionList.remove(i);
 
                     break;
                 }
@@ -286,7 +290,8 @@ public class JdEvChgrMwMain {
         logger.info(" t : " + t);
         logger.info(" cause : " + t.getCause());
         logger.info(" detailMessage : " + t.getMessage());
-        logger.info(" stackTrace : " + t.getStackTrace());
+        StringWriter outError = new StringWriter();
+        logger.info(" outError : " + outError.toString());
         logger.info("---------------------------------------------------");
         t.printStackTrace();
     }
