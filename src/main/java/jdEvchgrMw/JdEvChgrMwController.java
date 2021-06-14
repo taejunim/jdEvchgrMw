@@ -21,7 +21,7 @@ public class JdEvChgrMwController {
 	 * @return "Main"
 	 */
 	@RequestMapping(value = "/main.do")
-	public String main() throws Exception {
+	public String main() {
 		
 		logger.info("MAIN");
 
