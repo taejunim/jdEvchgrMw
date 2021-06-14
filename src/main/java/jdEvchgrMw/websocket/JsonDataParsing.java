@@ -1,5 +1,6 @@
 package jdEvchgrMw.websocket;
 
+import jdEvchgrMw.JdEvChgrMwController;
 import jdEvchgrMw.common.CollectServiceBean;
 import jdEvchgrMw.vo.*;
 import org.apache.logging.log4j.LogManager;
@@ -39,6 +40,7 @@ public class JsonDataParsing {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분 ss초");
     SimpleDateFormat responseDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     SimpleDateFormat logIdFormat = new SimpleDateFormat("yyMMddHHmmssSSS");     //이력ID 중복을 피하기위해 밀리세컨드 추가하여 구분하기 위함
+    JdEvChgrMwController jdEvChgrMwController = new JdEvChgrMwController();
 
     /**
      * JSON DATA PARSING MAIN
@@ -110,13 +112,20 @@ public class JsonDataParsing {
             //유효한 충전기인지 체크 => 무효할 시 13 으로 응답
             String stationChgrId = commonVO.getProviderId() + commonVO.getStationId() + commonVO.getChgrId();
 
+            //현재 메모리에 해당 충전기가 없을 때
             if (!chgrList.contains(stationChgrId)) {
 
-                logger.info("[ 등록되지 않은 충전기,  responseDate : " + commonVO.getResponseDate() + " ]");
+                //DB에 등록된 충전기 검색
+                jdEvChgrMwController.selectChgrList();
 
-                commonVO.setRTimeYn(action_type.substring(0,1).equals("d") ? "N" : "Y");
-                invalidErrorMsgSend(commonVO);
-                return;
+                //충전기 목록을 갱신했음에도 해당 충전기가 등록되지 않으면 "13" 보냄
+                if (!chgrList.contains(stationChgrId)) {
+                    logger.info("[ 등록되지 않은 충전기,  responseDate : " + commonVO.getResponseDate() + " ]");
+
+                    commonVO.setRTimeYn(action_type.substring(0,1).equals("d") ? "N" : "Y");
+                    invalidErrorMsgSend(commonVO);
+                    return;
+                }
             }
 
             logger.info(time + " - [ 충전소 : " + commonVO.getStationId() + " - 충전기 : " + commonVO.getChgrId() + " , action_type : " + action_type + " ]");
