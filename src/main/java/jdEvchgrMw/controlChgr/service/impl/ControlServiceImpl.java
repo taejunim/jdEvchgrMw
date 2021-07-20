@@ -2,6 +2,7 @@ package jdEvchgrMw.controlChgr.service.impl;
 
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import jdEvchgrMw.controlChgr.service.ControlChgrService;
+import jdEvchgrMw.vo.AnnounceVO;
 import jdEvchgrMw.vo.ControlChgrVO;
 import org.springframework.stereotype.Service;
 
@@ -46,4 +47,15 @@ public class ControlServiceImpl extends EgovAbstractServiceImpl implements Contr
         return controlChgrMapper.txMsgListUpdate(controlChgrVO);
     }
 
+    /*현재 공지사항 수정(TABLE: CHGR_CURR_ANNOUNCE / 충전기->M/W)*/
+    public int chgrCurrAnnounceUpdate(AnnounceVO announceVO) throws Exception {
+
+        return controlChgrMapper.chgrCurrAnnounceUpdate(announceVO);
+    }
+
+    /*현재 공지사항 수정을 위한 TX_MSG 가져오기*/
+    public String selectTxMsg(String uuid) throws Exception {
+
+        return controlChgrMapper.selectTxMsg(uuid);
+    }
 }

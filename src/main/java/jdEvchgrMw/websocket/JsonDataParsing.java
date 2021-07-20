@@ -291,7 +291,11 @@ public class JsonDataParsing {
                     else if (qActionType.equals("reset") || qActionType.equals("prices") || qActionType.equals("changeMode")
                             || qActionType.equals("displayBrightness") || qActionType.equals("sound") || qActionType.equals("askVer") || qActionType.equals("dr") || qActionType.equals("announce")) {
 
-                        controlResponse(commonVO);
+                        commonVO = controlResponse(commonVO);
+
+                        if (qActionType.equals("announce")) {
+                            chgrCurrAnnounceUpdate(commonVO);
+                        }
                         return;
 
                     } else {
@@ -2507,7 +2511,7 @@ public class JsonDataParsing {
         return commonVO;
     }
 
-    //reset
+    //제어 Data Parsing
     private CommonVO controlResponse(CommonVO commonVO) {
 
         try {
@@ -2682,6 +2686,55 @@ public class JsonDataParsing {
         }
 
         return commonVO;
+    }
+
+    private void chgrCurrAnnounceUpdate(CommonVO commonVO) {
+        try {
+
+            CollectServiceBean csb = new CollectServiceBean();
+
+            AnnounceVO announceVO = new AnnounceVO();
+
+            String txMsg = csb.controlChgrService().selectTxMsg(commonVO.getUuid());
+
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(txMsg);//
+            JSONObject data = (JSONObject) jsonObject.get("data");
+
+            JSONArray contDetlArray = (JSONArray) data.get("cont_detl");
+
+            for (int i = 0; i < contDetlArray.size(); i++) {
+                JSONObject tmp = (JSONObject) contDetlArray.get(i);
+                String lang = (String) tmp.get("lang");
+                String cont= (String) tmp.get("cont");
+
+                logger.info("<----------- 공지사항 cont_detl Parsing Data [" + (i+1) + "]----------->");
+                logger.info("lang : " + lang);
+                logger.info("cont : " + cont);
+
+                if (lang.equals("ko")) {
+                    announceVO.setKoDetl(cont);
+                } else if (lang.equals("en")) {
+                    announceVO.setEnDetl(cont);
+                }
+            }
+
+            announceVO.setProviderId(commonVO.getProviderId());
+            announceVO.setStId(commonVO.getStationId());
+            announceVO.setChgrId(commonVO.getChgrId());
+            announceVO.setUuid(commonVO.getUuid());
+            announceVO.setResDt(commonVO.getResponseDate());
+
+            logger.info("<----------------------- 공지사항 수정 OK -------------------------> : " + csb.controlChgrService().chgrCurrAnnounceUpdate(announceVO));
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            logger.error("<----------------------- DB Insert 오류 ------------------------->");
+            logger.error("*******************************************************");
+            logger.error("Exception : " + e);
+            logger.error("*******************************************************");
+            commonVO = unknownErrorMsgSend(commonVO, "DB Insert 오류입니다. 담당자에게 문의주세요.");
+        }
     }
 
     public void protocolErrorMsgSend(CommonVO commonVO) {

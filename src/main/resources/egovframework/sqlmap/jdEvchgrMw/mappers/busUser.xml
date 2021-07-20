@@ -43,6 +43,7 @@
                                   , MW_KIND_CD
                                   , MEM_AUTH_REQ_DT
                                   , MEM_AUTH_INPUT_NO
+                                  , CUST_ID
                                   , RES_DT
                                   , AUTH_RSLT_CD
                                   , AUTH_RSLT_VALID
@@ -59,6 +60,7 @@
                                   , #{mwKindCd}
                                   , #{memAuthReqDt}
                                   , #{memAuthInputNo}
+                                  , #{custId}
                                   , #{resDt}
                                   , #{authRsltCd}
                                   , #{authRsltValid}

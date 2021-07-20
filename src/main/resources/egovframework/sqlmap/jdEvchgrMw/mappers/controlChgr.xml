@@ -52,5 +52,48 @@
 
     </update>
 
+    <insert id="chgrCurrAnnounceUpdate" parameterType="announceVO" >
+
+        INSERT INTO EVCMS.CHGR_CURR_ANNOUNCE
+        (
+            PROVIDER_ID,
+            ST_ID,
+            CHGR_ID,
+            KO_DETL,
+            EN_DETL,
+            MOD_UID,
+            MOD_DT
+        )
+        VALUES
+        (
+            #{providerId},
+            #{stId},
+            #{chgrId},
+            #{koDetl},
+            #{enDetl},
+            (
+             SELECT CTRL_UID
+               FROM EVCMS.TX_MSG_LIST TL RIGHT JOIN EVCMS.CTRL_LIST CL ON CL.CTRL_LIST_ID = TL.CTRL_LIST_ID
+              WHERE UUID =#{uuid}
+            ),
+            #{resDt}
+        )
+        ON DUPLICATE KEY UPDATE
+            KO_DETL = VALUES(KO_DETL),
+            EN_DETL = VALUES(EN_DETL),
+            MOD_UID = VALUES(MOD_UID),
+            MOD_DT = VALUES(MOD_DT)
+
+    </insert>
+
+    <select id="selectTxMsg" parameterType="java.lang.String" resultType="java.lang.String">
+
+        SELECT TX_MSG
+        FROM TX_MSG_LIST
+        WHERE UUID = #{uuid}
+        ORDER BY CTRL_LIST_ID DESC
+        LIMIT 1
+
+    </select>
 
 </mapper>

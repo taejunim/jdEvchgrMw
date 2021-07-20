@@ -1,5 +1,6 @@
 package jdEvchgrMw.controlChgr.service;
 
+import jdEvchgrMw.vo.AnnounceVO;
 import jdEvchgrMw.vo.ControlChgrVO;
 
 /**
@@ -27,5 +28,10 @@ public interface ControlChgrService {
 
     /*제어 이력 수정(TABLE: TX_MSG_LIST / 충전기->M/W)*/
     int txMsgListUpdate(ControlChgrVO controlChgrVO) throws Exception;
-    
+
+    /*현재 공지사항 수정(TABLE: CHGR_CURR_ANNOUNCE / 충전기->M/W)*/
+    int chgrCurrAnnounceUpdate(AnnounceVO announceVO) throws Exception;
+
+    /*현재 공지사항 수정을 위한 TX_MSG 가져오기*/
+    String selectTxMsg(String uuid) throws Exception;
 }
